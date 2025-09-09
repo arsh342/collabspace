@@ -1,0 +1,129 @@
+<nav class="col-md-3 col-lg-2 d-md-block sidebar">
+  <div class="position-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a
+          class="nav-link <%= path === '/dashboard' ? 'active' : '' %>"
+          href="/dashboard"
+        >
+          <i class="fas fa-tachometer-alt"></i>
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link <%= path === '/teams' ? 'active' : '' %>"
+          href="/teams"
+        >
+          <i class="fas fa-users"></i>
+          Teams
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link <%= path === '/tasks' ? 'active' : '' %>"
+          href="/tasks"
+        >
+          <i class="fas fa-tasks"></i>
+          Tasks
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link <%= path === '/chat' ? 'active' : '' %>"
+          href="/chat"
+        >
+          <i class="fas fa-comments"></i>
+          Chat
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link <%= path === '/profile' ? 'active' : '' %>"
+          href="/profile"
+        >
+          <i class="fas fa-user"></i>
+          Profile
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link <%= path === '/settings' ? 'active' : '' %>"
+          href="/settings"
+        >
+          <i class="fas fa-cog"></i>
+          Settings
+        </a>
+      </li>
+    </ul>
+
+    <!-- Quick Actions -->
+    <h6
+      class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+    >
+      <span>Quick Actions</span>
+    </h6>
+    <ul class="nav flex-column mb-2">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          href="#"
+          data-bs-toggle="modal"
+          data-bs-target="#createTeamModal"
+        >
+          <i class="fas fa-plus"></i>
+          Create Team
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          href="#"
+          data-bs-toggle="modal"
+          data-bs-target="#createTaskModal"
+        >
+          <i class="fas fa-plus"></i>
+          Create Task
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          href="#"
+          data-bs-toggle="modal"
+          data-bs-target="#inviteUserModal"
+        >
+          <i class="fas fa-user-plus"></i>
+          Invite User
+        </a>
+      </li>
+    </ul>
+
+    <!-- Recent Teams -->
+    <h6
+      class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+    >
+      <span>Recent Teams</span>
+    </h6>
+    <ul class="nav flex-column mb-2">
+      <li class="nav-item">
+        <a class="nav-link" href="/teams/1">
+          <i class="fas fa-users"></i>
+          Development Team
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/teams/2">
+          <i class="fas fa-users"></i>
+          Marketing Team
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/teams/3">
+          <i class="fas fa-users"></i>
+          Design Team
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

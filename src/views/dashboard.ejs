@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - CollabSpace</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/public/css/style.css" />
+  </head>
+  <body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/">
+          <i class="fas fa-users me-2"></i>CollabSpace
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/dashboard">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/teams">
+                <i class="fas fa-users me-1"></i>Teams
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/tasks">
+                <i class="fas fa-tasks me-1"></i>Tasks
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/chat">
+                <i class="fas fa-comments me-1"></i>Chat
+              </a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="fas fa-user-circle me-1"></i><%= user ? user.firstName
+                : 'User' %>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <!-- Page Header -->
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+      >
+        <h1 class="h2">Dashboard</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+              Export
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+              Share
+            </button>
+          </div>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-secondary dropdown-toggle"
+          >
+            <i class="fas fa-calendar"></i>
+            This week
+          </button>
+        </div>
+      </div>
+
+      <!-- Welcome Message -->
+      <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">
+          Welcome back, <%= user ? user.firstName : 'User' %>!
+        </h4>
+        <p>Here's what's happening with your teams and tasks today.</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                  >
+                    Active Teams
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-users fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                  >
+                    Tasks Completed
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                  >
+                    Pending Tasks
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">8</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clock fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-danger text-uppercase mb-1"
+                  >
+                    Overdue Tasks
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                </div>
+                <div class="col-auto">
+                  <i
+                    class="fas fa-exclamation-triangle fa-2x text-gray-300"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Recent Activity</h6>
+            </div>
+            <div class="card-body">
+              <div class="list-group list-group-flush">
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <i class="fas fa-user-plus text-success me-2"></i>
+                    <strong>John Doe</strong> joined
+                    <strong>Development Team</strong>
+                  </div>
+                  <small class="text-muted">2 hours ago</small>
+                </div>
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <i class="fas fa-check text-primary me-2"></i>
+                    <strong>Task completed:</strong> Update user authentication
+                  </div>
+                  <small class="text-muted">4 hours ago</small>
+                </div>
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <i class="fas fa-comment text-info me-2"></i>
+                    <strong>New message</strong> in
+                    <strong>Project Discussion</strong>
+                  </div>
+                  <small class="text-muted">6 hours ago</small>
+                </div>
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <i class="fas fa-tasks text-warning me-2"></i>
+                    <strong>New task assigned:</strong> Bug fix in login system
+                  </div>
+                  <small class="text-muted">1 day ago</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+            </div>
+            <div class="card-body">
+              <div class="d-grid gap-2">
+                <a href="/teams" class="btn btn-primary">
+                  <i class="fas fa-users me-2"></i>Create Team
+                </a>
+                <a href="/tasks" class="btn btn-success">
+                  <i class="fas fa-plus me-2"></i>New Task
+                </a>
+                <a href="/chat" class="btn btn-info">
+                  <i class="fas fa-comments me-2"></i>Start Chat
+                </a>
+                <a href="/profile" class="btn btn-outline-secondary">
+                  <i class="fas fa-user me-2"></i>Edit Profile
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">
+                Team Members Online
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <div
+                  class="bg-success rounded-circle me-2"
+                  style="width: 10px; height: 10px"
+                ></div>
+                <span>John Doe</span>
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <div
+                  class="bg-success rounded-circle me-2"
+                  style="width: 10px; height: 10px"
+                ></div>
+                <span>Jane Smith</span>
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <div
+                  class="bg-secondary rounded-circle me-2"
+                  style="width: 10px; height: 10px"
+                ></div>
+                <span>Mike Johnson</span>
+              </div>
+              <div class="d-flex align-items-center">
+                <div
+                  class="bg-secondary rounded-circle me-2"
+                  style="width: 10px; height: 10px"
+                ></div>
+                <span>Sarah Wilson</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+      <div class="container text-center">
+        <p class="mb-0">&copy; 2024 CollabSpace. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      // Dashboard functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Dashboard loaded successfully");
+
+        // Add any dashboard-specific JavaScript here
+        // For example, real-time updates, charts, etc.
+      });
+    </script>
+  </body>
+</html>

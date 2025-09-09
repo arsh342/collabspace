@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - CollabSpace</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/public/css/style.css" />
+  </head>
+  <body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+          <i class="fas fa-users me-2"></i>CollabSpace
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="/register"
+            >Don't have an account? Sign Up</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-6 col-lg-5">
+          <div class="card shadow border-0">
+            <div class="card-body p-5">
+              <div class="text-center mb-4">
+                <h2 class="fw-bold text-primary">Welcome Back</h2>
+                <p class="text-muted">Sign in to your CollabSpace account</p>
+              </div>
+
+              <form id="loginForm" action="javascript:void(0);">
+                <div
+                  id="errorAlert"
+                  class="alert alert-danger d-none"
+                  role="alert"
+                >
+                  <i class="fas fa-exclamation-triangle me-2"></i>
+                  <span id="errorMessage"></span>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    required
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    required
+                  />
+                </div>
+
+                <div class="mb-3 form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="remember"
+                    name="remember"
+                  />
+                  <label class="form-check-label" for="remember">
+                    Remember me
+                  </label>
+                </div>
+
+                <button
+                  type="submit"
+                  class="btn btn-primary w-100 btn-lg mb-3"
+                  id="loginButton"
+                >
+                  <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                </button>
+
+                <div class="text-center mb-3">
+                  <a href="#" class="text-primary text-decoration-none"
+                    >Forgot your password?</a
+                  >
+                </div>
+
+                <div class="text-center">
+                  <p class="mb-0">
+                    Don't have an account?
+                    <a href="/register" class="text-primary">Sign Up</a>
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+      <div class="container text-center">
+        <p class="mb-0">&copy; 2024 CollabSpace. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Login page loaded");
+
+        const loginForm = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+        const errorAlert = document.getElementById("errorAlert");
+        const errorMessage = document.getElementById("errorMessage");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+
+        // Simple form submission prevention
+        loginForm.addEventListener("submit", function (e) {
+          console.log("Form submit intercepted");
+          e.preventDefault();
+          handleLogin();
+        });
+
+        // Check for URL parameters and populate form
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailParam = urlParams.get("email");
+        const passwordParam = urlParams.get("password");
+
+        console.log("URL params:", {
+          email: emailParam,
+          password: passwordParam ? "***" : null,
+        });
+
+        if (emailParam) {
+          emailInput.value = decodeURIComponent(emailParam);
+          console.log("Email populated:", emailInput.value);
+        }
+        if (passwordParam) {
+          passwordInput.value = decodeURIComponent(passwordParam);
+          console.log("Password populated");
+        }
+
+        // Auto-submit if both email and password are provided via URL
+        if (emailParam && passwordParam) {
+          console.log("Auto-submit conditions met");
+
+          // Clear URL parameters for security
+          if (window.history.replaceState) {
+            window.history.replaceState(
+              {},
+              document.title,
+              window.location.pathname
+            );
+            console.log("URL parameters cleared from history");
+          }
+
+          // Show loading state immediately
+          setLoading(true);
+
+          // Auto-submit after a short delay
+          setTimeout(() => {
+            console.log("Triggering auto-submit");
+            handleLogin();
+          }, 500);
+        }
+
+        function showError(message) {
+          errorMessage.textContent = message;
+          errorAlert.classList.remove("d-none");
+        }
+
+        function hideError() {
+          errorAlert.classList.add("d-none");
+        }
+
+        function setLoading(loading) {
+          if (loading) {
+            loginButton.disabled = true;
+            loginButton.innerHTML =
+              '<i class="fas fa-spinner fa-spin me-2"></i>Signing In...';
+          } else {
+            loginButton.disabled = false;
+            loginButton.innerHTML =
+              '<i class="fas fa-sign-in-alt me-2"></i>Sign In';
+          }
+        }
+
+        async function handleLogin() {
+          console.log("handleLogin called");
+          hideError();
+          setLoading(true);
+
+          const data = {
+            email: emailInput.value.trim(),
+            password: passwordInput.value,
+          };
+
+          console.log("Login data:", {
+            email: data.email,
+            password: data.password ? "***" : null,
+          });
+
+          if (!data.email || !data.password) {
+            setLoading(false);
+            showError("Please enter both email and password.");
+            return;
+          }
+
+          try {
+            console.log("Sending login request...");
+            const response = await fetch("/api/auth/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            });
+
+            console.log("Response status:", response.status);
+            const result = await response.json();
+            console.log("Login response:", {
+              success: result.success,
+              message: result.message,
+            });
+
+            if (response.ok && result.success) {
+              // Store the token
+              if (result.data && result.data.token) {
+                localStorage.setItem("token", result.data.token);
+                localStorage.setItem("user", JSON.stringify(result.data.user));
+                console.log("Token and user data stored");
+              }
+
+              // Show success message briefly then redirect
+              loginButton.innerHTML =
+                '<i class="fas fa-check me-2"></i>Success!';
+              console.log("Login successful, redirecting...");
+
+              // Redirect to dashboard
+              setTimeout(() => {
+                window.location.href = "/dashboard";
+              }, 500);
+            } else {
+              setLoading(false);
+              showError(result.message || "Login failed. Please try again.");
+              console.error("Login failed:", result.message);
+            }
+          } catch (error) {
+            setLoading(false);
+            showError(
+              "Network error. Please check your connection and try again."
+            );
+            console.error("Login error:", error);
+          }
+        }
+
+        // Make functions globally available
+        window.handleLogin = handleLogin;
+        window.setLoading = setLoading;
+      });
+    </script>
+  </body>
+</html>

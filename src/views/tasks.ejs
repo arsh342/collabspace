@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tasks - CollabSpace</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/public/css/style.css" />
+
+    <%- include('partials/head') %>
+  </head>
+  <body class="bg-light">
+    <!-- Navigation -->
+    <%- include('partials/nav') %>
+
+    <!-- Main Content -->
+    <main class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <%- include('partials/sidebar') %>
+
+        <!-- Main Content Area -->
+        <div class="col-md-9">
+          <div class="container-fluid">
+            <!-- Page Header -->
+            <div
+              class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+            >
+              <h1 class="h2">Task Management</h1>
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    Filter
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    Sort
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#createTaskModal"
+                >
+                  <i class="fas fa-plus me-2"></i>Create Task
+                </button>
+              </div>
+            </div>
+
+            <!-- Task Filters -->
+            <div class="row mb-4">
+              <div class="col-md-3">
+                <label for="statusFilter" class="form-label">Status</label>
+                <select class="form-select" id="statusFilter">
+                  <option value="">All Statuses</option>
+                  <option value="todo">Todo</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="review">Review</option>
+                  <option value="done">Done</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="priorityFilter" class="form-label">Priority</label>
+                <select class="form-select" id="priorityFilter">
+                  <option value="">All Priorities</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                  <option value="urgent">Urgent</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="teamFilter" class="form-label">Team</label>
+                <select class="form-select" id="teamFilter">
+                  <option value="">All Teams</option>
+                  <option value="1">Development Team</option>
+                  <option value="2">Marketing Team</option>
+                  <option value="3">Design Team</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="searchTasks" class="form-label">Search</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="searchTasks"
+                  placeholder="Search tasks..."
+                />
+              </div>
+            </div>
+
+            <!-- Task Board -->
+            <div class="row">
+              <!-- Todo Column -->
+              <div class="col-md-3">
+                <div class="card">
+                  <div class="card-header bg-secondary text-white">
+                    <h6 class="mb-0">
+                      <i class="fas fa-list me-2"></i>Todo
+                      <span class="badge bg-light text-dark ms-2">5</span>
+                    </h6>
+                  </div>
+                  <div class="card-body" id="todo-column">
+                    <!-- Task Card -->
+                    <div class="task-card mb-3" data-task-id="1">
+                      <div class="card">
+                        <div class="card-body p-3">
+                          <div
+                            class="d-flex justify-content-between align-items-start mb-2"
+                          >
+                            <h6 class="card-title mb-0">Design landing page</h6>
+                            <div class="dropdown">
+                              <button
+                                class="btn btn-sm btn-link p-0"
+                                data-bs-toggle="dropdown"
+                              >
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="editTask(1)"
+                                    >Edit</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="deleteTask(1)"
+                                    >Delete</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <p class="card-text small text-muted">
+                            Create a modern and responsive landing page design
+                          </p>
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <span class="badge bg-warning">Medium</span>
+                            <small class="text-muted">Due: Dec 20</small>
+                          </div>
+                          <div class="mt-2">
+                            <small class="text-muted">Design Team</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Another Task Card -->
+                    <div class="task-card mb-3" data-task-id="2">
+                      <div class="card">
+                        <div class="card-body p-3">
+                          <div
+                            class="d-flex justify-content-between align-items-start mb-2"
+                          >
+                            <h6 class="card-title mb-0">Write blog post</h6>
+                            <div class="dropdown">
+                              <button
+                                class="btn btn-sm btn-link p-0"
+                                data-bs-toggle="dropdown"
+                              >
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="editTask(2)"
+                                    >Edit</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="deleteTask(2)"
+                                    >Delete</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <p class="card-text small text-muted">
+                            Write a blog post about team collaboration
+                          </p>
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <span class="badge bg-success">Low</span>
+                            <small class="text-muted">Due: Dec 30</small>
+                          </div>
+                          <div class="mt-2">
+                            <small class="text-muted">Marketing Team</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- In Progress Column -->
+              <div class="col-md-3">
+                <div class="card">
+                  <div class="card-header bg-warning text-dark">
+                    <h6 class="mb-0">
+                      <i class="fas fa-spinner me-2"></i>In Progress
+                      <span class="badge bg-light text-dark ms-2">3</span>
+                    </h6>
+                  </div>
+                  <div class="card-body" id="in-progress-column">
+                    <!-- Task Card -->
+                    <div class="task-card mb-3" data-task-id="3">
+                      <div class="card">
+                        <div class="card-body p-3">
+                          <div
+                            class="d-flex justify-content-between align-items-start mb-2"
+                          >
+                            <h6 class="card-title mb-0">
+                              Implement user authentication
+                            </h6>
+                            <div class="dropdown">
+                              <button
+                                class="btn btn-sm btn-link p-0"
+                                data-bs-toggle="dropdown"
+                              >
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="editTask(3)"
+                                    >Edit</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="deleteTask(3)"
+                                    >Delete</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <p class="card-text small text-muted">
+                            Implement JWT-based user authentication system
+                          </p>
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <span class="badge bg-danger">High</span>
+                            <small class="text-muted">Due: Dec 25</small>
+                          </div>
+                          <div class="mt-2">
+                            <small class="text-muted">Development Team</small>
+                          </div>
+                          <div class="mt-2">
+                            <div class="progress" style="height: 6px">
+                              <div
+                                class="progress-bar bg-warning"
+                                style="width: 60%"
+                              ></div>
+                            </div>
+                            <small class="text-muted">60% complete</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Review Column -->
+              <div class="col-md-3">
+                <div class="card">
+                  <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                      <i class="fas fa-eye me-2"></i>Review
+                      <span class="badge bg-light text-dark ms-2">2</span>
+                    </h6>
+                  </div>
+                  <div class="card-body" id="review-column">
+                    <!-- Task Card -->
+                    <div class="task-card mb-3" data-task-id="4">
+                      <div class="card">
+                        <div class="card-body p-3">
+                          <div
+                            class="d-flex justify-content-between align-items-start mb-2"
+                          >
+                            <h6 class="card-title mb-0">API documentation</h6>
+                            <div class="dropdown">
+                              <button
+                                class="btn btn-sm btn-link p-0"
+                                data-bs-toggle="dropdown"
+                              >
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="editTask(4)"
+                                    >Edit</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="deleteTask(4)"
+                                    >Delete</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <p class="card-text small text-muted">
+                            Review and update API documentation
+                          </p>
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <span class="badge bg-warning">Medium</span>
+                            <small class="text-muted">Due: Dec 22</small>
+                          </div>
+                          <div class="mt-2">
+                            <small class="text-muted">Development Team</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Done Column -->
+              <div class="col-md-3">
+                <div class="card">
+                  <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">
+                      <i class="fas fa-check me-2"></i>Done
+                      <span class="badge bg-light text-dark ms-2">4</span>
+                    </h6>
+                  </div>
+                  <div class="card-body" id="done-column">
+                    <!-- Task Card -->
+                    <div class="task-card mb-3" data-task-id="5">
+                      <div class="card">
+                        <div class="card-body p-3">
+                          <div
+                            class="d-flex justify-content-between align-items-start mb-2"
+                          >
+                            <h6 class="card-title mb-0">Database setup</h6>
+                            <div class="dropdown">
+                              <button
+                                class="btn btn-sm btn-link p-0"
+                                data-bs-toggle="dropdown"
+                              >
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="editTask(5)"
+                                    >Edit</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="#"
+                                    onclick="deleteTask(5)"
+                                    >Delete</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <p class="card-text small text-muted">
+                            Set up MongoDB database and schemas
+                          </p>
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <span class="badge bg-danger">High</span>
+                            <small class="text-muted">Completed: Dec 15</small>
+                          </div>
+                          <div class="mt-2">
+                            <small class="text-muted">Development Team</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Create Task Modal -->
+          <div class="modal fade" id="createTaskModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Create New Task</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form id="createTaskForm">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label for="taskTitle" class="form-label"
+                            >Task Title *</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="taskTitle"
+                            required
+                          />
+                        </div>
+                        <div class="mb-3">
+                          <label for="taskDescription" class="form-label"
+                            >Description</label
+                          >
+                          <textarea
+                            class="form-control"
+                            id="taskDescription"
+                            rows="4"
+                            placeholder="Describe the task in detail..."
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="mb-3">
+                          <label for="taskTeam" class="form-label"
+                            >Team *</label
+                          >
+                          <select class="form-select" id="taskTeam" required>
+                            <option value="">Select a team</option>
+                            <option value="1">Development Team</option>
+                            <option value="2">Marketing Team</option>
+                            <option value="3">Design Team</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="taskAssignee" class="form-label"
+                            >Assign To</label
+                          >
+                          <select class="form-select" id="taskAssignee">
+                            <option value="">Unassigned</option>
+                            <option value="1">John Doe</option>
+                            <option value="2">Jane Smith</option>
+                            <option value="3">Bob Johnson</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="taskPriority" class="form-label"
+                            >Priority</label
+                          >
+                          <select class="form-select" id="taskPriority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="taskDueDate" class="form-label"
+                            >Due Date</label
+                          >
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="taskDueDate"
+                          />
+                        </div>
+                        <div class="mb-3">
+                          <label for="taskEstimatedHours" class="form-label"
+                            >Estimated Hours</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="taskEstimatedHours"
+                            min="0"
+                            step="0.5"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="taskTags" class="form-label">Tags</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="taskTags"
+                        placeholder="Enter tags separated by commas"
+                      />
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="createTask()"
+                  >
+                    Create Task
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Task Modal -->
+          <div class="modal fade" id="editTaskModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Edit Task</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form id="editTaskForm">
+                    <input type="hidden" id="editTaskId" />
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label for="editTaskTitle" class="form-label"
+                            >Task Title *</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="editTaskTitle"
+                            required
+                          />
+                        </div>
+                        <div class="mb-3">
+                          <label for="editTaskDescription" class="form-label"
+                            >Description</label
+                          >
+                          <textarea
+                            class="form-control"
+                            id="editTaskDescription"
+                            rows="4"
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="mb-3">
+                          <label for="editTaskStatus" class="form-label"
+                            >Status *</label
+                          >
+                          <select
+                            class="form-select"
+                            id="editTaskStatus"
+                            required
+                          >
+                            <option value="todo">Todo</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="review">Review</option>
+                            <option value="done">Done</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="editTaskTeam" class="form-label"
+                            >Team *</label
+                          >
+                          <select
+                            class="form-select"
+                            id="editTaskTeam"
+                            required
+                          >
+                            <option value="1">Development Team</option>
+                            <option value="2">Marketing Team</option>
+                            <option value="3">Design Team</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="editTaskAssignee" class="form-label"
+                            >Assign To</label
+                          >
+                          <select class="form-select" id="editTaskAssignee">
+                            <option value="">Unassigned</option>
+                            <option value="1">John Doe</option>
+                            <option value="2">Jane Smith</option>
+                            <option value="3">Bob Johnson</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="editTaskPriority" class="form-label"
+                            >Priority</label
+                          >
+                          <select class="form-select" id="editTaskPriority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="editTaskDueDate" class="form-label"
+                            >Due Date</label
+                          >
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="editTaskDueDate"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="updateTask()"
+                  >
+                    Update Task
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            // Task management functions
+            function createTask() {
+              // Implementation for creating a new task
+              console.log("Creating new task...");
+              // Close modal and refresh task list
+              $("#createTaskModal").modal("hide");
+            }
+
+            function editTask(taskId) {
+              // Implementation for editing a task
+              console.log("Editing task:", taskId);
+              $("#editTaskModal").modal("show");
+            }
+
+            function updateTask() {
+              // Implementation for updating a task
+              console.log("Updating task...");
+              // Close modal and refresh task list
+              $("#editTaskModal").modal("hide");
+            }
+
+            function deleteTask(taskId) {
+              // Implementation for deleting a task
+              if (confirm("Are you sure you want to delete this task?")) {
+                console.log("Deleting task:", taskId);
+                // Remove task from DOM and update counts
+              }
+            }
+
+            // Initialize task board functionality
+            document.addEventListener("DOMContentLoaded", function () {
+              // Add drag and drop functionality for task cards
+              const taskCards = document.querySelectorAll(".task-card");
+              const columns = document.querySelectorAll(
+                '.card-body[id$="-column"]'
+              );
+
+              // Simple drag and drop implementation
+              taskCards.forEach((card) => {
+                card.draggable = true;
+                card.addEventListener("dragstart", handleDragStart);
+                card.addEventListener("dragend", handleDragEnd);
+              });
+
+              columns.forEach((column) => {
+                column.addEventListener("dragover", handleDragOver);
+                column.addEventListener("drop", handleDrop);
+              });
+            });
+
+            function handleDragStart(e) {
+              e.target.style.opacity = "0.4";
+              e.dataTransfer.effectAllowed = "move";
+              e.dataTransfer.setData("text/html", e.target.outerHTML);
+            }
+
+            function handleDragEnd(e) {
+              e.target.style.opacity = "1";
+            }
+
+            function handleDragOver(e) {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+            }
+
+            function handleDrop(e) {
+              e.stopPropagation();
+
+              if (e.target.closest(".card-body")) {
+                const column = e.target.closest(".card-body");
+                const taskCard = document.querySelector(
+                  '[data-task-id="' +
+                    e.dataTransfer
+                      .getData("text/html")
+                      .match(/data-task-id="(\d+)"/)[1] +
+                    '"]'
+                );
+
+                if (taskCard && column) {
+                  column.appendChild(taskCard);
+                  // Update task status based on column
+                  updateTaskStatus(taskCard, column.id);
+                }
+              }
+
+              return false;
+            }
+
+            function updateTaskStatus(taskCard, columnId) {
+              const status = columnId.replace("-column", "");
+              console.log("Task moved to:", status);
+              // Update task status in database
+            }
+          </script>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Custom JS -->
+    <script src="/public/js/main.js"></script>
+
+    <%- include('partials/scripts') %>
+  </body>
+</html>

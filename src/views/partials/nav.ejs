@@ -1,0 +1,140 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <!-- Brand -->
+    <a class="navbar-brand" href="/">
+      <i class="fas fa-users me-2"></i>
+      CollabSpace
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Items -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <% if (locals.user) { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/dashboard">
+            <i class="fas fa-tachometer-alt me-1"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/teams">
+            <i class="fas fa-users me-1"></i>
+            Teams
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/tasks">
+            <i class="fas fa-tasks me-1"></i>
+            Tasks
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/chat">
+            <i class="fas fa-comments me-1"></i>
+            Chat
+          </a>
+        </li>
+        <% } %>
+      </ul>
+
+      <!-- User Menu -->
+      <ul class="navbar-nav">
+        <% if (locals.user) { %>
+        <!-- Notifications -->
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="notificationsDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+          >
+            <i class="fas fa-bell"></i>
+            <span class="badge bg-danger">3</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><h6 class="dropdown-header">Notifications</h6></li>
+            <li><a class="dropdown-item" href="#">New task assigned</a></li>
+            <li><a class="dropdown-item" href="#">Team invitation</a></li>
+            <li><a class="dropdown-item" href="#">Message from team</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="#">View all notifications</a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- User Profile -->
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle d-flex align-items-center"
+            href="#"
+            id="userDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+          >
+            <% if (user.avatar) { %>
+            <img
+              src="<%= user.avatar %>"
+              alt="<%= user.username %>"
+              class="rounded-circle me-2"
+              width="32"
+              height="32"
+            />
+            <% } else { %>
+            <div
+              class="bg-secondary rounded-circle me-2 d-flex align-items-center justify-content-center"
+              style="width: 32px; height: 32px"
+            >
+              <i class="fas fa-user text-white"></i>
+            </div>
+            <% } %> <%= user.username %>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><h6 class="dropdown-header">Profile</h6></li>
+            <li>
+              <a class="dropdown-item" href="/profile">
+                <i class="fas fa-user me-2"></i>My Profile
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/settings">
+                <i class="fas fa-cog me-2"></i>Settings
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="#" id="logoutBtn">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+              </a>
+            </li>
+          </ul>
+        </li>
+        <% } else { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/login">
+            <i class="fas fa-sign-in-alt me-1"></i>
+            Login
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/register">
+            <i class="fas fa-user-plus me-1"></i>
+            Register
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>

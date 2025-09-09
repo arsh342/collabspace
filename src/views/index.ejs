@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CollabSpace - Team Collaboration Platform</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/">
+        <i class="fas fa-users me-2"></i>CollabSpace
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Sign In</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-light text-primary px-3" href="/register">Get Started</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="row min-vh-100 align-items-center bg-primary text-white">
+      <div class="col-lg-8 mx-auto text-center">
+        <h1 class="display-3 fw-bold mb-4">Welcome to CollabSpace</h1>
+        <p class="lead mb-5">
+          The ultimate team collaboration platform that brings your team together
+          with real-time chat, task management, and seamless communication.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+          <a href="/register" class="btn btn-light btn-lg px-4 py-2">
+            <i class="fas fa-rocket me-2"></i>
+            Get Started Free
+          </a>
+          <a href="/login" class="btn btn-outline-light btn-lg px-4 py-2">
+            <i class="fas fa-sign-in-alt me-2"></i>
+            Sign In
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row py-5 bg-light">
+      <div class="col-12 text-center mb-5">
+        <h2 class="display-5 fw-bold text-dark">Why Choose CollabSpace?</h2>
+        <p class="lead text-muted">
+          Everything your team needs to collaborate effectively
+        </p>
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px">
+              <i class="fas fa-users fa-2x text-white"></i>
+            </div>
+            <h4 class="card-title">Team Management</h4>
+            <p class="card-text">
+              Create and manage teams with ease. Invite members, assign roles, and
+              keep everyone organized.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px">
+              <i class="fas fa-tasks fa-2x text-white"></i>
+            </div>
+            <h4 class="card-title">Task Management</h4>
+            <p class="card-text">
+              Track tasks, set priorities, and monitor progress in real-time.
+              Never miss a deadline again.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px">
+              <i class="fas fa-comments fa-2x text-white"></i>
+            </div>
+            <h4 class="card-title">Real-time Chat</h4>
+            <p class="card-text">
+              Communicate instantly with your team. Share files, react to
+              messages, and stay connected.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="row py-5">
+      <div class="col-12 text-center mb-5">
+        <h2 class="display-5 fw-bold text-dark">Trusted by Teams Worldwide</h2>
+      </div>
+
+      <div class="col-lg-3 col-md-6 text-center mb-4">
+        <div class="stats-card">
+          <h3>1000+</h3>
+          <p>Active Teams</p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 text-center mb-4">
+        <div class="stats-card">
+          <h3>50K+</h3>
+          <p>Tasks Completed</p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 text-center mb-4">
+        <div class="stats-card">
+          <h3>1M+</h3>
+          <p>Messages Sent</p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 text-center mb-4">
+        <div class="stats-card">
+          <h3>99.9%</h3>
+          <p>Uptime</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row py-5 bg-dark text-white">
+      <div class="col-12 text-center">
+        <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Team?</h2>
+        <p class="lead mb-4">
+          Join thousands of teams who are already using CollabSpace to boost
+          productivity and collaboration.
+        </p>
+        <a href="/register" class="btn btn-primary btn-lg px-5 py-3">
+          <i class="fas fa-rocket me-2"></i>
+          Start Your Free Trial
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4">
+    <div class="container text-center">
+      <p class="mb-0">&copy; 2024 CollabSpace. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
