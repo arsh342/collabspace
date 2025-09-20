@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const logger = require("../middleware/logger");
+const { logger } = require("../middleware/logger");
 
 const teamSchema = new mongoose.Schema(
   {
@@ -43,6 +43,28 @@ const teamSchema = new mongoose.Schema(
           type: String,
           enum: ["pending", "accepted", "declined"],
           default: "pending",
+        },
+      },
+    ],
+    joinRequests: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        requestedAt: {
+          type: Date,
+          default: Date.now,
+        },
+        status: {
+          type: String,
+          enum: ["pending", "approved", "denied"],
+          default: "pending",
+        },
+        message: {
+          type: String,
+          maxlength: [200, "Join request message cannot exceed 200 characters"],
+          default: "",
         },
       },
     ],
@@ -117,7 +139,7 @@ const teamSchema = new mongoose.Schema(
 
 // Virtual for member count
 teamSchema.virtual("memberCount").get(function () {
-  return this.members.length;
+  return this.members ? this.members.length : 0;
 });
 
 // Virtual for completion rate
@@ -138,6 +160,7 @@ teamSchema.index({ admin: 1 });
 teamSchema.index({ members: 1 });
 teamSchema.index({ isActive: 1 });
 teamSchema.index({ "invitedUsers.user": 1 });
+teamSchema.index({ "joinRequests.user": 1 });
 teamSchema.index({ tags: 1 });
 
 // Pre-save middleware to update stats

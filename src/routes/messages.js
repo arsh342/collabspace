@@ -6,7 +6,7 @@ const fs = require("fs");
 const Message = require("../models/Message");
 const Team = require("../models/Team");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
-const { requireTeamMember } = require("../middleware/auth");
+const { requireTeamMembership } = require("../middleware/auth");
 const logger = require("../middleware/logger");
 
 const router = express.Router();
@@ -90,7 +90,7 @@ const validateReaction = [
 // @access  Private (Team Member)
 router.get(
   "/:teamId",
-  requireTeamMember,
+  requireTeamMembership,
   catchAsync(async (req, res) => {
     try {
       const {
@@ -589,7 +589,7 @@ router.get(
 // @access  Private (Team Member)
 router.get(
   "/search/:teamId",
-  requireTeamMember,
+  requireTeamMembership,
   catchAsync(async (req, res) => {
     try {
       const { q, messageType, sender, page = 1, limit = 20 } = req.query;
@@ -652,7 +652,7 @@ router.get(
 // @access  Private (Team Member)
 router.get(
   "/mentions/:teamId",
-  requireTeamMember,
+  requireTeamMembership,
   catchAsync(async (req, res) => {
     try {
       const { page = 1, limit = 20 } = req.query;
@@ -700,7 +700,7 @@ router.get(
 // @access  Private (Team Member)
 router.get(
   "/stats/:teamId",
-  requireTeamMember,
+  requireTeamMembership,
   catchAsync(async (req, res) => {
     try {
       const stats = await Message.aggregate([

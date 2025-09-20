@@ -7,8 +7,8 @@ const Task = require("../models/Task");
 const Team = require("../models/Team");
 const Message = require("../models/Message");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
-const { requireTeamMember, requireTeamAdmin } = require("../middleware/auth");
-const logger = require("../middleware/logger");
+const { requireTeamMembership, requireTeamOrganiser, requireAuth } = require("../middleware/auth");
+const { logger } = require("../middleware/logger");
 
 const router = express.Router();
 
@@ -78,7 +78,20 @@ const validateTaskCreation = [
   body("dueDate")
     .optional()
     .isISO8601()
-    .withMessage("Due date must be a valid date"),
+    .withMessage("Due date must be a valid date")
+    .custom((value) => {
+      if (value) {
+        const dueDate = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset time to start of day
+        dueDate.setHours(0, 0, 0, 0);
+        
+        if (dueDate < today) {
+          throw new Error("Due date cannot be in the past");
+        }
+      }
+      return true;
+    }),
   body("estimatedHours")
     .optional()
     .isFloat({ min: 0, max: 1000 })
@@ -119,7 +132,20 @@ const validateTaskUpdate = [
   body("dueDate")
     .optional()
     .isISO8601()
-    .withMessage("Due date must be a valid date"),
+    .withMessage("Due date must be a valid date")
+    .custom((value) => {
+      if (value) {
+        const dueDate = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset time to start of day
+        dueDate.setHours(0, 0, 0, 0);
+        
+        if (dueDate < today) {
+          throw new Error("Due date cannot be in the past");
+        }
+      }
+      return true;
+    }),
   body("estimatedHours")
     .optional()
     .isFloat({ min: 0, max: 1000 })
@@ -159,6 +185,7 @@ const validateTimeLog = [
 // @access  Private
 router.get(
   "/",
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const {
@@ -171,6 +198,7 @@ router.get(
         search,
         sortBy = "createdAt",
         sortOrder = "desc",
+        organiser = false,
       } = req.query;
 
       const options = { status, team, assignedTo };
@@ -183,23 +211,51 @@ router.get(
       const skip = (page - 1) * limit;
       const sort = { [sortBy]: sortOrder === "desc" ? -1 : 1 };
 
-      // Get tasks for user
-      const tasks = await Task.findByUser(req.user._id, options)
-        .sort(sort)
-        .skip(skip)
-        .limit(parseInt(limit));
+      let tasks;
+      let total;
 
-      // Get total count
-      const query = {
-        $or: [{ assignedTo: req.user._id }, { createdBy: req.user._id }],
-        isArchived: false,
-      };
+      if (organiser === 'true') {
+        // Get tasks for teams where user is admin/organiser
+        const userTeams = await Team.find({ admin: req.user._id }).select('_id');
+        const teamIds = userTeams.map(team => team._id);
 
-      if (status) query.status = status;
-      if (team) query.team = team;
-      if (assignedTo) query.assignedTo = assignedTo;
+        const query = {
+          team: { $in: teamIds },
+          isArchived: false,
+        };
 
-      const total = await Task.countDocuments(query);
+        if (status) query.status = status;
+        if (team) query.team = team;
+        if (assignedTo) query.assignedTo = assignedTo;
+
+        tasks = await Task.find(query)
+          .populate("team", "name")
+          .populate("assignedTo", "username firstName lastName avatar")
+          .populate("createdBy", "username firstName lastName")
+          .sort(sort)
+          .skip(skip)
+          .limit(parseInt(limit));
+
+        total = await Task.countDocuments(query);
+      } else {
+        // Get tasks for user
+        tasks = await Task.findByUser(req.user._id, options)
+          .sort(sort)
+          .skip(skip)
+          .limit(parseInt(limit));
+
+        // Get total count
+        const query = {
+          $or: [{ assignedTo: req.user._id }, { createdBy: req.user._id }],
+          isArchived: false,
+        };
+
+        if (status) query.status = status;
+        if (team) query.team = team;
+        if (assignedTo) query.assignedTo = assignedTo;
+
+        total = await Task.countDocuments(query);
+      }
 
       res.json({
         success: true,
@@ -225,7 +281,7 @@ router.get(
 // @access  Private (Team Member)
 router.get(
   "/team/:teamId",
-  requireTeamMember,
+  requireTeamMembership,
   catchAsync(async (req, res) => {
     try {
       const {
@@ -307,6 +363,7 @@ router.get(
 // @access  Private
 router.post(
   "/",
+  requireAuth,
   validateTaskCreation,
   catchAsync(async (req, res) => {
     try {
@@ -386,11 +443,23 @@ router.post(
         `User ${req.user.username} created task: ${title} in team: ${teamDoc.name}`
       );
 
+      // Send successful response first
       res.status(201).json({
         success: true,
         message: "Task created successfully",
         data: { task },
       });
+
+      // Emit organiser summary (team admin) - temporarily disabled for debugging
+      // try {
+      //   const { emitOrganiserSummary } = require('../app');
+      //   if (emitOrganiserSummary) {
+      //     emitOrganiserSummary(teamDoc.admin.toString());
+      //   }
+      // } catch (e) {
+      //   logger.warn('Failed to emit organiser summary after task create:', e.message);
+      // }
+
     } catch (error) {
       logger.error("Create task error:", error);
       throw new AppError("Failed to create task", 500);
@@ -403,6 +472,7 @@ router.post(
 // @access  Private
 router.get(
   "/:id",
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const task = await Task.findById(req.params.id)
@@ -443,6 +513,7 @@ router.get(
 // @access  Private
 router.put(
   "/:id",
+  requireAuth,
   validateTaskUpdate,
   catchAsync(async (req, res) => {
     try {
@@ -517,6 +588,16 @@ router.put(
 
       logger.info(`User ${req.user.username} updated task: ${task.title}`);
 
+      // Emit organiser summary (team admin)
+      try {
+        const { emitOrganiserSummary } = require('../app');
+        if (task.team && task.team.admin) {
+          emitOrganiserSummary && emitOrganiserSummary(task.team.admin.toString());
+        }
+      } catch (e) {
+        logger.warn('Failed to emit organiser summary after task update');
+      }
+
       res.json({
         success: true,
         message: "Task updated successfully",
@@ -534,6 +615,7 @@ router.put(
 // @access  Private
 router.delete(
   "/:id",
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const task = await Task.findById(req.params.id).populate(
@@ -548,8 +630,13 @@ router.delete(
         });
       }
 
-      // Check if user has access to this task
-      if (!task.team.members.includes(req.user._id)) {
+      // Check if user has access to this task (either team member or team admin)
+      const isTeamMember = task.team.members.some(member => 
+        member.toString() === req.user._id.toString()
+      );
+      const isTeamAdmin = task.team.admin && task.team.admin.toString() === req.user._id.toString();
+
+      if (!isTeamMember && !isTeamAdmin) {
         return res.status(403).json({
           success: false,
           message: "You do not have access to this task",
@@ -557,12 +644,6 @@ router.delete(
       }
 
       // Only task creator or team admin can delete
-      const isTeamAdmin = task.team.members.find(
-        (member) =>
-          member._id.toString() === req.user._id.toString() &&
-          task.team.admin.toString() === req.user._id.toString()
-      );
-
       if (
         task.createdBy.toString() !== req.user._id.toString() &&
         !isTeamAdmin
@@ -574,9 +655,40 @@ router.delete(
       }
 
       const taskTitle = task.title;
+      const teamId = task.team._id || task.team;
+      
       await Task.findByIdAndDelete(req.params.id);
 
+      // Manually recalculate team stats after deletion
+      try {
+        const Team = require('../models/Team');
+        const remainingTasks = await Task.find({ team: teamId });
+        
+        const stats = {
+          totalTasks: remainingTasks.length,
+          completedTasks: remainingTasks.filter(t => t.status === 'completed').length,
+          inProgressTasks: remainingTasks.filter(t => t.status === 'in_progress').length,
+          todoTasks: remainingTasks.filter(t => t.status === 'todo').length,
+          reviewTasks: remainingTasks.filter(t => t.status === 'review').length
+        };
+        
+        await Team.findByIdAndUpdate(teamId, { stats }, { new: true });
+        logger.info(`Updated team stats after task deletion: ${JSON.stringify(stats)}`);
+      } catch (statError) {
+        logger.error('Failed to update team stats after task deletion:', statError);
+      }
+
       logger.info(`User ${req.user.username} deleted task: ${taskTitle}`);
+
+      // Emit organiser summary (team admin)
+      try {
+        const { emitOrganiserSummary } = require('../app');
+        if (task.team && task.team.admin) {
+          emitOrganiserSummary && emitOrganiserSummary(task.team.admin.toString());
+        }
+      } catch (e) {
+        logger.warn('Failed to emit organiser summary after task delete');
+      }
 
       res.json({
         success: true,

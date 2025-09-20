@@ -1,10 +1,10 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const { generateToken } = require("../config/jwt");
 const User = require("../models/User");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
 const logger = require("../middleware/logger");
+const { authenticateSession } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -36,6 +36,9 @@ const validateRegistration = [
     .trim()
     .isLength({ min: 1, max: 50 })
     .withMessage("Last name is required and cannot exceed 50 characters"),
+  body("role")
+    .isIn(["Organiser", "Team Member"])
+    .withMessage("Role must be either 'Organiser' or 'Team Member'"),
 ];
 
 const validateLogin = [
@@ -70,7 +73,7 @@ router.post(
         password,
         firstName,
         lastName,
-        role = "member",
+        role,
       } = req.body;
 
       // Check if user already exists
@@ -115,8 +118,9 @@ router.post(
 
       await user.save();
 
-      // Generate JWT token
-      const token = generateToken(user._id, user.role);
+      // Create session
+      req.session.userId = user._id;
+      req.session.role = user.role;
 
       // Remove password from response
       const userResponse = user.toObject();
@@ -129,7 +133,6 @@ router.post(
         message: "User registered successfully",
         data: {
           user: userResponse,
-          token,
         },
       });
     } catch (error) {
@@ -207,8 +210,22 @@ router.post(
       // Update last seen
       await user.updateLastSeen();
 
-      // Generate JWT token
-      const token = generateToken(user._id, user.role);
+      // Create session
+      req.session.userId = user._id;
+      req.session.role = user.role;
+
+      // Force session save to ensure persistence
+      await new Promise((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) {
+            console.error('Session save error:', err);
+            reject(err);
+          } else {
+            console.log('✅ Session saved successfully for user:', user.email);
+            resolve();
+          }
+        });
+      });
 
       // Remove password from response
       const userResponse = user.toObject();
@@ -216,12 +233,21 @@ router.post(
 
       logger.logger.info(`User logged in: ${user.username} (${email})`);
 
+      // Determine redirect URL based on role
+      let redirectUrl = '/dashboard'; // default
+      if (user.role === 'Organiser') {
+        redirectUrl = '/organiser-dashboard';
+      } else if (user.role === 'Team Member') {
+        redirectUrl = '/member-dashboard';
+      }
+
       res.json({
         success: true,
         message: "Login successful",
         data: {
           user: userResponse,
-          token,
+          redirectUrl,
+          sessionId: req.sessionID // Include session ID for debugging
         },
       });
     } catch (error) {
@@ -231,58 +257,158 @@ router.post(
   })
 );
 
-// @route   POST /api/auth/refresh
-// @desc    Refresh JWT token
+// @route   POST /auth/web-login
+// @desc    Web-based login for VS Code browser compatibility
 // @access  Public
 router.post(
-  "/refresh",
+  "/web-login",
+  validateLogin,
   catchAsync(async (req, res) => {
     try {
-      const { token } = req.body;
-
-      if (!token) {
-        return res.status(400).json({
-          success: false,
-          message: "Token is required",
+      // Check for validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.render('login', {
+          error: 'Please provide valid login credentials',
+          title: 'Login - CollabSpace'
         });
       }
 
-      // Verify current token
-      const { verifyToken, decodeToken } = require("../config/jwt");
-      const decoded = verifyToken(token);
+      const { email, password } = req.body;
 
-      // Find user
-      const user = await User.findById(decoded.userId).select("-password");
+      // Find user by email and include password for comparison
+      const user = await User.findOne({ email }).select("+password");
 
-      if (!user || !user.isActive) {
-        return res.status(401).json({
-          success: false,
-          message: "Invalid token",
+      if (!user) {
+        return res.render('login', {
+          error: 'Invalid email or password',
+          title: 'Login - CollabSpace'
         });
       }
 
-      // Generate new token
-      const newToken = generateToken(user._id, user.role);
+      // Check if account is locked
+      if (user.isLocked()) {
+        return res.render('login', {
+          error: 'Account is temporarily locked due to multiple failed login attempts. Please try again later.',
+          title: 'Login - CollabSpace'
+        });
+      }
 
-      logger.logger.info(`Token refreshed for user: ${user.username}`);
+      // Check if account is active
+      if (!user.isActive) {
+        return res.render('login', {
+          error: 'Account is deactivated',
+          title: 'Login - CollabSpace'
+        });
+      }
 
-      res.json({
-        success: true,
-        message: "Token refreshed successfully",
-        data: {
-          user,
-          token: newToken,
-        },
+      // Verify password
+      const isPasswordValid = await user.comparePassword(password);
+
+      if (!isPasswordValid) {
+        // Increment login attempts
+        await user.incLoginAttempts();
+
+        return res.render('login', {
+          error: 'Invalid email or password',
+          title: 'Login - CollabSpace'
+        });
+      }
+
+      // Reset login attempts on successful login
+      if (user.loginAttempts > 0) {
+        await user.resetLoginAttempts();
+      }
+
+      // Update last seen
+      await user.updateLastSeen();
+
+      // Create session
+      req.session.userId = user._id;
+      req.session.role = user.role;
+
+      // Force session save to ensure persistence
+      await new Promise((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) {
+            console.error('Session save error:', err);
+            reject(err);
+          } else {
+            console.log('✅ Web login session saved successfully for user:', user.email);
+            resolve();
+          }
+        });
       });
+
+      logger.logger.info(`User logged in via web form: ${user.username} (${email})`);
+
+      // Redirect based on role
+      if (user.role === 'Organiser') {
+        res.redirect('/organiser-dashboard');
+      } else if (user.role === 'Team Member') {
+        res.redirect('/member-dashboard');
+      } else {
+        res.redirect('/dashboard');
+      }
     } catch (error) {
-      logger.logger.error("Token refresh error:", error);
-      return res.status(401).json({
-        success: false,
-        message: "Invalid token",
+      logger.logger.error("Web login error:", error);
+      res.render('login', {
+        error: 'Login failed. Please try again.',
+        title: 'Login - CollabSpace'
       });
     }
   })
 );
+
+// @route   POST /api/auth/logout
+// @desc    Logout user and destroy session
+// @access  Private
+router.post(
+  "/logout",
+  catchAsync(async (req, res) => {
+    try {
+      if (req.session) {
+        req.session.destroy((err) => {
+          if (err) {
+            logger.logger.error("Session destruction error:", err);
+            return res.status(500).json({
+              success: false,
+              message: "Could not log out, please try again",
+            });
+          }
+          
+          res.clearCookie('connect.sid'); // Clear session cookie
+          res.json({
+            success: true,
+            message: "Logout successful",
+          });
+        });
+      } else {
+        res.json({
+          success: true,
+          message: "Already logged out",
+        });
+      }
+    } catch (error) {
+      logger.logger.error("User logout error:", error);
+      throw new AppError("Failed to logout user", 500);
+    }
+  })
+);
+
+// @route   POST /api/auth/refresh
+// @desc    Refresh JWT token (deprecated - using sessions now)
+// @access  Public
+// router.post(
+//   "/refresh",
+//   catchAsync(async (req, res) => {
+//     // Session-based auth doesn't need token refresh
+//     res.status(404).json({
+//       success: false,
+//       message: "Token refresh not needed with session-based authentication",
+//     });
+//   })
+// );
 
 // @route   POST /api/auth/forgot-password
 // @desc    Send password reset email
@@ -461,24 +587,13 @@ router.post(
 // @route   GET /api/auth/me
 // @desc    Get current user profile
 // @access  Private
-router.get("/me", async (req, res) => {
+router.get("/me", authenticateSession, async (req, res) => {
   try {
-    // This route should be protected by auth middleware
-    // For now, we'll check if user is in request
-    if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required",
-      });
-    }
-
     const user = await User.findById(req.user._id).select("-password");
 
     res.json({
       success: true,
-      data: {
-        user,
-      },
+      data: user,
     });
   } catch (error) {
     logger.logger.error("Get user profile error:", error);

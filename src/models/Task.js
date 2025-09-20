@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const logger = require("../middleware/logger");
+const { logger } = require("../middleware/logger");
 
 const taskSchema = new mongoose.Schema(
   {
@@ -432,5 +432,36 @@ taskSchema.statics.findByUser = function (userId, options = {}) {
     .populate("assignedTo", "username firstName lastName avatar")
     .sort(options.sort || { dueDate: 1, createdAt: -1 });
 };
+
+// Post-remove middleware to update team stats when task is deleted
+taskSchema.post("findOneAndDelete", async function (doc) {
+  if (doc && doc.team) {
+    try {
+      const Team = require("./Team");
+      await Team.findByIdAndUpdate(doc.team, {
+        $inc: {
+          "stats.totalTasks": -1,
+          "stats.completedTasks": doc.status === "completed" ? -1 : 0,
+        },
+      });
+      logger.info(`Updated team stats after task deletion: team=${doc.team}, task=${doc._id}`);
+    } catch (error) {
+      logger.error("Error updating team stats after task deletion:", error);
+    }
+  }
+});
+
+// Post-remove middleware for deleteOne method
+taskSchema.post("deleteOne", async function (result) {
+  if (result && result.deletedCount > 0) {
+    try {
+      // Since we don't have access to the document in deleteOne, 
+      // we'll need to update this in the route instead
+      logger.info("Task deleted via deleteOne method");
+    } catch (error) {
+      logger.error("Error in deleteOne post middleware:", error);
+    }
+  }
+});
 
 module.exports = mongoose.model("Task", taskSchema);

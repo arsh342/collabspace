@@ -3,174 +3,2905 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#3b82f6">
   <title>CollabSpace - Team Collaboration Platform</title>
   
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="/public/css/style.css">
+  <!-- Internal CSS -->
+  <style>
+    /* CollabSpace - Modern Professional Design System */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    :root {
+      --color-primary: #1e40af;
+      --color-primary-hover: #1e3a8a;
+      --color-primary-light: #dbeafe;
+      --color-primary-dark: #1e3a8a;
+      --color-success: #10b981;
+      --color-success-light: #d1fae5;
+      --color-white: #ffffff;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+      --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+      --line-height-normal: 1.5;
+      --line-height-relaxed: 1.625;
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --radius-sm: 0.25rem;
+      --radius-lg: 0.5rem;
+      --radius-xl: 0.75rem;
+      --radius-full: 9999px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --z-fixed: 1030;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family-primary);
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-normal);
+      color: var(--color-gray-900);
+      background: var(--color-gray-50);
+      min-height: 100vh;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Animation classes */
+    .animate-on-scroll {
+      opacity: 0;
+      transition: all 0.6s ease-out;
+    }
+
+    .animate-on-scroll.animate {
+      opacity: 1;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .slide-in-left {
+      animation: slideInLeft 0.8s ease-out forwards;
+    }
+
+    .slide-in-right {
+      animation: slideInRight 0.8s ease-out forwards;
+    }
+
+    .slide-in-up {
+      animation: slideInUp 0.8s ease-out forwards;
+    }
+
+    .scale-in {
+      animation: scaleIn 0.6s ease-out forwards;
+    }
+
+    .pulse-animation {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Staggered animation delays */
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+    .animate-delay-4 { animation-delay: 0.4s; }
+    .animate-delay-5 { animation-delay: 0.5s; }
+
+    .landing-page {
+      font-family: var(--font-family-primary);
+      line-height: var(--line-height-normal);
+      color: var(--color-gray-800);
+      background: var(--color-white);
+    }
+
+    .landing-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-gray-200);
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4rem;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--color-gray-900);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-xl);
+      transition: color 0.3s ease;
+    }
+
+    .nav-brand:hover {
+      color: var(--color-primary);
+    }
+
+    .brand-logo {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.75rem;
+    }
+
+    .brand-logo svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .brand-name {
+      font-weight: var(--font-weight-bold);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--color-gray-700);
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .nav-toggle:hover {
+      background: var(--color-gray-100);
+      color: var(--color-primary);
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--color-gray-700);
+      font-weight: var(--font-weight-medium);
+      font-size: var(--font-size-sm);
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--color-primary);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .hero {
+      padding: 8rem 2rem 4rem;
+      background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-white) 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-size: 3.5rem;
+      font-weight: var(--font-weight-bold);
+      line-height: 1.1;
+      color: var(--color-gray-900);
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--color-gray-900), var(--color-primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: var(--font-size-lg);
+      color: var(--color-gray-600);
+      line-height: var(--line-height-relaxed);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-note {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-success);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+    }
+
+    /* Custom button styles */
+    .btn-outline-light {
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      backdrop-filter: blur(10px);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-outline-light:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+      color: white;
+      text-decoration: none;
+      transform: translateY(-2px);
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-image {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-preview {
+      max-width: 100%;
+      height: auto;
+      border-radius: 1rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transition: transform 0.3s ease;
+      min-height: 300px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-preview:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Fallback for when image fails to load */
+    .hero-image::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      z-index: -1;
+    }
+
+    .hero-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+      opacity: 0.1;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .shape-1 {
+      width: 200px;
+      height: 200px;
+      top: -50px;
+      right: -50px;
+      animation-delay: 0s;
+    }
+
+    .shape-2 {
+      width: 150px;
+      height: 150px;
+      bottom: -30px;
+      left: -30px;
+      animation-delay: 2s;
+    }
+
+    .shape-3 {
+      width: 100px;
+      height: 100px;
+      top: 50%;
+      left: -20px;
+      animation-delay: 4s;
+    }
+
+    .hero-stats {
+      position: absolute;
+      bottom: -2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 2rem;
+      z-index: 3;
+    }
+
+    .stat-card {
+      background: var(--color-white);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 200px;
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-icon {
+      width: 3rem;
+      height: 3rem;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.25rem;
+    }
+
+    .stat-content h3 {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-gray-900);
+      margin: 0 0 0.25rem 0;
+    }
+
+    .stat-content p {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-600);
+      margin: 0;
+    }
+
+    .features {
+      padding: 6rem 2rem;
+      background: var(--color-white);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-gray-900);
+      margin-bottom: 1rem;
+    }
+
+    .section-header p {
+      font-size: var(--font-size-lg);
+      color: var(--color-gray-600);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--color-white);
+      padding: 2rem;
+      border-radius: 1rem;
+      border: 1px solid var(--color-gray-200);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+      border-color: var(--color-primary-light);
+    }
+
+    .feature-card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 123, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 1rem;
+    }
+
+    .feature-card:hover .feature-card-overlay {
+      opacity: 1;
+    }
+
+    .feature-card-overlay span {
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    /* Modal Styles */
+    .feature-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      display: none;
+      animation: fadeIn 0.3s ease;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .feature-modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal-backdrop {
+      display: none;
+    }
+
+    .modal-content {
+      position: relative;
+      background: white;
+      border-radius: 1.5rem;
+      max-width: 800px;
+      width: 100%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      animation: slideInUp 0.3s ease;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      z-index: 1001;
+      overflow: hidden;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--color-gray-500);
+      transition: color 0.2s ease;
+      z-index: 10;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .modal-close:hover {
+      color: var(--color-gray-700);
+      background: var(--color-gray-100);
+    }
+
+    .modal-header {
+      padding: 3rem 3rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid var(--color-gray-200);
+      flex-shrink: 0;
+    }
+
+    .modal-icon {
+      width: 5rem;
+      height: 5rem;
+      background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+      border-radius: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      font-size: 2.5rem;
+      margin: 0 auto 1.5rem;
+    }
+
+    .modal-header h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-gray-900);
+      margin: 0;
+    }
+
+    .modal-body {
+      padding: 3rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-description {
+      font-size: 1.125rem;
+      color: var(--color-gray-600);
+      line-height: 1.7;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .modal-features {
+      display: grid;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .modal-feature {
+      display: flex;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: var(--color-gray-50);
+      border-radius: 1rem;
+      transition: transform 0.2s ease;
+    }
+
+    .modal-feature:hover {
+      transform: translateY(-2px);
+      background: var(--color-white);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-detail-icon {
+      width: 3rem;
+      height: 3rem;
+      background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .feature-detail-content h4 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin: 0 0 0.5rem 0;
+    }
+
+    .feature-detail-content p {
+      color: var(--color-gray-600);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .modal-cta {
+      text-align: center;
+    }
+
+    .modal-cta .btn {
+      padding: 1rem 2rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .feature-modal.active {
+        padding: 1rem;
+      }
+
+      .modal-content {
+        width: 100%;
+        max-height: 90vh;
+      }
+
+      .modal-header {
+        padding: 2rem 2rem 1.5rem;
+      }
+
+      .modal-body {
+        padding: 2rem;
+      }
+
+      .modal-header h2 {
+        font-size: 2rem;
+      }
+
+      .modal-icon {
+        width: 4rem;
+        height: 4rem;
+        font-size: 2rem;
+      }
+
+      .modal-features {
+        gap: 1.5rem;
+      }
+
+      .modal-feature {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    .feature-icon {
+      width: 3rem;
+      height: 3rem;
+      background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-card h3 {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-900);
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      color: var(--color-gray-600);
+      line-height: var(--line-height-relaxed);
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--color-gray-700);
+      font-size: var(--font-size-sm);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-list li i {
+      color: var(--color-success);
+      font-size: var(--font-size-sm);
+    }
+
+    .social-proof {
+      padding: 6rem 2rem;
+      background: var(--color-white);
+      text-align: center;
+    }
+
+    .logos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 3rem;
+      align-items: center;
+      justify-items: center;
+      margin-bottom: 4rem;
+      padding: 0 2rem;
+    }
+
+    .logo-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background: var(--color-gray-50);
+      border-radius: var(--radius-xl);
+      transition: all var(--transition-fast);
+      border: 1px solid var(--color-gray-200);
+      min-height: 80px;
+      width: 100%;
+      max-width: 160px;
+    }
+
+    .logo-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      background: var(--color-white);
+      border-color: var(--color-primary-light);
+    }
+
+    .logo-item img {
+      max-width: 100%;
+      height: auto;
+      max-height: 40px;
+      object-fit: contain;
+      filter: grayscale(100%) opacity(0.7);
+      transition: all var(--transition-fast);
+    }
+
+    .logo-item:hover img {
+      filter: grayscale(0%) opacity(1);
+    }
+
+    .testimonials {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: var(--color-white);
+      border-radius: var(--radius-xl);
+      padding: 3rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--color-gray-200);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonial-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+    }
+
+    .testimonial-content {
+      margin-bottom: 2rem;
+    }
+
+    .testimonial-content p {
+      font-size: 1.25rem;
+      line-height: var(--line-height-relaxed);
+      color: var(--color-gray-800);
+      margin: 0;
+      font-style: italic;
+      position: relative;
+    }
+
+    .testimonial-content p::before {
+      content: '"';
+      font-size: 4rem;
+      color: var(--color-primary-light);
+      position: absolute;
+      top: -1rem;
+      left: -1rem;
+      font-family: serif;
+      line-height: 1;
+    }
+
+    .testimonial-content p::after {
+      content: '"';
+      font-size: 4rem;
+      color: var(--color-primary-light);
+      position: absolute;
+      bottom: -2rem;
+      right: -1rem;
+      font-family: serif;
+      line-height: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .testimonial-author img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--color-primary-light);
+    }
+
+    .author-info h4 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-900);
+      margin: 0 0 0.25rem 0;
+    }
+
+    .author-info p {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-600);
+      margin: 0;
+    }
+
+    .cta {
+      position: relative;
+      padding: 8rem 2rem;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+      color: var(--color-white);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      font-size: 3rem;
+      font-weight: var(--font-weight-bold);
+      line-height: 1.2;
+      margin: 0 0 1.5rem 0;
+      color: var(--color-white);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta p {
+      font-size: 1.25rem;
+      line-height: var(--line-height-relaxed);
+      margin: 0 0 3rem 0;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .cta .btn {
+      background: var(--color-white);
+      color: var(--color-primary);
+      border: none;
+      padding: 1.25rem 3rem;
+      font-size: 1.125rem;
+      font-weight: var(--font-weight-semibold);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      min-width: 280px;
+      justify-content: center;
+    }
+
+    .cta .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+      background: var(--color-gray-50);
+      color: var(--color-primary-dark);
+    }
+
+    .cta .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .cta .btn i {
+      font-size: 1rem;
+      transition: transform var(--transition-fast);
+    }
+
+    .cta .btn:hover i {
+      transform: translateX(4px);
+    }
+
+    .cta-note {
+      font-size: var(--font-size-sm);
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cta-note::before {
+      content: '✓';
+      color: var(--color-success);
+      font-weight: var(--font-weight-bold);
+      font-size: 1rem;
+    }
+
+    .site-footer {
+      background: var(--color-gray-900);
+      color: var(--color-gray-300);
+      padding: 3rem 0 1rem;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--color-white);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-xl);
+      transition: color 0.3s ease;
+    }
+
+    .footer-logo:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-logo svg {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      display: block;
+    }
+
+    .footer-brand p {
+      color: var(--color-gray-400);
+      line-height: var(--line-height-relaxed);
+      max-width: 300px;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .footer-section h3 {
+      color: var(--color-white);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: 1rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-section li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: var(--color-gray-400);
+      text-decoration: none;
+      font-size: var(--font-size-sm);
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-gray-700);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .footer-bottom p {
+      color: var(--color-gray-500);
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-links a {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--color-gray-800);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-gray-400);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--color-primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: var(--color-primary);
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      border-radius: 4px;
+      z-index: 1000;
+    }
+
+    .skip-link:focus {
+      top: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-container {
+        padding: 0 1rem;
+      }
+      
+      .nav-menu {
+        display: none;
+      }
+      
+      .nav-toggle {
+        display: block;
+      }
+      
+      .hero {
+        padding: 6rem 1rem 2rem;
+      }
+      
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+      }
+      
+      .hero-text h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-actions {
+        justify-content: center;
+      }
+      
+      .hero-stats {
+        position: static;
+        transform: none;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      
+      .stat-card {
+        min-width: auto;
+      }
+      
+      .features {
+        padding: 4rem 1rem;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .social-proof {
+        padding: 4rem 1rem;
+      }
+      
+      .social-proof .section-header h2 {
+        font-size: 2rem;
+      }
+      
+      .logos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        padding: 0;
+      }
+      
+      .logo-item {
+        padding: 1rem;
+        min-height: 60px;
+      }
+      
+      .testimonial-card {
+        padding: 2rem;
+      }
+      
+      .testimonial-content p {
+        font-size: 1.125rem;
+      }
+      
+      .testimonial-content p::before,
+      .testimonial-content p::after {
+        font-size: 3rem;
+      }
+      
+      .testimonial-author {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+      }
+      
+      .cta {
+        padding: 6rem 1rem;
+      }
+      
+      .cta h2 {
+        font-size: 2.25rem;
+      }
+      
+      .cta p {
+        font-size: 1.125rem;
+        margin-bottom: 2.5rem;
+      }
+      
+      .cta .btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        min-width: 240px;
+      }
+      
+      .cta .shape {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cta h2 {
+        font-size: 1.875rem;
+      }
+      
+      .cta p {
+        font-size: 1rem;
+      }
+      
+      .cta .btn {
+        padding: 0.875rem 1.5rem;
+        min-width: 200px;
+      }
+    }
+
+    /* Pricing Section Styles */
+    .pricing {
+      padding: 6rem 0;
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      color: white;
+    }
+
+    .pricing-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .pricing-header h2 {
+      font-size: 3.5rem;
+      font-weight: var(--font-weight-bold);
+      color: white;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.025em;
+    }
+
+    .pricing-header h3 {
+      font-size: 3.5rem;
+      font-weight: var(--font-weight-bold);
+      color: white;
+      margin-bottom: 2rem;
+      letter-spacing: -0.025em;
+    }
+
+    .pricing-header p {
+      font-size: 1.125rem;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+      align-items: start;
+      perspective: 1000px;
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      transition: all 0.3s ease-out;
+      position: relative;
+      color: #333;
+      height: fit-content;
+      cursor: pointer;
+      will-change: transform, box-shadow;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-20px) scale(1.05) !important;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3) !important;
+      z-index: 10;
+      border: 2px solid #007bff;
+    }
+
+    .pricing-card:hover .pricing-title {
+      transform: translateY(-2px);
+    }
+
+    .pricing-card:hover .pricing-amount {
+      transform: scale(1.05);
+    }
+
+    .pricing-card:hover .pricing-features li {
+      transform: translateX(5px);
+    }
+
+    .pricing-card:hover .pricing-features li:nth-child(1) {
+      transition-delay: 0ms;
+    }
+
+    .pricing-card:hover .pricing-features li:nth-child(2) {
+      transition-delay: 50ms;
+    }
+
+    .pricing-card:hover .pricing-features li:nth-child(3) {
+      transition-delay: 100ms;
+    }
+
+    .pricing-card:hover .pricing-features li:nth-child(4) {
+      transition-delay: 150ms;
+    }
+
+    .pricing-card:hover .pricing-features li:nth-child(5) {
+      transition-delay: 200ms;
+    }
+
+    .pricing-card.featured {
+      border: none;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+      position: relative;
+    }
+
+    .pricing-card.featured:hover {
+      transform: translateY(-20px) scale(1.05) !important;
+      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.4) !important;
+      z-index: 10;
+      border: 2px solid #007bff;
+    }
+
+    .pricing-card.featured:hover .pricing-title {
+      transform: translateY(-2px);
+    }
+
+    .pricing-card.featured:hover .pricing-amount {
+      transform: scale(1.05);
+    }
+
+    .pricing-card.featured:hover .pricing-features li {
+      transform: translateX(5px);
+    }
+
+    .pricing-card.featured:hover .pricing-features li:nth-child(1) {
+      transition-delay: 0ms;
+    }
+
+    .pricing-card.featured:hover .pricing-features li:nth-child(2) {
+      transition-delay: 50ms;
+    }
+
+    .pricing-card.featured:hover .pricing-features li:nth-child(3) {
+      transition-delay: 100ms;
+    }
+
+    .pricing-card.featured:hover .pricing-features li:nth-child(4) {
+      transition-delay: 150ms;
+    }
+
+    .pricing-card.featured:hover .pricing-features li:nth-child(5) {
+      transition-delay: 200ms;
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #007bff;
+      color: white;
+      padding: 1rem;
+      font-size: 0.9rem;
+      font-weight: var(--font-weight-semibold);
+      text-align: center;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .pricing-card:hover .pricing-badge {
+      transform: scale(1.02);
+    }
+
+    .pricing-card.featured .pricing-header-card {
+      padding-top: 3rem;
+    }
+
+    .pricing-header-card {
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .pricing-title {
+      font-size: 1.75rem;
+      font-weight: var(--font-weight-bold);
+      color: #1a202c;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .pricing-subtitle {
+      color: var(--color-text-secondary);
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pricing-price {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-currency {
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-semibold);
+      color: #1a202c;
+    }
+
+    .pricing-amount {
+      font-size: 4rem;
+      font-weight: var(--font-weight-bold);
+      color: #1a202c;
+      line-height: 1;
+      transition: transform 0.3s ease;
+    }
+
+    .pricing-period {
+      font-size: 1.25rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .pricing-description {
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .pricing-features {
+      padding: 2rem;
+    }
+
+    .pricing-features ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      color: #475569;
+      transition: transform 0.2s ease;
+    }
+
+    .pricing-features li:last-child {
+      margin-bottom: 0;
+    }
+
+    .pricing-features .check {
+      color: #10b981;
+      font-weight: var(--font-weight-bold);
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .pricing-footer {
+      padding: 1.5rem 2rem 2rem;
+    }
+
+    .pricing-btn {
+      width: 100%;
+      padding: 1rem 2rem;
+      border: 2px solid #e2e8f0;
+      background: transparent;
+      color: #475569;
+      font-weight: var(--font-weight-semibold);
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .pricing-btn:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #334155;
+      text-decoration: none;
+    }
+
+    .pricing-btn.primary {
+      background: #5a67d8;
+      color: white;
+      border-color: #5a67d8;
+    }
+
+    .pricing-btn.primary:hover {
+      background: #4c51bf;
+      border-color: #4c51bf;
+    }
+
+    .pricing-guarantee {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .pricing-guarantee p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: var(--font-size-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pricing-guarantee i {
+      color: #10b981;
+      font-size: 1.1rem;
+    }
+
+    /* About Section Styles */
+    .about {
+      padding: 6rem 0;
+      background: white;
+    }
+
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 4rem;
+    }
+
+    .about-text h2 {
+      font-size: 2.75rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .about-text p {
+      font-size: 1.125rem;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-image {
+      position: relative;
+    }
+
+    .about-image-placeholder {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+      border-radius: var(--radius-lg);
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 4rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      background: var(--color-gray-50);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 160px;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+      font-size: 3.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      margin-bottom: 0.75rem;
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.4;
+      text-align: center;
+      max-width: 150px;
+    }
+
+    /* Company Logos Section */
+    .company-logos {
+      padding: 4rem 0;
+      background: var(--color-gray-50);
+      overflow: hidden;
+    }
+
+    .logos-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    .logos-title {
+      font-size: 1.125rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 2rem;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .logos-carousel {
+      display: flex;
+      animation: scroll 30s linear infinite;
+      gap: 4rem;
+    }
+
+    .logo-item {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+      min-width: 120px;
+      opacity: 0.6;
+      transition: opacity var(--transition-fast);
+    }
+
+    .logo-item:hover {
+      opacity: 1;
+    }
+
+    .logo-item img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      filter: grayscale(100%);
+      transition: filter var(--transition-fast);
+    }
+
+    .logo-item:hover img {
+      filter: grayscale(0%);
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .pricing-header h2 {
+        font-size: 2.25rem;
+      }
+
+      .pricing-header h3 {
+        font-size: 2.25rem;
+      }
+
+      .pricing-header p {
+        font-size: 1.125rem;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        max-width: 400px;
+      }
+
+      .pricing-card {
+        margin: 0 auto;
+      }
+
+      .pricing-card.featured {
+        transform: none;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+      }
+
+      .about-text h2 {
+        font-size: 2.25rem;
+      }
+
+      .about-text p {
+        font-size: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+
+      .stat-card {
+        padding: 2rem 1rem;
+        min-height: 140px;
+      }
+
+      .stat-number {
+        font-size: 3rem;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+      }
+
+      .logos-carousel {
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .pricing-header h2 {
+        font-size: 2rem;
+      }
+
+      .about-text h2 {
+        font-size: 2rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        max-width: 300px;
+      }
+
+      .stat-card {
+        padding: 1.5rem 1rem;
+        min-height: 120px;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.85rem;
+        max-width: none;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="landing-page">
+
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="/">
-        <i class="fas fa-users me-2"></i>CollabSpace
+  <nav class="landing-nav" role="navigation">
+    <div class="nav-container">
+      <a class="nav-brand" href="/">
+        <div class="brand-logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#43e97b"/>
+                <stop offset="50%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#4facfe"/>
+              </linearGradient>
+              <linearGradient id="logoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#667eea"/>
+              </linearGradient>
+              <linearGradient id="logoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea"/>
+                <stop offset="100%" style="stop-color:#764ba2"/>
+              </linearGradient>
+            </defs>
+            <!-- Outer hexagon -->
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#logoGradient1)" opacity="0.9"/>
+            <!-- Inner C shape - top part -->
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+            <!-- Inner C shape - bottom part -->
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+            <!-- 3D effect - right side -->
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#logoGradient2)" opacity="0.8"/>
+            <!-- 3D effect - bottom -->
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#logoGradient3)" opacity="0.7"/>
+          </svg>
+        </div>
+        <span class="brand-name">CollabSpace</span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false">
+        <i class="fas fa-bars"></i>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Sign In</a>
+      <div class="nav-menu">
+        <ul class="nav-links">
+          <li>
+            <a href="#features" class="nav-link">Features</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-light text-primary px-3" href="/register">Get Started</a>
+          <li>
+            <a href="#pricing" class="nav-link">Pricing</a>
+          </li>
+          <li>
+            <a href="#about" class="nav-link">About</a>
+          </li>
+          <li>
+            <a href="/login" class="nav-link">Sign In</a>
+          </li>
+          <li>
+            <a href="/register" class="btn btn-primary">Get Started Free</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <div class="container-fluid">
+  <main id="main-content">
     <!-- Hero Section -->
-    <div class="row min-vh-100 align-items-center bg-primary text-white">
-      <div class="col-lg-8 mx-auto text-center">
-        <h1 class="display-3 fw-bold mb-4">Welcome to CollabSpace</h1>
-        <p class="lead mb-5">
-          The ultimate team collaboration platform that brings your team together
-          with real-time chat, task management, and seamless communication.
-        </p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-          <a href="/register" class="btn btn-light btn-lg px-4 py-2">
-            <i class="fas fa-rocket me-2"></i>
-            Get Started Free
-          </a>
-          <a href="/login" class="btn btn-outline-light btn-lg px-4 py-2">
-            <i class="fas fa-sign-in-alt me-2"></i>
-            Sign In
-          </a>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-text animate-on-scroll slide-in-left">
+          <h1>Where teams come together to build great things</h1>
+          <p class="hero-subtitle">
+            CollabSpace brings all your team's communication and collaboration into one place.
+            Real-time chat, task management, and seamless file sharing — all in a clean, focused interface.
+          </p>
+          <div class="hero-actions">
+            <a href="/register" class="btn btn-primary btn-lg">
+              <span>Get Started Free</span>
+              <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="/contact" class="btn btn-outline-light btn-lg">
+              <span>Contact Sales</span>
+              <i class="fas fa-phone"></i>
+            </a>
+          </div>
+          <p class="hero-note">
+            <i class="fas fa-check-circle"></i>
+            <span>No credit card required · Free 30-day trial</span>
+          </p>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-image">
+            <img src="/public/images/Image_prev.png" alt="CollabSpace interface preview" class="hero-preview" 
+                 onerror="console.log('Image failed to load:', this.src); this.style.display='none';" 
+                 onload="console.log('Image loaded successfully:', this.src);">
+            <div class="hero-shapes">
+              <div class="shape shape-1"></div>
+              <div class="shape shape-2"></div>
+              <div class="shape shape-3"></div>
+            </div>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="stat-content">
+                <h3>10,000+</h3>
+                <p>Teams trust us</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="stat-content">
+                <h3>4.9/5</h3>
+                <p>User rating</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+      <div class="hero-background">
+        <div class="gradient-overlay"></div>
+        <div class="pattern-overlay"></div>
+      </div>
+    </section>
 
     <!-- Features Section -->
-    <div class="row py-5 bg-light">
-      <div class="col-12 text-center mb-5">
-        <h2 class="display-5 fw-bold text-dark">Why Choose CollabSpace?</h2>
-        <p class="lead text-muted">
-          Everything your team needs to collaborate effectively
-        </p>
+    <section id="features" class="features">
+      <div class="section-header animate-on-scroll fade-in">
+        <h2>Everything your team needs</h2>
+        <p>Powerful features to help your team stay organized and efficient</p>
       </div>
 
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px">
-              <i class="fas fa-users fa-2x text-white"></i>
-            </div>
-            <h4 class="card-title">Team Management</h4>
-            <p class="card-text">
-              Create and manage teams with ease. Invite members, assign roles, and
-              keep everyone organized.
-            </p>
+      <div class="features-grid">
+        <div class="feature-card animate-on-scroll slide-in-up animate-delay-1" data-modal="chat-modal">
+          <div class="feature-icon">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3>Real-time Chat</h3>
+          <p>Instant messaging with rich text formatting, file sharing, and thread discussions.</p>
+          <ul class="feature-list">
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Organized conversations</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span>File sharing & preview</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Message reactions</span>
+            </li>
+          </ul>
+          <div class="feature-card-overlay">
+            <span>Click to learn more</span>
+          </div>
+        </div>
+
+        <div class="feature-card animate-on-scroll slide-in-up animate-delay-2" data-modal="task-modal">
+          <div class="feature-icon">
+            <i class="fas fa-tasks"></i>
+          </div>
+          <h3>Task Management</h3>
+          <p>Keep projects on track with powerful task management and tracking tools.</p>
+          <ul class="feature-list">
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Kanban boards</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Task assignments</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Progress tracking</span>
+            </li>
+          </ul>
+          <div class="feature-card-overlay">
+            <span>Click to learn more</span>
+          </div>
+        </div>
+
+        <div class="feature-card" data-modal="team-modal">
+          <div class="feature-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Team Organization</h3>
+          <p>Organize your team with channels, roles, and permissions.</p>
+          <ul class="feature-list">
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Team channels</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Role management</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Access control</span>
+            </li>
+          </ul>
+          <div class="feature-card-overlay">
+            <span>Click to learn more</span>
+          </div>
+        </div>
+
+        <div class="feature-card" data-modal="security-modal">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Security & Control</h3>
+          <p>Enterprise-grade security with data encryption and access controls.</p>
+          <ul class="feature-list">
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Data encryption</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span>SSO integration</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span>Audit logs</span>
+            </li>
+          </ul>
+          <div class="feature-card-overlay">
+            <span>Click to learn more</span>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px">
-              <i class="fas fa-tasks fa-2x text-white"></i>
-            </div>
-            <h4 class="card-title">Task Management</h4>
-            <p class="card-text">
-              Track tasks, set priorities, and monitor progress in real-time.
-              Never miss a deadline again.
-            </p>
+    <!-- Feature Modals -->
+    <div id="chat-modal" class="feature-modal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <button class="modal-close">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-comments"></i>
           </div>
+          <h2>Real-time Chat</h2>
         </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px">
-              <i class="fas fa-comments fa-2x text-white"></i>
+        <div class="modal-body">
+          <p class="modal-description">
+            Transform your team communication with our advanced real-time chat system. Built for modern teams, 
+            our chat platform offers seamless messaging with powerful collaboration features.
+          </p>
+          
+          <div class="modal-features">
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-layer-group"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Organized Conversations</h4>
+                <p>Create channels for different projects, departments, or topics. Keep discussions focused and easily searchable.</p>
+              </div>
             </div>
-            <h4 class="card-title">Real-time Chat</h4>
-            <p class="card-text">
-              Communicate instantly with your team. Share files, react to
-              messages, and stay connected.
-            </p>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-file-upload"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>File Sharing & Preview</h4>
+                <p>Share documents, images, and files instantly. Preview content directly in chat without leaving the conversation.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-smile"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Message Reactions</h4>
+                <p>Express yourself with emoji reactions, create polls, and engage with team messages in meaningful ways.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-search"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Advanced Search</h4>
+                <p>Find any message, file, or conversation instantly with our powerful search functionality and filters.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-cta">
+            <a href="/register" class="btn btn-primary">Start Chatting Now</a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Stats Section -->
-    <div class="row py-5">
-      <div class="col-12 text-center mb-5">
-        <h2 class="display-5 fw-bold text-dark">Trusted by Teams Worldwide</h2>
-      </div>
-
-      <div class="col-lg-3 col-md-6 text-center mb-4">
-        <div class="stats-card">
-          <h3>1000+</h3>
-          <p>Active Teams</p>
+    <div id="task-modal" class="feature-modal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <button class="modal-close">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-tasks"></i>
+          </div>
+          <h2>Task Management</h2>
         </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6 text-center mb-4">
-        <div class="stats-card">
-          <h3>50K+</h3>
-          <p>Tasks Completed</p>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6 text-center mb-4">
-        <div class="stats-card">
-          <h3>1M+</h3>
-          <p>Messages Sent</p>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6 text-center mb-4">
-        <div class="stats-card">
-          <h3>99.9%</h3>
-          <p>Uptime</p>
+        <div class="modal-body">
+          <p class="modal-description">
+            Take control of your projects with our comprehensive task management system. From simple to-dos 
+            to complex project workflows, manage everything in one place.
+          </p>
+          
+          <div class="modal-features">
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-columns"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Kanban Boards</h4>
+                <p>Visualize your workflow with customizable Kanban boards. Drag and drop tasks through different stages.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-user-tag"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Task Assignments</h4>
+                <p>Assign tasks to team members, set due dates, and track accountability across your organization.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Progress Tracking</h4>
+                <p>Monitor project progress with real-time updates, completion percentages, and milestone tracking.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Timeline Views</h4>
+                <p>Visualize project timelines, dependencies, and deadlines with Gantt charts and calendar views.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-cta">
+            <a href="/register" class="btn btn-primary">Organize Your Tasks</a>
+          </div>
         </div>
       </div>
     </div>
+
+    <div id="team-modal" class="feature-modal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <button class="modal-close">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h2>Team Organization</h2>
+        </div>
+        <div class="modal-body">
+          <p class="modal-description">
+            Build and organize your teams effectively with our comprehensive team management tools. 
+            Create structured workspaces that scale with your organization.
+          </p>
+          
+          <div class="modal-features">
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-hashtag"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Team Channels</h4>
+                <p>Create dedicated channels for different teams, projects, or topics. Keep conversations organized and relevant.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-user-cog"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Role Management</h4>
+                <p>Define custom roles and permissions for team members. Control access based on responsibility and hierarchy.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-key"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Access Control</h4>
+                <p>Granular permission settings ensure team members have access to exactly what they need, nothing more.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-sitemap"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Organizational Structure</h4>
+                <p>Create hierarchical team structures with departments, sub-teams, and cross-functional groups.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-cta">
+            <a href="/register" class="btn btn-primary">Build Your Team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="security-modal" class="feature-modal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <button class="modal-close">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h2>Security & Control</h2>
+        </div>
+        <div class="modal-body">
+          <p class="modal-description">
+            Protect your team's data with enterprise-grade security features. Built with privacy and 
+            compliance in mind, ensuring your information stays secure.
+          </p>
+          
+          <div class="modal-features">
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-lock"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Data Encryption</h4>
+                <p>End-to-end encryption for all messages, files, and data. Your information is protected both in transit and at rest.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-sign-in-alt"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>SSO Integration</h4>
+                <p>Seamless integration with your existing identity providers. Support for SAML, OAuth, and enterprise SSO solutions.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-clipboard-list"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Audit Logs</h4>
+                <p>Comprehensive logging of all user activities and system events. Meet compliance requirements with detailed audit trails.</p>
+              </div>
+            </div>
+            
+            <div class="modal-feature">
+              <div class="feature-detail-icon">
+                <i class="fas fa-shield-virus"></i>
+              </div>
+              <div class="feature-detail-content">
+                <h4>Advanced Threat Protection</h4>
+                <p>Multi-layer security with threat detection, malware scanning, and real-time monitoring for suspicious activities.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-cta">
+            <a href="/register" class="btn btn-primary">Secure Your Workspace</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+      <div class="pricing-container">
+        <div class="pricing-header animate-on-scroll fade-in">
+          <h2>Pricing plans</h2>
+          <h3>for teams of all sizes</h3>
+          <p>We make money when teams actually get work done using our platform.<br>
+          A simple flexible pricing model. Support for all team sizes.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <div class="pricing-card animate-on-scroll slide-in-up animate-delay-1" data-plan="basic" data-price="19">
+            <div class="pricing-header-card">
+              <div class="pricing-title">Basic</div>
+              <div class="pricing-price">
+                <span class="pricing-currency">$</span>
+                <span class="pricing-amount">19</span>
+                <span class="pricing-period">/month</span>
+              </div>
+            </div>
+            <div class="pricing-features">
+              <ul>
+                <li><span class="check">✓</span> Contained or archived</li>
+                <li><span class="check">✓</span> Does not do anything</li>
+                <li><span class="check">✓</span> Don't use as a guideline</li>
+              </ul>
+            </div>
+            <div class="pricing-footer">
+              <a href="/payment" class="pricing-btn">Get started</a>
+            </div>
+          </div>
+
+          <div class="pricing-card featured animate-on-scroll slide-in-up animate-delay-2" data-plan="essential" data-price="59">
+            <div class="pricing-badge">Most popular ✓</div>
+            <div class="pricing-header-card">
+              <div class="pricing-title">Essential</div>
+              <div class="pricing-price">
+                <span class="pricing-currency">$</span>
+                <span class="pricing-amount">59</span>
+                <span class="pricing-period">/month</span>
+              </div>
+            </div>
+            <div class="pricing-features">
+              <ul>
+                <li><span class="check">✓</span> Contained or archived</li>
+                <li><span class="check">✓</span> Team can do anything and access</li>
+                <li><span class="check">✓</span> Access to one workspace information</li>
+                <li><span class="check">✓</span> Extension lists showed grouped</li>
+                <li><span class="check">✓</span> Migrate non-profit campaigns via GUI</li>
+              </ul>
+            </div>
+            <div class="pricing-footer">
+              <a href="/payment" class="pricing-btn primary">Get started</a>
+            </div>
+          </div>
+
+          <div class="pricing-card animate-on-scroll slide-in-up animate-delay-3" data-plan="premium" data-price="119">
+            <div class="pricing-header-card">
+              <div class="pricing-title">Premium</div>
+              <div class="pricing-price">
+                <span class="pricing-currency">$</span>
+                <span class="pricing-amount">119</span>
+                <span class="pricing-period">/month</span>
+              </div>
+            </div>
+            <div class="pricing-features">
+              <ul>
+                <li><span class="check">✓</span> Contained or archived</li>
+                <li><span class="check">✓</span> Team can do anything</li>
+                <li><span class="check">✓</span> Access to one workspace</li>
+              </ul>
+            </div>
+            <div class="pricing-footer">
+              <a href="/payment" class="pricing-btn">Get started</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="pricing-guarantee">
+          <p><i class="fas fa-shield-alt"></i> 30-day money-back guarantee • Cancel anytime • No setup fees</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="about-container">
+        <div class="about-content">
+          <div class="about-text animate-on-scroll slide-in-left">
+            <h2>About CollabSpace</h2>
+            <p>Founded in 2023, CollabSpace was born from the simple idea that team collaboration shouldn't be complicated. We believe that great work happens when teams can communicate seamlessly, share ideas freely, and stay organized effortlessly.</p>
+            
+            <p>Our mission is to create tools that bring teams together, no matter where they are in the world. With features designed for the modern workplace, CollabSpace helps teams stay connected, productive, and focused on what matters most.</p>
+          </div>
+          <div class="about-image animate-on-scroll slide-in-right">
+            <div class="about-image-placeholder pulse-animation">
+              <i class="fas fa-users"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card animate-on-scroll scale-in animate-delay-1">
+            <div class="stat-number">10,000+</div>
+            <div class="stat-label">Teams using CollabSpace</div>
+          </div>
+          <div class="stat-card animate-on-scroll scale-in animate-delay-2">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Countries worldwide</div>
+          </div>
+          <div class="stat-card animate-on-scroll scale-in animate-delay-3">
+            <div class="stat-number">99.9%</div>
+            <div class="stat-label">Uptime guarantee</div>
+          </div>
+          <div class="stat-card animate-on-scroll scale-in animate-delay-4">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Customer support</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
     <!-- CTA Section -->
-    <div class="row py-5 bg-dark text-white">
-      <div class="col-12 text-center">
-        <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Team?</h2>
-        <p class="lead mb-4">
-          Join thousands of teams who are already using CollabSpace to boost
-          productivity and collaboration.
-        </p>
-        <a href="/register" class="btn btn-primary btn-lg px-5 py-3">
-          <i class="fas fa-rocket me-2"></i>
-          Start Your Free Trial
-        </a>
+    <section class="cta">
+      <div class="cta-content">
+        <h2>Ready to transform how your team works?</h2>
+        <p>Join thousands of teams who are already using CollabSpace to boost productivity.</p>
+        <div class="cta-actions">
+          <a href="/register" class="btn btn-primary btn-lg">
+            <span>Start Your Free Trial</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+          <p class="cta-note">No credit card required · 30-day free trial</p>
+        </div>
       </div>
-    </div>
-  </div>
+      <div class="cta-background"></div>
+      <!-- Floating Shapes -->
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </section>
 
-  <!-- Footer -->
-  <footer class="bg-dark text-white py-4">
-    <div class="container text-center">
-      <p class="mb-0">&copy; 2024 CollabSpace. All rights reserved.</p>
-    </div>
-  </footer>
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">
+            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="footerLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#43e97b"/>
+                  <stop offset="50%" style="stop-color:#00f2fe"/>
+                  <stop offset="100%" style="stop-color:#4facfe"/>
+                </linearGradient>
+                <linearGradient id="footerLogoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#00f2fe"/>
+                  <stop offset="100%" style="stop-color:#667eea"/>
+                </linearGradient>
+                <linearGradient id="footerLogoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#667eea"/>
+                  <stop offset="100%" style="stop-color:#764ba2"/>
+                </linearGradient>
+              </defs>
+              <!-- Outer hexagon -->
+              <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#footerLogoGradient1)" opacity="0.9"/>
+              <!-- Inner C shape - top part -->
+              <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+              <!-- Inner C shape - bottom part -->
+              <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+              <!-- 3D effect - right side -->
+              <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#footerLogoGradient2)" opacity="0.8"/>
+              <!-- 3D effect - bottom -->
+              <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#footerLogoGradient3)" opacity="0.7"/>
+            </svg>
+            <span>CollabSpace</span>
+          </a>
+          <p>Where teams come together to build great things.</p>
+        </div>
+
+        <div class="footer-links">
+          <div class="footer-section">
+            <h3>Product</h3>
+            <ul>
+              <li><a href="/#features">Features</a></li>
+              <li><a href="/#pricing">Pricing</a></li>
+              <li><a href="/security">Security</a></li>
+              <li><a href="/enterprise">Enterprise</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>Company</h3>
+            <ul>
+              <li><a href="/#about">About</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/blog">Blog</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="/docs">Documentation</a></li>
+              <li><a href="/help">Help Center</a></li>
+              <li><a href="/guides">Guides</a></li>
+              <li><a href="/api">API</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>Legal</h3>
+            <ul>
+              <li><a href="/privacy">Privacy</a></li>
+              <li><a href="/terms">Terms</a></li>
+              <li><a href="/security">Security</a></li>
+              <li><a href="/status">Status</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 CollabSpace. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#twitter" aria-label="Twitter">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#github" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="#linkedin" aria-label="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
+    </footer>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Navigation Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const navToggle = document.querySelector('.nav-toggle');
+      const navMenu = document.querySelector('.nav-menu');
+
+      if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function() {
+          const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', !isExpanded);
+          navMenu.classList.toggle('show');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+            navToggle.setAttribute('aria-expanded', 'false');
+            navMenu.classList.remove('show');
+          }
+        });
+
+        // Close menu when pressing Escape
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && navMenu.classList.contains('show')) {
+            navToggle.setAttribute('aria-expanded', 'false');
+            navMenu.classList.remove('show');
+          }
+        });
+
+        // Handle smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              // Close mobile menu if open
+              navToggle.setAttribute('aria-expanded', 'false');
+              navMenu.classList.remove('show');
+
+              // Scroll to target
+              targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+
+              // Update URL without scrolling
+              history.pushState(null, '', targetId);
+            }
+          });
+        });
+      }
+
+      // Add scroll-based navbar styling
+      const navbar = document.querySelector('.landing-nav');
+      if (navbar) {
+        const handleScroll = () => {
+          if (window.scrollY > 0) {
+            navbar.classList.add('scrolled');
+          } else {
+            navbar.classList.remove('scrolled');
+          }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Initial check
+      }
+    });
+
+    // Scroll-triggered animations
+    document.addEventListener('DOMContentLoaded', function() {
+      const animateElements = document.querySelectorAll('.animate-on-scroll');
+      
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+          }
+        });
+      }, observerOptions);
+
+      animateElements.forEach(element => {
+        observer.observe(element);
+      });
+
+      // Add floating animation to floating icons
+      const floatingElements = document.querySelectorAll('.float-animation');
+      floatingElements.forEach(element => {
+        element.classList.add('animate');
+      });
+    });
+
+    // Feature Card Modal Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const featureCards = document.querySelectorAll('.feature-card[data-modal]');
+      const modals = document.querySelectorAll('.feature-modal');
+      const modalBackdrops = document.querySelectorAll('.modal-backdrop');
+      const modalCloses = document.querySelectorAll('.modal-close');
+
+      // Open modal when feature card is clicked
+      featureCards.forEach(card => {
+        card.addEventListener('click', function() {
+          const modalId = this.getAttribute('data-modal');
+          const modal = document.getElementById(modalId);
+          
+          if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+          }
+        });
+      });
+
+      // Close modal when close button is clicked
+      modalCloses.forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+          const modal = this.closest('.feature-modal');
+          closeModal(modal);
+        });
+      });
+
+      // Close modal when backdrop is clicked
+      modals.forEach(modal => {
+        modal.addEventListener('click', function(e) {
+          // Only close if clicking the modal background, not the content
+          if (e.target === this) {
+            closeModal(this);
+          }
+        });
+      });
+
+      // Close modal when Escape key is pressed
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          const activeModal = document.querySelector('.feature-modal.active');
+          if (activeModal) {
+            closeModal(activeModal);
+          }
+        }
+      });
+
+      // Function to close modal with animation
+      function closeModal(modal) {
+        if (modal) {
+          modal.classList.remove('active');
+          document.body.style.overflow = ''; // Restore scrolling
+        }
+      }
+
+      // Add keyboard navigation for feature cards
+      featureCards.forEach(card => {
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', 'Click to learn more about ' + card.querySelector('h3').textContent);
+
+        card.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+          }
+        });
+      });
+    });
+
+    // Pricing Card Click Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const pricingCards = document.querySelectorAll('.pricing-card');
+      
+      pricingCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          // Don't trigger if clicking on the button directly
+          if (e.target.classList.contains('pricing-btn') || e.target.closest('.pricing-btn')) {
+            return;
+          }
+          
+          const plan = this.getAttribute('data-plan');
+          const price = this.getAttribute('data-price');
+          
+          // Create URL with plan parameters
+          const paymentUrl = `/payment?plan=${plan}&price=${price}`;
+          
+          // Navigate to payment page
+          window.location.href = paymentUrl;
+        });
+
+        // Add keyboard navigation
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', 'Select ' + card.querySelector('.pricing-title').textContent + ' plan');
+
+        card.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

@@ -3,8 +3,8 @@ const { body, validationResult } = require("express-validator");
 const Team = require("../models/Team");
 const User = require("../models/User");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
-const { requireTeamMember, requireTeamAdmin } = require("../middleware/auth");
-const logger = require("../middleware/logger");
+const { requireAuth, requireOrganiser, requireTeamMembership, requireTeamOrganiser } = require("../middleware/auth");
+const { logger } = require("../middleware/logger");
 
 const router = express.Router();
 
@@ -71,9 +71,17 @@ const validateInvitation = [
 // @access  Private
 router.get(
   "/",
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
-      const { page = 1, limit = 20, search, isActive } = req.query;
+      // Disable caching for teams data to ensure fresh data
+      res.set({
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      });
+
+      const { page = 1, limit = 20, search, isActive, admin } = req.query;
 
       const query = { isActive: true };
 
@@ -85,23 +93,25 @@ router.get(
         ];
       }
 
+      // Filter by admin role if requested
+      if (admin === 'true') {
+        query.admin = req.user._id;
+      } else {
+        // Default: get teams where user is a member
+        query.members = req.user._id;
+      }
+
       const skip = (page - 1) * limit;
 
-      // Get teams where user is a member
-      const userTeams = await Team.find({
-        ...query,
-        members: req.user._id,
-      })
+      const userTeams = await Team.find(query)
         .populate("admin", "username firstName lastName avatar")
         .populate("members", "username firstName lastName avatar")
+        .populate("joinRequests.user", "username firstName lastName avatar")
         .sort({ updatedAt: -1 })
         .skip(skip)
         .limit(parseInt(limit));
 
-      const total = await Team.countDocuments({
-        ...query,
-        members: req.user._id,
-      });
+      const total = await Team.countDocuments(query);
 
       res.json({
         success: true,
@@ -116,7 +126,7 @@ router.get(
         },
       });
     } catch (error) {
-      logger.error("Get user teams error:", error);
+      console.error("Get user teams error:", error);
       throw new AppError("Failed to get teams", 500);
     }
   })
@@ -127,6 +137,7 @@ router.get(
 // @access  Private
 router.get(
   "/public",
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const { page = 1, limit = 20, search } = req.query;
@@ -175,6 +186,7 @@ router.get(
 // @access  Private
 router.post(
   "/",
+  requireAuth,
   validateTeamCreation,
   catchAsync(async (req, res) => {
     try {
@@ -220,6 +232,14 @@ router.post(
 
       logger.info(`User ${req.user.username} created team: ${name}`);
 
+      // Emit updated organiser summary (lazy require to avoid circular)
+      try {
+        const { emitOrganiserSummary } = require('../app');
+        emitOrganiserSummary && emitOrganiserSummary(req.user._id.toString());
+      } catch (e) {
+        logger.warn('Failed to emit organiser summary after team create');
+      }
+
       res.status(201).json({
         success: true,
         message: "Team created successfully",
@@ -237,7 +257,7 @@ router.post(
 // @access  Private (Team Member)
 router.get(
   "/:id",
-  requireTeamMember,
+  requireTeamMembership,
   catchAsync(async (req, res) => {
     try {
       const team = await Team.findById(req.params.id)
@@ -272,7 +292,7 @@ router.get(
 // @access  Private (Team Admin)
 router.put(
   "/:id",
-  requireTeamAdmin,
+  requireTeamOrganiser,
   validateTeamUpdate,
   catchAsync(async (req, res) => {
     try {
@@ -336,7 +356,7 @@ router.put(
 // @access  Private (Team Admin)
 router.delete(
   "/:id",
-  requireTeamAdmin,
+  requireTeamOrganiser,
   catchAsync(async (req, res) => {
     try {
       const teamName = req.team.name;
@@ -361,7 +381,7 @@ router.delete(
 // @access  Private (Team Member)
 router.post(
   "/:id/invite",
-  requireTeamMember,
+  requireTeamMembership,
   validateInvitation,
   catchAsync(async (req, res) => {
     try {
@@ -560,7 +580,7 @@ router.post(
 // @access  Private (Team Member)
 router.post(
   "/:id/leave",
-  requireTeamMember,
+  requireTeamMembership,
   catchAsync(async (req, res) => {
     try {
       // Check if user is the admin
@@ -593,7 +613,7 @@ router.post(
 // @access  Private (Team Admin)
 router.post(
   "/:id/remove-member",
-  requireTeamAdmin,
+  requireTeamOrganiser,
   catchAsync(async (req, res) => {
     try {
       const { userId } = req.body;
@@ -640,7 +660,7 @@ router.post(
 // @access  Private (Team Admin)
 router.post(
   "/:id/transfer-admin",
-  requireTeamAdmin,
+  requireTeamOrganiser,
   catchAsync(async (req, res) => {
     try {
       const { userId } = req.body;
@@ -696,7 +716,7 @@ router.post(
 // @access  Private (Team Member)
 router.get(
   "/:id/stats",
-  requireTeamMember,
+  requireTeamMembership,
   catchAsync(async (req, res) => {
     try {
       // Update team stats
@@ -714,6 +734,407 @@ router.get(
     } catch (error) {
       logger.error("Get team stats error:", error);
       throw new AppError("Failed to get team statistics", 500);
+    }
+  })
+);
+
+// @route   POST /api/teams/:id/request-join
+// @desc    Request to join a private team
+// @access  Private
+router.post(
+  "/:id/request-join",
+  body("message")
+    .optional()
+    .trim()
+    .isLength({ max: 200 })
+    .withMessage("Message cannot exceed 200 characters"),
+  catchAsync(async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation failed",
+          errors: errors.array(),
+        });
+      }
+
+      const team = await Team.findById(req.params.id);
+      if (!team) {
+        return res.status(404).json({
+          success: false,
+          message: "Team not found",
+        });
+      }
+
+      // Check if user is already a member
+      if (team.members.includes(req.user._id)) {
+        return res.status(400).json({
+          success: false,
+          message: "You are already a member of this team",
+        });
+      }
+
+      // Check if user already has a pending join request
+      const existingRequest = team.joinRequests.find(
+        (request) => request.user.toString() === req.user._id.toString() && request.status === "pending"
+      );
+
+      if (existingRequest) {
+        return res.status(400).json({
+          success: false,
+          message: "You already have a pending join request for this team",
+        });
+      }
+
+      // Check if user has a pending invitation
+      const pendingInvitation = team.invitedUsers.find(
+        (invite) => invite.user.toString() === req.user._id.toString() && invite.status === "pending"
+      );
+
+      if (pendingInvitation) {
+        return res.status(400).json({
+          success: false,
+          message: "You have a pending invitation to this team. Please respond to the invitation instead.",
+        });
+      }
+
+      // Add join request
+      team.joinRequests.push({
+        user: req.user._id,
+        message: req.body.message || "",
+        requestedAt: new Date(),
+        status: "pending",
+      });
+
+      await team.save();
+
+      logger.info(`User ${req.user.username} requested to join team: ${team.name}`);
+
+      res.status(200).json({
+        success: true,
+        message: "Join request sent successfully",
+        data: {
+          teamId: team._id,
+          teamName: team.name,
+        },
+      });
+    } catch (error) {
+      logger.error("Request join team error:", error);
+      throw new AppError("Failed to send join request", 500);
+    }
+  })
+);
+
+// @route   GET /api/teams/:id/join-requests
+// @desc    Get join requests for a team (admin only)
+// @access  Private
+router.get(
+  "/:id/join-requests",
+  requireTeamOrganiser,
+  catchAsync(async (req, res) => {
+    try {
+      const team = await Team.findById(req.params.id)
+        .populate("joinRequests.user", "username firstName lastName email avatar")
+        .select("joinRequests");
+
+      if (!team) {
+        return res.status(404).json({
+          success: false,
+          message: "Team not found",
+        });
+      }
+
+      // Filter pending requests
+      const pendingRequests = team.joinRequests.filter(request => request.status === "pending");
+
+      res.json({
+        success: true,
+        data: {
+          requests: pendingRequests,
+          total: pendingRequests.length,
+        },
+      });
+    } catch (error) {
+      logger.error("Get join requests error:", error);
+      throw new AppError("Failed to get join requests", 500);
+    }
+  })
+);
+
+// @route   POST /api/teams/:id/approve-join-request
+// @desc    Approve a join request (admin only)
+// @access  Private
+router.post(
+  "/:id/approve-join-request",
+  requireTeamOrganiser,
+  body("userId")
+    .notEmpty()
+    .withMessage("User ID is required")
+    .isMongoId()
+    .withMessage("Invalid user ID"),
+  catchAsync(async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation failed",
+          errors: errors.array(),
+        });
+      }
+
+      const { userId } = req.body;
+
+      const team = await Team.findById(req.params.id);
+      if (!team) {
+        return res.status(404).json({
+          success: false,
+          message: "Team not found",
+        });
+      }
+
+      // Find the join request
+      const joinRequest = team.joinRequests.find(
+        (request) => request.user.toString() === userId && request.status === "pending"
+      );
+
+      if (!joinRequest) {
+        return res.status(404).json({
+          success: false,
+          message: "Join request not found or already processed",
+        });
+      }
+
+      // Check if user is already a member
+      if (team.members.includes(userId)) {
+        return res.status(400).json({
+          success: false,
+          message: "User is already a member of this team",
+        });
+      }
+
+      // Approve the request
+      joinRequest.status = "approved";
+      team.members.push(userId);
+
+      await team.save();
+
+      // Get user details for response
+      const user = await User.findById(userId).select("username firstName lastName");
+
+      logger.info(`Join request approved for user ${user.username} to team: ${team.name}`);
+
+      res.status(200).json({
+        success: true,
+        message: "Join request approved successfully",
+        data: {
+          teamId: team._id,
+          teamName: team.name,
+          newMember: user,
+        },
+      });
+    } catch (error) {
+      logger.error("Approve join request error:", error);
+      throw new AppError("Failed to approve join request", 500);
+    }
+  })
+);
+
+// @route   POST /api/teams/:id/deny-join-request
+// @desc    Deny a join request (admin only)
+// @access  Private
+router.post(
+  "/:id/deny-join-request",
+  requireTeamOrganiser,
+  body("userId")
+    .notEmpty()
+    .withMessage("User ID is required")
+    .isMongoId()
+    .withMessage("Invalid user ID"),
+  body("reason")
+    .optional()
+    .trim()
+    .isLength({ max: 200 })
+    .withMessage("Reason cannot exceed 200 characters"),
+  catchAsync(async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation failed",
+          errors: errors.array(),
+        });
+      }
+
+      const { userId, reason } = req.body;
+
+      const team = await Team.findById(req.params.id);
+      if (!team) {
+        return res.status(404).json({
+          success: false,
+          message: "Team not found",
+        });
+      }
+
+      // Find the join request
+      const joinRequest = team.joinRequests.find(
+        (request) => request.user.toString() === userId && request.status === "pending"
+      );
+
+      if (!joinRequest) {
+        return res.status(404).json({
+          success: false,
+          message: "Join request not found or already processed",
+        });
+      }
+
+      // Deny the request
+      joinRequest.status = "denied";
+      if (reason) {
+        joinRequest.reason = reason;
+      }
+
+      await team.save();
+
+      // Get user details for response
+      const user = await User.findById(userId).select("username firstName lastName");
+
+      logger.info(`Join request denied for user ${user.username} to team: ${team.name}`);
+
+      res.status(200).json({
+        success: true,
+        message: "Join request denied",
+        data: {
+          teamId: team._id,
+          teamName: team.name,
+          deniedUser: user,
+        },
+      });
+    } catch (error) {
+      logger.error("Deny join request error:", error);
+      throw new AppError("Failed to deny join request", 500);
+    }
+  })
+);
+
+// @route   GET /api/teams/search
+// @desc    Search for teams
+// @access  Private
+router.get(
+  "/search",
+  catchAsync(async (req, res) => {
+    try {
+      const { q, page = 1, limit = 20, type } = req.query;
+
+      if (!q || q.trim().length < 2) {
+        return res.status(400).json({
+          success: false,
+          message: "Search query must be at least 2 characters long",
+        });
+      }
+
+      const query = {
+        isActive: true,
+        $or: [
+          { name: { $regex: q, $options: "i" } },
+          { description: { $regex: q, $options: "i" } },
+          { tags: { $in: [new RegExp(q, "i")] } },
+        ],
+        // Don't show teams where user is already a member
+        members: { $ne: req.user._id },
+      };
+
+      // Filter by type if provided
+      if (type) {
+        query.type = type;
+      }
+
+      const skip = (page - 1) * limit;
+
+      const teams = await Team.find(query)
+        .populate("admin", "username firstName lastName avatar")
+        .select("name description admin memberCount isPublic tags type createdAt")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit));
+
+      const total = await Team.countDocuments(query);
+
+      // Add join status for each team
+      const teamsWithStatus = teams.map(team => {
+        const teamObj = team.toObject();
+        
+        // Check if user has pending join request
+        const hasPendingRequest = team.joinRequests?.some(
+          request => request.user.toString() === req.user._id.toString() && request.status === "pending"
+        );
+        
+        // Check if user has pending invitation
+        const hasPendingInvitation = team.invitedUsers?.some(
+          invite => invite.user.toString() === req.user._id.toString() && invite.status === "pending"
+        );
+
+        teamObj.userStatus = {
+          canJoin: team.isPublic,
+          canRequestJoin: !team.isPublic && !hasPendingRequest && !hasPendingInvitation,
+          hasPendingRequest,
+          hasPendingInvitation,
+        };
+
+        return teamObj;
+      });
+
+      res.json({
+        success: true,
+        data: {
+          teams: teamsWithStatus,
+          pagination: {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            total,
+            pages: Math.ceil(total / limit),
+          },
+        },
+      });
+    } catch (error) {
+      logger.error("Search teams error:", error);
+      throw new AppError("Failed to search teams", 500);
+    }
+  })
+);
+
+// @desc    Get total members count across all user's teams
+// @route   GET /api/teams/members-count
+// @access  Private
+router.get(
+  "/members-count",
+  requireAuth,
+  catchAsync(async (req, res) => {
+    try {
+      const teams = await Team.find({
+        $or: [
+          { admin: req.user._id },
+          { members: req.user._id }
+        ],
+        isActive: true
+      }).populate('members', '_id');
+
+      const totalMembers = teams.reduce((total, team) => {
+        return total + (team.members?.length || 0);
+      }, 0);
+
+      res.json({
+        success: true,
+        data: {
+          totalMembers,
+          totalTeams: teams.length
+        }
+      });
+    } catch (error) {
+      logger.error("Get members count error:", error);
+      throw new AppError("Failed to get members count", 500);
     }
   })
 );

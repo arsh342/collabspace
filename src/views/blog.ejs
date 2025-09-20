@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog - CollabSpace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --color-primary: #1e40af;
+      --color-primary-dark: #1e3a8a;
+      --color-secondary: #312e81;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+      --color-text-primary: #1f2937;
+      --color-text-secondary: #6b7280;
+      --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 1.875rem;
+      --font-size-4xl: 2.25rem;
+      --font-size-5xl: 3rem;
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --transition-fast: 0.15s ease-in-out;
+      --transition-normal: 0.3s ease-in-out;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family-sans);
+      line-height: 1.6;
+      color: var(--color-text-primary);
+      background: var(--color-gray-50);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--color-gray-200);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-logo svg {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    .brand-name {
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -0.025em;
+      color: var(--color-primary);
+    }
+
+    .navbar-brand:hover {
+      color: var(--color-primary-dark);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .navbar-brand:hover .brand-logo svg {
+      transform: scale(1.05);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      color: white;
+      padding: 5rem 0;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: var(--font-size-5xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      font-size: var(--font-size-xl);
+      opacity: 0.95;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .content-wrapper {
+      flex: 1;
+      padding: 4rem 0;
+    }
+
+    .blog-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .blog-header h2 {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .blog-header p {
+      font-size: var(--font-size-lg);
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .blog-category {
+      margin-bottom: 3rem;
+    }
+
+    .category-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--color-primary);
+      display: inline-block;
+    }
+
+    .blog-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .blog-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      transition: all var(--transition-normal);
+      border: 1px solid var(--color-gray-200);
+    }
+
+    .blog-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+
+    .blog-icon {
+      width: 4rem;
+      height: 4rem;
+      background: var(--color-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .blog-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 1rem;
+      color: var(--color-text-primary);
+    }
+
+    .blog-description {
+      font-size: var(--font-size-base);
+      color: var(--color-text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .blog-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .blog-date {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .blog-author {
+      background: var(--color-gray-100);
+      color: var(--color-gray-700);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-weight: var(--font-weight-medium);
+    }
+
+    .site-footer {
+      background: var(--color-gray-900);
+      color: var(--color-gray-300);
+      padding: 3rem 0 1rem;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-xl);
+      transition: color 0.3s ease;
+    }
+
+    .footer-logo:hover {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .footer-brand p {
+      color: var(--color-gray-400);
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .footer-section h3 {
+      color: white;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: 1rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-section li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: var(--color-gray-400);
+      font-size: var(--font-size-sm);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-gray-700);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .footer-bottom p {
+      color: var(--color-gray-500);
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-links a {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--color-gray-800);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-gray-400);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--color-primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: var(--font-size-4xl);
+      }
+
+      .hero p {
+        font-size: var(--font-size-lg);
+      }
+
+      .blog-title {
+        font-size: var(--font-size-lg);
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-links {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body class="blog-page">
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <div class="brand-logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#43e97b"/>
+                <stop offset="50%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#4facfe"/>
+              </linearGradient>
+              <linearGradient id="logoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#667eea"/>
+              </linearGradient>
+              <linearGradient id="logoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea"/>
+                <stop offset="100%" style="stop-color:#764ba2"/>
+              </linearGradient>
+            </defs>
+            <!-- Outer hexagon -->
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#logoGradient1)" opacity="0.9"/>
+            <!-- Inner C shape - top part -->
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+            <!-- Inner C shape - bottom part -->
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+            <!-- 3D effect - right side -->
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#logoGradient2)" opacity="0.8"/>
+            <!-- 3D effect - bottom -->
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#logoGradient3)" opacity="0.7"/>
+          </svg>
+        </div>
+        <span class="brand-name">CollabSpace</span>
+      </a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Insights & Stories</h1>
+      <p>Discover the latest trends, tips, and insights about team collaboration and productivity</p>
+    </div>
+  </section>
+
+  <div class="content-wrapper">
+    <div class="container">
+      <div class="blog-header">
+        <h2>Latest Blog Posts</h2>
+        <p>Stay updated with the latest insights, tips, and stories about team collaboration</p>
+      </div>
+
+      <div class="blog-category">
+        <h3 class="category-title">Recent Articles</h3>
+        <div class="blog-cards">
+          <div class="blog-card">
+            <div class="blog-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h4 class="blog-title">The Future of Remote Team Collaboration</h4>
+            <p class="blog-description">As remote work becomes the new normal, teams are discovering new ways to collaborate effectively across distances. Explore emerging trends and technologies.</p>
+            <div class="blog-meta">
+              <span class="blog-date">
+                <i class="far fa-calendar"></i>
+                December 15, 2024
+              </span>
+              <span class="blog-author">Sarah Johnson</span>
+            </div>
+          </div>
+
+          <div class="blog-card">
+            <div class="blog-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h4 class="blog-title">10 Tips for Effective Async Communication</h4>
+            <p class="blog-description">Asynchronous communication is a cornerstone of successful remote teams. Here are our top 10 tips for making async communication work for your team.</p>
+            <div class="blog-meta">
+              <span class="blog-date">
+                <i class="far fa-calendar"></i>
+                December 10, 2024
+              </span>
+              <span class="blog-author">Mike Chen</span>
+            </div>
+          </div>
+
+          <div class="blog-card">
+            <div class="blog-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h4 class="blog-title">Boosting Team Productivity with Smart Tools</h4>
+            <p class="blog-description">Learn how the right combination of tools and processes can dramatically improve your team's productivity and collaboration effectiveness.</p>
+            <div class="blog-meta">
+              <span class="blog-date">
+                <i class="far fa-calendar"></i>
+                December 5, 2024
+              </span>
+              <span class="blog-author">Emma Davis</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-category">
+        <h3 class="category-title">Team Management</h3>
+        <div class="blog-cards">
+          <div class="blog-card">
+            <div class="blog-icon">
+              <i class="fas fa-bullhorn"></i>
+            </div>
+            <h4 class="blog-title">Building a Strong Remote Team Culture</h4>
+            <p class="blog-description">Creating and maintaining team culture in a remote environment requires intentional effort and the right strategies.</p>
+            <div class="blog-meta">
+              <span class="blog-date">
+                <i class="far fa-calendar"></i>
+                November 28, 2024
+              </span>
+              <span class="blog-author">Alex Thompson</span>
+            </div>
+          </div>
+
+          <div class="blog-card">
+            <div class="blog-icon">
+              <i class="fas fa-cogs"></i>
+            </div>
+            <h4 class="blog-title">Streamlining Project Workflows</h4>
+            <p class="blog-description">Discover proven strategies for optimizing your project workflows and reducing bottlenecks in your team's processes.</p>
+            <div class="blog-meta">
+              <span class="blog-date">
+                <i class="far fa-calendar"></i>
+                November 20, 2024
+              </span>
+              <span class="blog-author">Lisa Rodriguez</span>
+            </div>
+          </div>
+
+          <div class="blog-card">
+            <div class="blog-icon">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <h4 class="blog-title">Effective Cross-Team Collaboration</h4>
+            <p class="blog-description">Learn how to break down silos and foster collaboration between different teams and departments in your organization.</p>
+            <div class="blog-meta">
+              <span class="blog-date">
+                <i class="far fa-calendar"></i>
+                November 15, 2024
+              </span>
+              <span class="blog-author">David Kim</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="footerLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#43e97b" />
+                <stop offset="50%" style="stop-color:#00f2fe" />
+                <stop offset="100%" style="stop-color:#4facfe" />
+              </linearGradient>
+              <linearGradient id="footerLogoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00f2fe" />
+                <stop offset="100%" style="stop-color:#667eea" />
+              </linearGradient>
+              <linearGradient id="footerLogoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea" />
+                <stop offset="100%" style="stop-color:#764ba2" />
+              </linearGradient>
+            </defs>
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#footerLogoGradient1)" opacity="0.9" />
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white" />
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white" />
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#footerLogoGradient2)" opacity="0.8" />
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#footerLogoGradient3)" opacity="0.7" />
+          </svg>
+          <span>CollabSpace</span>
+        </a>
+        <p>Where teams come together to build great things.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-section">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            <li><a href="/security">Security</a></li>
+            <li><a href="/enterprise">Enterprise</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="/docs">Documentation</a></li>
+            <li><a href="/help">Help Center</a></li>
+            <li><a href="/guides">Guides</a></li>
+            <li><a href="/api">API</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy</a></li>
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/security">Security</a></li>
+            <li><a href="/status">Status</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CollabSpace. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#github" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="#linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>

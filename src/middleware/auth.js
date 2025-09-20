@@ -1,31 +1,29 @@
-const { verifyToken } = require("../config/jwt");
 const User = require("../models/User");
 const { logger } = require("./logger");
 
-const authenticateToken = async (req, res, next) => {
+// Session-based authentication middleware for API routes
+const authenticateSession = async (req, res, next) => {
   try {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
-
-    if (!token) {
+    if (!req.session.userId) {
       return res.status(401).json({
         success: false,
-        message: "Access token required",
+        message: "Authentication required",
       });
     }
 
-    const decoded = verifyToken(token);
-    const user = await User.findById(decoded.userId).select("-password");
+    const user = await User.findById(req.session.userId).select("-password");
 
     if (!user) {
+      req.session.destroy();
       return res.status(401).json({
         success: false,
-        message: "Invalid token - user not found",
+        message: "Invalid session - user not found",
       });
     }
 
     // Check if user is active
     if (!user.isActive) {
+      req.session.destroy();
       return res.status(401).json({
         success: false,
         message: "Account is deactivated",
@@ -33,27 +31,58 @@ const authenticateToken = async (req, res, next) => {
     }
 
     req.user = user;
-    req.token = decoded;
     next();
   } catch (error) {
     logger.error("Authentication error:", error);
-
-    if (error.message === "Token has expired") {
-      return res.status(401).json({
-        success: false,
-        message: "Token has expired",
-      });
-    }
-
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
-      message: "Invalid token",
+      message: "Authentication error",
     });
   }
 };
 
-const requireRole = (roles) => {
-  return (req, res, next) => {
+// Session-based authentication middleware for web routes (redirects to login)
+const authenticateWeb = async (req, res, next) => {
+  try {
+    console.log('🔍 Session debug:', {
+      sessionId: req.sessionID,
+      userId: req.session.userId,
+      sessionExists: !!req.session,
+      cookies: req.headers.cookie
+    });
+
+    if (!req.session.userId) {
+      console.log('❌ No userId in session, redirecting to login');
+      return res.redirect('/login');
+    }
+
+    const user = await User.findById(req.session.userId).select("-password");
+
+    if (!user) {
+      console.log('❌ User not found, destroying session');
+      req.session.destroy();
+      return res.redirect('/login');
+    }
+
+    // Check if user is active
+    if (!user.isActive) {
+      console.log('❌ User inactive, destroying session');
+      req.session.destroy();
+      return res.redirect('/login');
+    }
+
+    console.log('✅ Authentication successful for user:', user.email);
+    req.user = user;
+    next();
+  } catch (error) {
+    logger.error("Authentication error:", error);
+    return res.redirect('/login');
+  }
+};
+
+// Role-based access control middleware for API routes
+const requireOrganiser = async (req, res, next) => {
+  try {
     if (!req.user) {
       return res.status(401).json({
         success: false,
@@ -61,116 +90,198 @@ const requireRole = (roles) => {
       });
     }
 
-    const userRole = req.user.role;
-
-    if (Array.isArray(roles)) {
-      if (!roles.includes(userRole)) {
-        return res.status(403).json({
-          success: false,
-          message: "Insufficient permissions",
-        });
-      }
-    } else {
-      if (userRole !== roles) {
-        return res.status(403).json({
-          success: false,
-          message: "Insufficient permissions",
-        });
-      }
-    }
-
-    next();
-  };
-};
-
-const requireAdmin = requireRole("admin");
-const requireMember = requireRole(["admin", "member"]);
-
-const requireTeamMember = async (req, res, next) => {
-  try {
-    const { teamId } = req.params;
-
-    if (!teamId) {
-      return res.status(400).json({
-        success: false,
-        message: "Team ID is required",
-      });
-    }
-
-    const Team = require("../models/Team");
-    const team = await Team.findById(teamId);
-
-    if (!team) {
-      return res.status(404).json({
-        success: false,
-        message: "Team not found",
-      });
-    }
-
-    // Check if user is a member of the team
-    if (!team.members.includes(req.user._id)) {
+    if (req.user.role !== 'Organiser') {
       return res.status(403).json({
         success: false,
-        message: "You are not a member of this team",
+        message: "Organiser access required",
       });
     }
 
-    req.team = team;
     next();
   } catch (error) {
-    logger.error("Team membership verification error:", error);
+    logger.error("Authorization error:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: "Authorization error",
     });
   }
 };
 
-const requireTeamAdmin = async (req, res, next) => {
+// Role-based access control middleware for web routes
+const requireOrganiserWeb = async (req, res, next) => {
   try {
-    const { teamId } = req.params;
-
-    if (!teamId) {
-      return res.status(400).json({
-        success: false,
-        message: "Team ID is required",
-      });
+    if (!req.user) {
+      return res.redirect('/login');
     }
 
-    const Team = require("../models/Team");
-    const team = await Team.findById(teamId);
-
-    if (!team) {
-      return res.status(404).json({
-        success: false,
-        message: "Team not found",
-      });
+    if (req.user.role !== 'Organiser') {
+      return res.status(403).send('Organiser access required');
     }
 
-    // Check if user is the admin of the team
-    if (team.admin.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
-        success: false,
-        message: "Only team admin can perform this action",
-      });
-    }
-
-    req.team = team;
     next();
   } catch (error) {
-    logger.error("Team admin verification error:", error);
+    logger.error("Authorization error:", error);
+    return res.redirect('/login');
+  }
+};
+
+const requireTeamMember = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
+    if (req.user.role !== 'Team Member') {
+      return res.status(403).json({
+        success: false,
+        message: "Team Member access required",
+      });
+    }
+
+    next();
+  } catch (error) {
+    logger.error("Authorization error:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: "Authorization error",
     });
+  }
+};
+
+// Web version for team member access
+const requireTeamMemberWeb = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.redirect('/login');
+    }
+
+    if (req.user.role !== 'Team Member') {
+      return res.status(403).send('Team Member access required');
+    }
+
+    next();
+  } catch (error) {
+    logger.error("Authorization error:", error);
+    return res.redirect('/login');
+  }
+};
+
+// Middleware for routes that require any authenticated user
+const requireAuth = authenticateSession;
+
+// Team membership verification middleware
+const requireTeamMembership = async (req, res, next) => {
+  // First authenticate the user
+  try {
+    await authenticateSession(req, res, async () => {
+      try {
+        const teamId = req.params.teamId || req.params.id;
+
+        if (!teamId) {
+          return res.status(400).json({
+            success: false,
+            message: "Team ID is required",
+          });
+        }
+
+        const Team = require("../models/Team");
+        const team = await Team.findById(teamId);
+
+        if (!team) {
+          return res.status(404).json({
+            success: false,
+            message: "Team not found",
+          });
+        }
+
+        // Check if user is a member of the team or the admin
+        const isMember = team.members.includes(req.user._id);
+        const isAdmin = team.admin.toString() === req.user._id.toString();
+
+        if (!isMember && !isAdmin) {
+          return res.status(403).json({
+            success: false,
+            message: "You are not a member of this team",
+          });
+        }
+
+        req.team = team;
+        req.isTeamAdmin = isAdmin;
+        next();
+      } catch (error) {
+        logger.error("Team membership verification error:", error);
+        return res.status(500).json({
+          success: false,
+          message: "Internal server error",
+        });
+      }
+    });
+  } catch (error) {
+    // Authentication failed, error already sent by authenticateSession
+    return;
+  }
+};
+
+// Team organiser verification middleware
+const requireTeamOrganiser = async (req, res, next) => {
+  // First authenticate the user
+  try {
+    await authenticateSession(req, res, async () => {
+      try {
+        const teamId = req.params.teamId || req.params.id;
+
+        if (!teamId) {
+          return res.status(400).json({
+            success: false,
+            message: "Team ID is required",
+          });
+        }
+
+        const Team = require("../models/Team");
+        const team = await Team.findById(teamId);
+
+        if (!team) {
+          return res.status(404).json({
+            success: false,
+            message: "Team not found",
+          });
+        }
+
+        // Check if user is the admin of the team
+        if (team.admin.toString() !== req.user._id.toString()) {
+          return res.status(403).json({
+            success: false,
+            message: "Only team admin can perform this action",
+          });
+        }
+
+        req.team = team;
+        next();
+      } catch (error) {
+        logger.error("Team organiser verification error:", error);
+        return res.status(500).json({
+          success: false,
+          message: "Internal server error",
+        });
+      }
+    });
+  } catch (error) {
+    // Authentication failed, error already sent by authenticateSession
+    return;
   }
 };
 
 module.exports = {
-  authenticateToken,
-  requireRole,
-  requireAdmin,
-  requireMember,
+  authenticateSession,
+  authenticateWeb,
+  requireAuth,
+  requireOrganiser,
+  requireOrganiserWeb,
   requireTeamMember,
-  requireTeamAdmin,
+  requireTeamMemberWeb,
+  requireTeamMembership,
+  requireTeamOrganiser,
 };

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const logger = require("../middleware/logger");
+const { logger } = require("../middleware/logger");
 
 const userSchema = new mongoose.Schema(
   {
@@ -47,8 +47,8 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "member"],
-      default: "member",
+      enum: ["Organiser", "Team Member"],
+      required: [true, "Role is required"],
     },
     avatar: {
       type: String,
@@ -114,7 +114,7 @@ userSchema.pre("save", async function (next) {
     this.password = hashedPassword;
     next();
   } catch (error) {
-    logger.logger.error("Password hashing error:", error);
+    logger.error("Password hashing error:", error);
     next(error);
   }
 });
@@ -132,7 +132,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   try {
     return await bcrypt.compare(candidatePassword, this.password);
   } catch (error) {
-    logger.logger.error("Password comparison error:", error);
+    logger.error("Password comparison error:", error);
     throw error;
   }
 };
