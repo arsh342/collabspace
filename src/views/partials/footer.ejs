@@ -1,59 +1,260 @@
-<footer class="bg-dark text-white py-4 mt-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <h5 class="mb-3">
-          <i class="fas fa-users me-2"></i>
-          CollabSpace
-        </h5>
-        <p class="mb-0">
-          Empowering teams to collaborate effectively with modern tools and
-          real-time communication.
-        </p>
-      </div>
-      <div class="col-md-3">
-        <h6 class="mb-3">Product</h6>
-        <ul class="list-unstyled">
-          <li>
-            <a href="#" class="text-light text-decoration-none">Features</a>
-          </li>
-          <li>
-            <a href="#" class="text-light text-decoration-none">Pricing</a>
-          </li>
-          <li>
-            <a href="#" class="text-light text-decoration-none">Security</a>
-          </li>
+<style>
+  :root {
+    --color-primary: #1e40af;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    --color-white: #ffffff;
+    --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-xl: 1.25rem;
+    --line-height-relaxed: 1.625;
+  }
+
+  .site-footer {
+    background: var(--color-gray-900);
+    color: var(--color-gray-300);
+    padding: 3rem 0 1rem;
+    margin-top: auto;
+  }
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--color-white);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+    transition: color 0.3s ease;
+  }
+
+  .footer-logo:hover {
+    color: var(--color-primary);
+  }
+
+  .footer-logo svg {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    display: block;
+  }
+
+  .footer-brand p {
+    color: var(--color-gray-400);
+    line-height: var(--line-height-relaxed);
+    max-width: 300px;
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .footer-section h3 {
+    color: var(--color-white);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 1rem;
+  }
+
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-section li {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-section a {
+    color: var(--color-gray-400);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    transition: color 0.3s ease;
+  }
+
+  .footer-section a:hover {
+    color: var(--color-primary);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--color-gray-700);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .footer-bottom p {
+    color: var(--color-gray-500);
+    font-size: var(--font-size-sm);
+    margin: 0;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .social-links a {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--color-gray-800);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-400);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .social-links a:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .footer-links {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="footerLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#43e97b"/>
+              <stop offset="50%" style="stop-color:#00f2fe"/>
+              <stop offset="100%" style="stop-color:#4facfe"/>
+            </linearGradient>
+            <linearGradient id="footerLogoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#00f2fe"/>
+              <stop offset="100%" style="stop-color:#667eea"/>
+            </linearGradient>
+            <linearGradient id="footerLogoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#667eea"/>
+              <stop offset="100%" style="stop-color:#764ba2"/>
+            </linearGradient>
+          </defs>
+          <!-- Outer hexagon -->
+          <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#footerLogoGradient1)" opacity="0.9"/>
+          <!-- Inner C shape - top part -->
+          <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+          <!-- Inner C shape - bottom part -->
+          <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+          <!-- 3D effect - right side -->
+          <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#footerLogoGradient2)" opacity="0.8"/>
+          <!-- 3D effect - bottom -->
+          <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#footerLogoGradient3)" opacity="0.7"/>
+        </svg>
+        <span>CollabSpace</span>
+      </a>
+      <p>Where teams come together to build great things.</p>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-section">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/security">Security</a></li>
+          <li><a href="/enterprise">Enterprise</a></li>
         </ul>
       </div>
-      <div class="col-md-3">
-        <h6 class="mb-3">Support</h6>
-        <ul class="list-unstyled">
-          <li>
-            <a href="#" class="text-light text-decoration-none">Help Center</a>
-          </li>
-          <li>
-            <a href="#" class="text-light text-decoration-none">Contact Us</a>
-          </li>
-          <li>
-            <a href="#" class="text-light text-decoration-none">API Docs</a>
-          </li>
+
+      <div class="footer-section">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/#about">About</a></li>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="/docs">Documentation</a></li>
+          <li><a href="/help">Help Center</a></li>
+          <li><a href="/guides">Guides</a></li>
+          <li><a href="/api">API</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="/security">Security</a></li>
+          <li><a href="/status">Status</a></li>
         </ul>
       </div>
     </div>
-    <hr class="my-4" />
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <p class="mb-0">&copy; 2024 CollabSpace. All rights reserved.</p>
-      </div>
-      <div class="col-md-6 text-md-end">
-        <a href="#" class="text-light text-decoration-none me-3"
-          >Privacy Policy</a
-        >
-        <a href="#" class="text-light text-decoration-none me-3"
-          >Terms of Service</a
-        >
-        <a href="#" class="text-light text-decoration-none">Cookie Policy</a>
-      </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 CollabSpace. All rights reserved.</p>
+    <div class="social-links">
+      <a href="#twitter" aria-label="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="#github" aria-label="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="#linkedin" aria-label="LinkedIn">
+        <i class="fab fa-linkedin"></i>
+      </a>
     </div>
   </div>
 </footer>

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise - CollabSpace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --color-primary: #1e40af;
+      --color-primary-dark: #1e3a8a;
+      --color-secondary: #312e81;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+      --color-text-primary: #1f2937;
+      --color-text-secondary: #6b7280;
+      --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 1.875rem;
+      --font-size-4xl: 2.25rem;
+      --font-size-5xl: 3rem;
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --transition-fast: 0.15s ease-in-out;
+      --transition-normal: 0.3s ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family-sans);
+      line-height: 1.6;
+      color: var(--color-text-primary);
+      background: white;
+    }
+
+    .enterprise-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--color-gray-200);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-logo svg {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    .brand-name {
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -0.025em;
+    }
+
+    .navbar-brand:hover {
+      color: var(--color-primary-dark);
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .navbar-brand:hover .brand-logo svg {
+      transform: scale(1.05);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      color: white;
+      padding: 6rem 0 4rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: var(--font-size-5xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero p {
+      font-size: var(--font-size-xl);
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .content {
+      flex: 1;
+      padding: 4rem 0;
+    }
+
+    .enterprise-feature {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--color-gray-200);
+    }
+
+    .enterprise-feature:last-child {
+      border-bottom: none;
+    }
+
+    .feature-icon {
+      width: 4rem;
+      height: 4rem;
+      background: var(--color-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 1rem;
+    }
+
+    .feature-description {
+      font-size: var(--font-size-lg);
+      color: var(--color-text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: var(--font-size-base);
+      color: var(--color-text-secondary);
+    }
+
+    .feature-list .check {
+      color: var(--color-success);
+      font-weight: var(--font-weight-bold);
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .pricing-card {
+      background: white;
+      border: 2px solid var(--color-gray-200);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--color-primary);
+      transform: scale(1.05);
+    }
+
+    .pricing-card.featured::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -0.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .price {
+      font-size: var(--font-size-5xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .price-period {
+      color: var(--color-text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .cta-section {
+      background: var(--color-gray-50);
+      padding: 4rem 0;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      color: var(--color-primary);
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 1rem;
+    }
+
+    .cta-btn {
+      background: var(--color-primary);
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      text-decoration: none;
+      display: inline-block;
+      transition: all var(--transition-fast);
+      margin: 0.5rem;
+    }
+
+    .cta-btn:hover {
+      background: var(--color-primary-dark);
+      transform: translateY(-2px);
+      color: white;
+      text-decoration: none;
+    }
+
+    .cta-btn.secondary {
+      background: transparent;
+      color: var(--color-primary);
+      border: 2px solid var(--color-primary);
+    }
+
+    .cta-btn.secondary:hover {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .footer {
+      background: var(--color-gray-800);
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .site-footer {
+      background: var(--color-gray-900);
+      color: var(--color-gray-300);
+      padding: 3rem 0 1rem;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--color-white);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-xl);
+      transition: color 0.3s ease;
+    }
+
+    .footer-logo:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-logo svg {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      display: block;
+    }
+
+    .footer-brand p {
+      color: var(--color-gray-400);
+      line-height: var(--line-height-relaxed);
+      max-width: 300px;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .footer-section h3 {
+      color: var(--color-white);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: 1rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-section li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: var(--color-gray-400);
+      text-decoration: none;
+      font-size: var(--font-size-sm);
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-gray-700);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .footer-bottom p {
+      color: var(--color-gray-500);
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-links a {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--color-gray-800);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-gray-400);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--color-primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: var(--font-size-4xl);
+      }
+
+      .hero p {
+        font-size: var(--font-size-lg);
+      }
+
+      .feature-title {
+        font-size: var(--font-size-xl);
+      }
+
+      .pricing-card.featured {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body class="enterprise-page">
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <div class="brand-logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#43e97b"/>
+                <stop offset="50%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#4facfe"/>
+              </linearGradient>
+              <linearGradient id="logoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#667eea"/>
+              </linearGradient>
+              <linearGradient id="logoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea"/>
+                <stop offset="100%" style="stop-color:#764ba2"/>
+              </linearGradient>
+            </defs>
+            <!-- Outer hexagon -->
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#logoGradient1)" opacity="0.9"/>
+            <!-- Inner C shape - top part -->
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+            <!-- Inner C shape - bottom part -->
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+            <!-- 3D effect - right side -->
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#logoGradient2)" opacity="0.8"/>
+            <!-- 3D effect - bottom -->
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#logoGradient3)" opacity="0.7"/>
+          </svg>
+        </div>
+        <span class="brand-name">CollabSpace</span>
+      </a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Enterprise Solutions</h1>
+      <p>Scale your team collaboration with enterprise-grade features, security, and support designed for large organizations.</p>
+    </div>
+  </section>
+
+  <main class="content">
+    <div class="container">
+      <div class="enterprise-feature">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <div class="feature-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            <h2 class="feature-title">Advanced Administration</h2>
+            <p class="feature-description">Comprehensive admin controls to manage users, permissions, and organizational settings at scale.</p>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> Centralized user management</li>
+              <li><span class="check">✓</span> Advanced permission controls</li>
+              <li><span class="check">✓</span> Bulk user provisioning</li>
+              <li><span class="check">✓</span> Custom organizational hierarchy</li>
+              <li><span class="check">✓</span> Audit logs and reporting</li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <div class="text-center">
+              <i class="fas fa-users-cog" style="font-size: 8rem; color: var(--color-primary); opacity: 0.1;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="enterprise-feature">
+        <div class="row align-items-center">
+          <div class="col-md-6 order-md-2">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h2 class="feature-title">Advanced Analytics</h2>
+            <p class="feature-description">Deep insights into team productivity, collaboration patterns, and organizational performance.</p>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> Custom dashboards and reports</li>
+              <li><span class="check">✓</span> Team productivity metrics</li>
+              <li><span class="check">✓</span> Usage analytics and trends</li>
+              <li><span class="check">✓</span> Data export capabilities</li>
+              <li><span class="check">✓</span> Real-time collaboration insights</li>
+            </ul>
+          </div>
+          <div class="col-md-6 order-md-1">
+            <div class="text-center">
+              <i class="fas fa-chart-bar" style="font-size: 8rem; color: var(--color-primary); opacity: 0.1;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="enterprise-feature">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <div class="feature-icon">
+              <i class="fas fa-plug"></i>
+            </div>
+            <h2 class="feature-title">Custom Integrations</h2>
+            <p class="feature-description">Seamlessly connect with your existing enterprise tools and workflows.</p>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> Custom API development</li>
+              <li><span class="check">✓</span> Enterprise SSO integration</li>
+              <li><span class="check">✓</span> LDAP/Active Directory sync</li>
+              <li><span class="check">✓</span> Custom workflow automation</li>
+              <li><span class="check">✓</span> Third-party app integrations</li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <div class="text-center">
+              <i class="fas fa-network-wired" style="font-size: 8rem; color: var(--color-primary); opacity: 0.1;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="enterprise-feature">
+        <div class="row align-items-center">
+          <div class="col-md-6 order-md-2">
+            <div class="feature-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h2 class="feature-title">Dedicated Support</h2>
+            <p class="feature-description">Priority support with dedicated account management and 24/7 technical assistance.</p>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> Dedicated customer success manager</li>
+              <li><span class="check">✓</span> 24/7 priority support</li>
+              <li><span class="check">✓</span> Custom onboarding and training</li>
+              <li><span class="check">✓</span> Direct engineering support</li>
+              <li><span class="check">✓</span> SLA guarantees</li>
+            </ul>
+          </div>
+          <div class="col-md-6 order-md-1">
+            <div class="text-center">
+              <i class="fas fa-phone-alt" style="font-size: 8rem; color: var(--color-primary); opacity: 0.1;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-md-8 offset-md-2">
+          <div class="pricing-card featured">
+            <h3>Enterprise Plan</h3>
+            <div class="price">Custom</div>
+            <div class="price-period">Pricing based on your needs</div>
+            <ul class="feature-list text-start">
+              <li><span class="check">✓</span> Everything in Professional</li>
+              <li><span class="check">✓</span> Unlimited users and teams</li>
+              <li><span class="check">✓</span> Advanced security and compliance</li>
+              <li><span class="check">✓</span> Custom integrations and API</li>
+              <li><span class="check">✓</span> Dedicated support and training</li>
+              <li><span class="check">✓</span> On-premise deployment options</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to transform your enterprise collaboration?</h2>
+      <p class="mb-4">Let's discuss how CollabSpace Enterprise can meet your organization's unique needs.</p>
+      <a href="/contact" class="cta-btn">Contact Sales</a>
+      <a href="#demo" class="cta-btn secondary">Schedule Demo</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="footerLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#43e97b"/>
+                <stop offset="50%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#4facfe"/>
+              </linearGradient>
+              <linearGradient id="footerLogoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#667eea"/>
+              </linearGradient>
+              <linearGradient id="footerLogoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea"/>
+                <stop offset="100%" style="stop-color:#764ba2"/>
+              </linearGradient>
+            </defs>
+            <!-- Outer hexagon -->
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#footerLogoGradient1)" opacity="0.9"/>
+            <!-- Inner C shape - top part -->
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+            <!-- Inner C shape - bottom part -->
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+            <!-- 3D effect - right side -->
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#footerLogoGradient2)" opacity="0.8"/>
+            <!-- 3D effect - bottom -->
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#footerLogoGradient3)" opacity="0.7"/>
+          </svg>
+          <span>CollabSpace</span>
+        </a>
+        <p>Where teams come together to build great things.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-section">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            <li><a href="/security">Security</a></li>
+            <li><a href="/enterprise">Enterprise</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="/docs">Documentation</a></li>
+            <li><a href="/help">Help Center</a></li>
+            <li><a href="/guides">Guides</a></li>
+            <li><a href="/api">API</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy</a></li>
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/security">Security</a></li>
+            <li><a href="/status">Status</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 CollabSpace. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#twitter" aria-label="Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#github" aria-label="GitHub">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="#linkedin" aria-label="LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

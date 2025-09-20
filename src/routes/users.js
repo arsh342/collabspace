@@ -5,8 +5,8 @@ const path = require("path");
 const fs = require("fs");
 const User = require("../models/User");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
-const { requireAdmin, requireMember } = require("../middleware/auth");
-const logger = require("../middleware/logger");
+const { requireAuth, requireOrganiser } = require("../middleware/auth");
+const { logger } = require("../middleware/logger");
 
 const router = express.Router();
 
@@ -87,7 +87,7 @@ const validatePasswordChange = [
 // @access  Private (Admin)
 router.get(
   "/",
-  requireAdmin,
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const { page = 1, limit = 20, search, role, isActive } = req.query;
@@ -140,7 +140,7 @@ router.get(
 // @access  Private
 router.get(
   "/search",
-  requireMember,
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const { q, excludeCurrentUser = true } = req.query;
@@ -171,7 +171,7 @@ router.get(
 // @access  Private
 router.get(
   "/:id",
-  requireMember,
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const user = await User.findById(req.params.id).select("-password");
@@ -199,7 +199,7 @@ router.get(
 // @access  Private
 router.get(
   "/profile/me",
-  requireMember,
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const user = await User.findById(req.user._id).select("-password");
@@ -220,6 +220,7 @@ router.get(
 // @access  Private
 router.put(
   "/profile/me",
+  requireAuth,
   validateUserUpdate,
   catchAsync(async (req, res) => {
     try {
@@ -317,6 +318,7 @@ router.put(
 // @access  Private
 router.put(
   "/profile/password",
+  requireAuth,
   validatePasswordChange,
   catchAsync(async (req, res) => {
     try {
@@ -366,7 +368,7 @@ router.put(
 // @access  Private (Admin)
 router.put(
   "/:id",
-  requireAdmin,
+  requireAuth,
   validateUserUpdate,
   catchAsync(async (req, res) => {
     try {
@@ -428,12 +430,66 @@ router.put(
   })
 );
 
+// @route   DELETE /api/users/me
+// @desc    Delete current user's own account
+// @access  Private
+router.delete(
+  "/me",
+  requireAuth,
+  catchAsync(async (req, res) => {
+    try {
+      const userId = req.user._id;
+
+      // First, find all teams where this user is the organiser and delete them
+      const teams = await require("../models/Team").find({ organiser: userId });
+      
+      for (const team of teams) {
+        // Delete all tasks associated with the team
+        await require("../models/Task").deleteMany({ team: team._id });
+        
+        // Delete the team itself
+        await require("../models/Team").findByIdAndDelete(team._id);
+      }
+
+      // Remove user from any teams they are a member of
+      await require("../models/Team").updateMany(
+        { members: userId },
+        { $pull: { members: userId } }
+      );
+
+      // Delete all tasks assigned to or created by this user
+      await require("../models/Task").deleteMany({
+        $or: [
+          { assignedTo: userId },
+          { createdBy: userId }
+        ]
+      });
+
+      // Delete all messages sent by this user
+      await require("../models/Message").deleteMany({ sender: userId });
+
+      // Finally, delete the user account
+      await User.findByIdAndDelete(userId);
+
+      logger.info(`User ${req.user.username} deleted their own account`);
+
+      res.json({
+        success: true,
+        message: "Account deleted successfully",
+      });
+    } catch (error) {
+      logger.error("Delete own account error:", error);
+      throw new AppError("Failed to delete account", 500);
+    }
+  })
+);
+
 // @route   DELETE /api/users/:id
 // @desc    Delete user (admin only)
 // @access  Private (Admin)
 router.delete(
   "/:id",
-  requireAdmin,
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       // Prevent admin from deleting themselves
@@ -476,12 +532,14 @@ router.delete(
   })
 );
 
+// @route   PUT /api/users/:id/deactivate
+
 // @route   POST /api/users/:id/deactivate
 // @desc    Deactivate user (admin only)
 // @access  Private (Admin)
 router.post(
   "/:id/deactivate",
-  requireAdmin,
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       // Prevent admin from deactivating themselves
@@ -526,7 +584,7 @@ router.post(
 // @access  Private (Admin)
 router.post(
   "/:id/activate",
-  requireAdmin,
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const user = await User.findByIdAndUpdate(
@@ -561,7 +619,7 @@ router.post(
 // @access  Private (Admin)
 router.get(
   "/stats/overview",
-  requireAdmin,
+  requireAuth,
   catchAsync(async (req, res) => {
     try {
       const stats = await User.aggregate([

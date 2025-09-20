@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Documentation - CollabSpace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --color-primary: #1e40af;
+      --color-primary-dark: #1e3a8a;
+      --color-secondary: #312e81;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+      --color-text-primary: #1f2937;
+      --color-text-secondary: #6b7280;
+      --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 1.875rem;
+      --font-size-4xl: 2.25rem;
+      --font-size-5xl: 3rem;
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --transition-fast: 0.15s ease-in-out;
+      --transition-normal: 0.3s ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family-sans);
+      line-height: 1.6;
+      color: var(--color-text-primary);
+      background: white;
+    }
+
+    .api-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--color-gray-200);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-logo svg {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    .brand-name {
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -0.025em;
+      color: var(--color-primary);
+    }
+
+    .navbar-brand:hover {
+      color: var(--color-primary-dark);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      color: white;
+      padding: 5rem 0;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: var(--font-size-5xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      font-size: var(--font-size-xl);
+      opacity: 0.95;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .content-wrapper {
+      flex: 1;
+      padding: 4rem 0;
+    }
+
+    .api-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--color-gray-200);
+    }
+
+    .api-section h2 {
+      color: var(--color-primary);
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 1rem;
+    }
+
+    .endpoint {
+      background: var(--color-gray-50);
+      border-left: 4px solid var(--color-primary);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+    }
+
+    .endpoint:hover {
+      background: var(--color-gray-100);
+      transform: translateX(4px);
+    }
+
+    .method {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      text-transform: uppercase;
+      margin-right: 1rem;
+    }
+
+    .method-get {
+      background: var(--color-success);
+      color: white;
+    }
+
+    .method-post {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .method-put {
+      background: var(--color-warning);
+      color: white;
+    }
+
+    .method-delete {
+      background: var(--color-error);
+      color: white;
+    }
+
+    .endpoint code {
+      background: var(--color-gray-200);
+      color: var(--color-text-primary);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: var(--font-size-sm);
+    }
+
+    .cta-section {
+      background: var(--color-gray-50);
+      padding: 4rem 0;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      color: var(--color-primary);
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 1rem;
+    }
+
+    .cta-btn {
+      background: var(--color-primary);
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      text-decoration: none;
+      display: inline-block;
+      transition: all var(--transition-fast);
+    }
+
+    .cta-btn:hover {
+      background: var(--color-primary-dark);
+      transform: translateY(-2px);
+      color: white;
+      text-decoration: none;
+    }
+
+    .site-footer {
+      background: var(--color-gray-900);
+      color: var(--color-gray-300);
+      padding: 3rem 0 1rem;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-xl);
+      transition: color 0.3s ease;
+    }
+
+    .footer-logo:hover {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .footer-brand p {
+      color: var(--color-gray-400);
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-section h3 {
+      color: white;
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: 1rem;
+      font-size: var(--font-size-base);
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-section li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: var(--color-gray-400);
+      text-decoration: none;
+      font-size: var(--font-size-sm);
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-gray-700);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .footer-bottom p {
+      color: var(--color-gray-500);
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-links a {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--color-gray-800);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-gray-400);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--color-primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: var(--font-size-4xl);
+      }
+
+      .hero p {
+        font-size: var(--font-size-lg);
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body class="api-page">
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <div class="brand-logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#43e97b"/>
+                <stop offset="50%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#4facfe"/>
+              </linearGradient>
+              <linearGradient id="logoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#667eea"/>
+              </linearGradient>
+              <linearGradient id="logoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea"/>
+                <stop offset="100%" style="stop-color:#764ba2"/>
+              </linearGradient>
+            </defs>
+            <!-- Outer hexagon -->
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#logoGradient1)" opacity="0.9"/>
+            <!-- Inner C shape - top part -->
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+            <!-- Inner C shape - bottom part -->
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+            <!-- 3D effect - right side -->
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#logoGradient2)" opacity="0.8"/>
+            <!-- 3D effect - bottom -->
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#logoGradient3)" opacity="0.7"/>
+          </svg>
+        </div>
+        <span class="brand-name">CollabSpace</span>
+      </a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <h1>API Documentation</h1>
+      <p>Integrate CollabSpace with your applications using our powerful and flexible RESTful API</p>
+    </div>
+  </section>
+
+  <div class="content-wrapper">
+    <div class="container">
+      <div class="api-section">
+        <h2>Authentication</h2>
+        <p>All API requests require authentication using an API key. Include your API key in the Authorization header:</p>
+        <div class="endpoint">
+          <code>Authorization: Bearer YOUR_API_KEY</code>
+        </div>
+      </div>
+
+      <div class="api-section">
+        <h2>Teams</h2>
+        <p>Manage team information and members</p>
+        <div class="endpoint">
+          <span class="method method-get">GET</span>
+          <code>/api/v1/teams</code>
+          <p class="mt-2 mb-0">Retrieve all teams for the authenticated user</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-post">POST</span>
+          <code>/api/v1/teams</code>
+          <p class="mt-2 mb-0">Create a new team</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-get">GET</span>
+          <code>/api/v1/teams/{id}/members</code>
+          <p class="mt-2 mb-0">Get team members</p>
+        </div>
+      </div>
+
+      <div class="api-section">
+        <h2>Tasks</h2>
+        <p>Create and manage tasks within your teams</p>
+        <div class="endpoint">
+          <span class="method method-get">GET</span>
+          <code>/api/v1/tasks</code>
+          <p class="mt-2 mb-0">Retrieve all tasks</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-post">POST</span>
+          <code>/api/v1/tasks</code>
+          <p class="mt-2 mb-0">Create a new task</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-put">PUT</span>
+          <code>/api/v1/tasks/{id}</code>
+          <p class="mt-2 mb-0">Update task status or details</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-delete">DELETE</span>
+          <code>/api/v1/tasks/{id}</code>
+          <p class="mt-2 mb-0">Delete a task</p>
+        </div>
+      </div>
+
+      <div class="api-section">
+        <h2>Messages</h2>
+        <p>Send and retrieve team messages</p>
+        <div class="endpoint">
+          <span class="method method-get">GET</span>
+          <code>/api/v1/messages</code>
+          <p class="mt-2 mb-0">Get team messages</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-post">POST</span>
+          <code>/api/v1/messages</code>
+          <p class="mt-2 mb-0">Send a message to team</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to integrate CollabSpace?</h2>
+      <p class="mb-4">Get your API key and start building amazing integrations today.</p>
+      <a href="/register" class="cta-btn">Get Started Today</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="footerLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#43e97b" />
+                <stop offset="50%" style="stop-color:#00f2fe" />
+                <stop offset="100%" style="stop-color:#4facfe" />
+              </linearGradient>
+              <linearGradient id="footerLogoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00f2fe" />
+                <stop offset="100%" style="stop-color:#667eea" />
+              </linearGradient>
+              <linearGradient id="footerLogoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea" />
+                <stop offset="100%" style="stop-color:#764ba2" />
+              </linearGradient>
+            </defs>
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#footerLogoGradient1)" opacity="0.9" />
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white" />
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white" />
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#footerLogoGradient2)" opacity="0.8" />
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#footerLogoGradient3)" opacity="0.7" />
+          </svg>
+          <span>CollabSpace</span>
+        </a>
+        <p>Where teams come together to build great things.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-section">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            <li><a href="/security">Security</a></li>
+            <li><a href="/enterprise">Enterprise</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="/docs">Documentation</a></li>
+            <li><a href="/help">Help Center</a></li>
+            <li><a href="/guides">Guides</a></li>
+            <li><a href="/api">API</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy</a></li>
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/security">Security</a></li>
+            <li><a href="/status">Status</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CollabSpace. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#github" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="#linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>

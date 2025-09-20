@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - CollabSpace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --color-primary: #1e40af;
+      --color-primary-dark: #1e3a8a;
+      --color-secondary: #312e81;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+      --color-white: #ffffff;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 1.875rem;
+      --font-size-4xl: 2.25rem;
+      --font-size-5xl: 3rem;
+      --line-height-tight: 1.25;
+      --line-height-snug: 1.375;
+      --line-height-normal: 1.5;
+      --line-height-relaxed: 1.625;
+      --letter-spacing-tight: -0.025em;
+      --letter-spacing-normal: 0;
+      --letter-spacing-wide: 0.025em;
+      --transition-base: all 0.2s ease-in-out;
+      --transition-fast: 0.15s ease-in-out;
+      --transition-colors: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+      --border-radius-sm: 0.375rem;
+      --border-radius-md: 0.5rem;
+      --border-radius-lg: 0.75rem;
+      --border-radius-xl: 1rem;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--color-gray-50);
+    }
+
+    .navbar {
+      background: var(--color-white) !important;
+      border-bottom: 1px solid var(--color-gray-200);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: all var(--transition-base);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-logo svg {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    .brand-name {
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -0.025em;
+      color: var(--color-primary);
+    }
+
+    .navbar-brand:hover {
+      color: var(--color-primary-dark);
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .navbar-brand:hover .brand-logo svg {
+      transform: scale(1.05);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      color: white;
+      padding: 4rem 0 3rem;
+      text-align: center;
+    }
+
+    .doc-card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .doc-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .doc-card h4 {
+      color: var(--color-gray-900);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      font-size: var(--font-size-xl);
+    }
+
+    .doc-card p {
+      flex-grow: 1;
+      margin-bottom: 1rem;
+      line-height: var(--line-height-relaxed);
+    }
+
+    .doc-card small {
+      font-weight: 500;
+      font-size: var(--font-size-sm);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .doc-icon {
+      width: 3rem;
+      height: 3rem;
+      background: var(--color-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius-md);
+      transition: var(--transition-base);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-dark);
+      border-color: var(--color-primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline-primary {
+      background: transparent;
+      border: 2px solid var(--color-primary);
+      color: var(--color-primary);
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius-md);
+      transition: var(--transition-base);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-outline-primary:hover {
+      background: var(--color-primary);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .site-footer {
+      background: var(--color-gray-900);
+      color: var(--color-gray-300);
+      padding: 3rem 0 1rem;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--color-white);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-xl);
+      transition: color 0.3s ease;
+    }
+
+    .footer-logo:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-logo svg {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      display: block;
+    }
+
+    .footer-brand p {
+      color: var(--color-gray-400);
+      line-height: var(--line-height-relaxed);
+      max-width: 300px;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .footer-section h3 {
+      color: var(--color-white);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: 1rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-section li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: var(--color-gray-400);
+      text-decoration: none;
+      font-size: var(--font-size-sm);
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-gray-700);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .footer-bottom p {
+      color: var(--color-gray-500);
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-links a {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--color-gray-800);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-gray-400);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--color-primary);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .footer-links {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+
+    .text-primary {
+      color: var(--color-primary) !important;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <div class="brand-logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#43e97b"/>
+                <stop offset="50%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#4facfe"/>
+              </linearGradient>
+              <linearGradient id="logoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00f2fe"/>
+                <stop offset="100%" style="stop-color:#667eea"/>
+              </linearGradient>
+              <linearGradient id="logoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea"/>
+                <stop offset="100%" style="stop-color:#764ba2"/>
+              </linearGradient>
+            </defs>
+            <!-- Outer hexagon -->
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#logoGradient1)" opacity="0.9"/>
+            <!-- Inner C shape - top part -->
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+            <!-- Inner C shape - bottom part -->
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+            <!-- 3D effect - right side -->
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#logoGradient2)" opacity="0.8"/>
+            <!-- 3D effect - bottom -->
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#logoGradient3)" opacity="0.7"/>
+          </svg>
+        </div>
+        <span class="brand-name">CollabSpace</span>
+      </a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-3">Documentation</h1>
+      <p class="lead">Everything you need to get started with CollabSpace</p>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4">
+        <a href="#getting-started" class="doc-card text-decoration-none h-100 d-flex flex-column">
+          <div class="doc-icon">
+            <i class="fas fa-rocket"></i>
+          </div>
+          <h4>Getting Started</h4>
+          <p class="text-muted">Quick start guide to set up your first team and begin collaborating</p>
+          <small class="text-primary">5 minute read →</small>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <a href="#user-guide" class="doc-card text-decoration-none h-100 d-flex flex-column">
+          <div class="doc-icon">
+            <i class="fas fa-user"></i>
+          </div>
+          <h4>User Guide</h4>
+          <p class="text-muted">Complete guide to using all CollabSpace features effectively</p>
+          <small class="text-primary">15 minute read →</small>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <a href="#admin-guide" class="doc-card text-decoration-none h-100 d-flex flex-column">
+          <div class="doc-icon">
+            <i class="fas fa-cog"></i>
+          </div>
+          <h4>Admin Guide</h4>
+          <p class="text-muted">Administrative features for team organizers and managers</p>
+          <small class="text-primary">20 minute read →</small>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <a href="/api" class="doc-card text-decoration-none h-100 d-flex flex-column">
+          <div class="doc-icon">
+            <i class="fas fa-code"></i>
+          </div>
+          <h4>API Reference</h4>
+          <p class="text-muted">Complete API documentation for developers and integrations</p>
+          <small class="text-primary">API Docs →</small>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <a href="#integrations" class="doc-card text-decoration-none h-100 d-flex flex-column">
+          <div class="doc-icon">
+            <i class="fas fa-plug"></i>
+          </div>
+          <h4>Integrations</h4>
+          <p class="text-muted">Connect CollabSpace with your favorite tools and services</p>
+          <small class="text-primary">Setup guides →</small>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <a href="#troubleshooting" class="doc-card text-decoration-none h-100 d-flex flex-column">
+          <div class="doc-icon">
+            <i class="fas fa-tools"></i>
+          </div>
+          <h4>Troubleshooting</h4>
+          <p class="text-muted">Common issues and solutions to help you get back on track</p>
+          <small class="text-primary">Support docs →</small>
+        </a>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <h3 style="color: var(--color-primary);">Need More Help?</h3>
+      <p class="text-muted mb-4">Can't find what you're looking for?</p>
+      <a href="/help" class="btn btn-primary me-3">Visit Help Center</a>
+      <a href="/contact" class="btn btn-outline-primary">Contact Support</a>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="footerLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#43e97b" />
+                <stop offset="50%" style="stop-color:#00f2fe" />
+                <stop offset="100%" style="stop-color:#4facfe" />
+              </linearGradient>
+              <linearGradient id="footerLogoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00f2fe" />
+                <stop offset="100%" style="stop-color:#667eea" />
+              </linearGradient>
+              <linearGradient id="footerLogoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea" />
+                <stop offset="100%" style="stop-color:#764ba2" />
+              </linearGradient>
+            </defs>
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#footerLogoGradient1)" opacity="0.9" />
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white" />
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white" />
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#footerLogoGradient2)" opacity="0.8" />
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#footerLogoGradient3)" opacity="0.7" />
+          </svg>
+          <span>CollabSpace</span>
+        </a>
+        <p>Where teams come together to build great things.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-section">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
+            <li><a href="/security">Security</a></li>
+            <li><a href="/enterprise">Enterprise</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="/docs">Documentation</a></li>
+            <li><a href="/help">Help Center</a></li>
+            <li><a href="/guides">Guides</a></li>
+            <li><a href="/api">API</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy</a></li>
+            <li><a href="/terms">Terms</a></li>
+            <li><a href="/security">Security</a></li>
+            <li><a href="/status">Status</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CollabSpace. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#github" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="#linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

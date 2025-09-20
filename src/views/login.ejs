@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - CollabSpace</title>
+    <title>Sign In - CollabSpace</title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -15,118 +15,646 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/public/css/style.css" />
+    <!-- Internal CSS -->
+    <style>
+      /* Teams Login Styles */
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+      
+      :root {
+        --color-primary: #1e40af;
+        --color-primary-hover: #2563eb;
+        --color-primary-light: #dbeafe;
+        --color-primary-dark: #1d4ed8;
+        --color-success: #10b981;
+        --color-success-light: #d1fae5;
+        --color-white: #ffffff;
+        --color-gray-50: #f9fafb;
+        --color-gray-100: #f3f4f6;
+        --color-gray-200: #e5e7eb;
+        --color-gray-300: #d1d5db;
+        --color-gray-400: #9ca3af;
+        --color-gray-500: #6b7280;
+        --color-gray-600: #4b5563;
+        --color-gray-700: #374151;
+        --color-gray-800: #1f2937;
+        --color-gray-900: #111827;
+        --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-size-xs: 0.75rem;
+        --font-size-sm: 0.875rem;
+        --font-size-base: 1rem;
+        --font-size-lg: 1.125rem;
+        --font-size-xl: 1.25rem;
+        --font-size-2xl: 1.5rem;
+        --font-weight-normal: 400;
+        --font-weight-medium: 500;
+        --font-weight-semibold: 600;
+        --font-weight-bold: 700;
+        --line-height-normal: 1.5;
+        --line-height-relaxed: 1.625;
+        --space-1: 0.25rem;
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-6: 1.5rem;
+        --space-8: 2rem;
+        --radius-sm: 0.25rem;
+        --radius-lg: 0.5rem;
+        --radius-xl: 0.75rem;
+        --radius-full: 9999px;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-family-primary);
+        font-size: var(--font-size-base);
+        line-height: var(--line-height-normal);
+        color: var(--color-gray-900);
+        background: var(--color-gray-50);
+        min-height: 100vh;
+      }
+
+      .teams-login-body {
+        background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-white) 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-4);
+      }
+
+      .teams-login-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        max-width: 1200px;
+        width: 100%;
+        background: var(--color-white);
+        border-radius: var(--radius-xl);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+        min-height: 600px;
+      }
+
+      .login-left {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+        color: var(--color-white);
+        padding: var(--space-8);
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-left::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      .login-branding {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+      }
+
+      .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        margin-bottom: var(--space-8);
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+      }
+
+      .brand-logo i {
+        width: 3rem;
+        height: 3rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+
+      .login-branding h1 {
+        font-size: 2.5rem;
+        font-weight: var(--font-weight-bold);
+        line-height: 1.2;
+        margin-bottom: var(--space-4);
+        color: var(--color-white);
+      }
+
+      .login-branding p {
+        font-size: var(--font-size-lg);
+        color: rgba(255, 255, 255, 0.9);
+        line-height: var(--line-height-relaxed);
+        margin-bottom: var(--space-8);
+      }
+
+      .feature-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+        margin-bottom: var(--space-8);
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: var(--font-size-sm);
+      }
+
+      .feature-item i {
+        width: 2rem;
+        height: 2rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-size-sm);
+      }
+
+      .login-right {
+        padding: var(--space-8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .login-form-container {
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: var(--space-8);
+      }
+
+      .login-header h2 {
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-gray-900);
+        margin-bottom: var(--space-2);
+      }
+
+      .login-header p {
+        color: var(--color-gray-600);
+        font-size: var(--font-size-base);
+      }
+
+      .teams-login-form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-6);
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+      }
+
+      .form-label {
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        color: var(--color-gray-700);
+        margin-bottom: var(--space-1);
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: var(--space-3);
+        color: var(--color-gray-400);
+        font-size: var(--font-size-sm);
+        z-index: 2;
+      }
+
+      .teams-input {
+        width: 100%;
+        padding: var(--space-3) var(--space-3) var(--space-3) 2.5rem;
+        border: 1px solid var(--color-gray-300);
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-base);
+        color: var(--color-gray-900);
+        background: var(--color-white);
+        transition: all var(--transition-fast);
+      }
+
+      .teams-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px var(--color-primary-light);
+      }
+
+      .teams-input::placeholder {
+        color: var(--color-gray-400);
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: var(--space-3);
+        background: none;
+        border: none;
+        color: var(--color-gray-400);
+        cursor: pointer;
+        padding: var(--space-1);
+        border-radius: var(--radius-sm);
+        transition: color var(--transition-fast);
+        z-index: 2;
+      }
+
+      .password-toggle:hover {
+        color: var(--color-gray-600);
+      }
+
+      .form-options {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: var(--space-2) 0;
+      }
+
+      .form-check {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+
+      .form-check-input {
+        width: 1rem;
+        height: 1rem;
+        border: 1px solid var(--color-gray-300);
+        border-radius: var(--radius-sm);
+        background: var(--color-white);
+        cursor: pointer;
+      }
+
+      .form-check-label {
+        font-size: var(--font-size-sm);
+        color: var(--color-gray-700);
+        cursor: pointer;
+      }
+
+      .forgot-password {
+        color: var(--color-primary);
+        text-decoration: none;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        transition: color var(--transition-fast);
+      }
+
+      .forgot-password:hover {
+        color: var(--color-primary-dark);
+        text-decoration: underline;
+      }
+
+      .teams-btn-primary {
+        background: var(--color-primary);
+        color: var(--color-white);
+        border: none;
+        padding: var(--space-3) var(--space-6);
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-base);
+        font-weight: var(--font-weight-semibold);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        text-decoration: none;
+      }
+
+      .teams-btn-primary:hover {
+        background: var(--color-primary-hover);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .teams-btn-primary:active {
+        transform: translateY(0);
+      }
+
+      .teams-btn-primary.loading {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      .teams-btn-primary.success {
+        background: var(--color-success);
+      }
+
+      .divider {
+        position: relative;
+        text-align: center;
+        margin: var(--space-4) 0;
+      }
+
+      .divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--color-gray-200);
+      }
+
+      .divider span {
+        background: var(--color-white);
+        padding: 0 var(--space-4);
+        color: var(--color-gray-500);
+        font-size: var(--font-size-sm);
+        position: relative;
+      }
+
+      .social-login {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+      }
+
+      .teams-btn-social {
+        background: var(--color-white);
+        color: var(--color-gray-700);
+        border: 1px solid var(--color-gray-300);
+        padding: var(--space-3) var(--space-6);
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+      }
+
+      .teams-btn-social:hover {
+        background: var(--color-gray-50);
+        border-color: var(--color-gray-400);
+        transform: translateY(-1px);
+      }
+
+      .signup-link {
+        text-align: center;
+        margin-top: var(--space-4);
+      }
+
+      .signup-link p {
+        color: var(--color-gray-600);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
+      .link-primary {
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: var(--font-weight-medium);
+        transition: color var(--transition-fast);
+      }
+
+      .link-primary:hover {
+        color: var(--color-primary-dark);
+        text-decoration: underline;
+      }
+
+      .alert {
+        padding: var(--space-3) var(--space-4);
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-sm);
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+
+      .alert-danger {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+      }
+
+      .d-none {
+        display: none !important;
+      }
+
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+        20%, 40%, 60%, 80% { transform: translateX(2px); }
+      }
+
+      @media (max-width: 768px) {
+        .teams-login-container {
+          grid-template-columns: 1fr;
+          max-width: 500px;
+        }
+        
+        .login-left {
+          padding: var(--space-6);
+          text-align: center;
+        }
+        
+        .login-branding h1 {
+          font-size: 2rem;
+        }
+        
+        .login-right {
+          padding: var(--space-6);
+        }
+      }
+    </style>
   </head>
-  <body class="bg-light">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="container">
-        <a class="navbar-brand fw-bold" href="/">
-          <i class="fas fa-users me-2"></i>CollabSpace
-        </a>
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/register"
-            >Don't have an account? Sign Up</a
-          >
-        </div>
-      </div>
-    </nav>
-
-    <div class="container">
-      <div class="row justify-content-center mt-5">
-        <div class="col-md-6 col-lg-5">
-          <div class="card shadow border-0">
-            <div class="card-body p-5">
-              <div class="text-center mb-4">
-                <h2 class="fw-bold text-primary">Welcome Back</h2>
-                <p class="text-muted">Sign in to your CollabSpace account</p>
-              </div>
-
-              <form id="loginForm" action="javascript:void(0);">
-                <div
-                  id="errorAlert"
-                  class="alert alert-danger d-none"
-                  role="alert"
-                >
-                  <i class="fas fa-exclamation-triangle me-2"></i>
-                  <span id="errorMessage"></span>
-                </div>
-
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email Address</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    name="email"
-                    required
-                  />
-                </div>
-
-                <div class="mb-3">
-                  <label for="password" class="form-label">Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    name="password"
-                    required
-                  />
-                </div>
-
-                <div class="mb-3 form-check">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="remember"
-                    name="remember"
-                  />
-                  <label class="form-check-label" for="remember">
-                    Remember me
-                  </label>
-                </div>
-
-                <button
-                  type="submit"
-                  class="btn btn-primary w-100 btn-lg mb-3"
-                  id="loginButton"
-                >
-                  <i class="fas fa-sign-in-alt me-2"></i>Sign In
-                </button>
-
-                <div class="text-center mb-3">
-                  <a href="#" class="text-primary text-decoration-none"
-                    >Forgot your password?</a
-                  >
-                </div>
-
-                <div class="text-center">
-                  <p class="mb-0">
-                    Don't have an account?
-                    <a href="/register" class="text-primary">Sign Up</a>
-                  </p>
-                </div>
-              </form>
+  <body class="teams-login-body">
+    <!-- Teams-like Login Layout -->
+    <div class="teams-login-container">
+      <!-- Left Side - Branding -->
+      <div class="login-left">
+        <div class="login-branding">
+          <div class="brand-logo">
+            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="loginLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#43e97b"/>
+                  <stop offset="50%" style="stop-color:#00f2fe"/>
+                  <stop offset="100%" style="stop-color:#4facfe"/>
+                </linearGradient>
+                <linearGradient id="loginLogoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#00f2fe"/>
+                  <stop offset="100%" style="stop-color:#667eea"/>
+                </linearGradient>
+                <linearGradient id="loginLogoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#667eea"/>
+                  <stop offset="100%" style="stop-color:#764ba2"/>
+                </linearGradient>
+              </defs>
+              <!-- Outer hexagon -->
+              <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#loginLogoGradient1)" opacity="0.9"/>
+              <!-- Inner C shape - top part -->
+              <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+              <!-- Inner C shape - bottom part -->
+              <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+              <!-- 3D effect - right side -->
+              <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#loginLogoGradient2)" opacity="0.8"/>
+              <!-- 3D effect - bottom -->
+              <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#loginLogoGradient3)" opacity="0.7"/>
+            </svg>
+            <span>CollabSpace</span>
+          </div>
+          <h1>Welcome to your workspace</h1>
+          <p>Connect, collaborate, and create amazing things together with your team.</p>
+          
+          <div class="feature-list">
+            <div class="feature-item">
+              <i class="fas fa-comments"></i>
+              <span>Real-time messaging</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-tasks"></i>
+              <span>Task management</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-users"></i>
+              <span>Team collaboration</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-file-share"></i>
+              <span>File sharing</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-5">
-      <div class="container text-center">
-        <p class="mb-0">&copy; 2024 CollabSpace. All rights reserved.</p>
+      <!-- Right Side - Login Form -->
+      <div class="login-right">
+        <div class="login-form-container">
+          <div class="login-header">
+            <h2>Sign in to CollabSpace</h2>
+            <p>Enter your credentials to access your workspace</p>
+          </div>
+
+          <form id="loginForm" class="teams-login-form">
+            <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              <span id="errorMessage"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">Email Address</label>
+              <div class="input-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input
+                  type="email"
+                  class="form-control teams-input"
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-wrapper">
+                <i class="fas fa-lock input-icon"></i>
+                <input
+                  type="password"
+                  class="form-control teams-input"
+                  id="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button type="button" class="password-toggle" id="passwordToggle">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-options">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="remember"
+                  name="remember"
+                />
+                <label class="form-check-label" for="remember">
+                  Remember me
+                </label>
+              </div>
+              <a href="#" class="forgot-password" onclick="handleForgotPassword()">Forgot password?</a>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary teams-btn-primary w-100"
+              id="loginButton"
+            >
+              <i class="fas fa-sign-in-alt me-2"></i>Sign In
+            </button>
+
+            <div class="divider">
+              <span>or</span>
+            </div>
+
+            <div class="social-login">
+              <button type="button" class="btn btn-outline-secondary teams-btn-social" onclick="handleSocialLogin('microsoft')">
+                <i class="fab fa-microsoft me-2"></i>Sign in with Microsoft
+              </button>
+              <button type="button" class="btn btn-outline-secondary teams-btn-social" onclick="handleSocialLogin('google')">
+                <i class="fab fa-google me-2"></i>Sign in with Google
+              </button>
+            </div>
+
+            <div class="signup-link">
+              <p>
+                Don't have an account?
+                <a href="/register" class="link-primary">Sign up for free</a>
+              </p>
+            </div>
+          </form>
+        </div>
       </div>
-    </footer>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        console.log("Login page loaded");
+        console.log("Teams Login page loaded");
 
         const loginForm = document.getElementById("loginForm");
         const loginButton = document.getElementById("loginButton");
@@ -134,8 +662,19 @@
         const errorMessage = document.getElementById("errorMessage");
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
+        const passwordToggle = document.getElementById("passwordToggle");
 
-        // Simple form submission prevention
+        // Password toggle functionality
+        passwordToggle.addEventListener("click", function() {
+          const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+          passwordInput.setAttribute("type", type);
+          
+          const icon = passwordToggle.querySelector("i");
+          icon.classList.toggle("fa-eye");
+          icon.classList.toggle("fa-eye-slash");
+        });
+
+        // Form submission
         loginForm.addEventListener("submit", function (e) {
           console.log("Form submit intercepted");
           e.preventDefault();
@@ -188,6 +727,12 @@
         function showError(message) {
           errorMessage.textContent = message;
           errorAlert.classList.remove("d-none");
+          
+          // Add shake animation
+          errorAlert.style.animation = "shake 0.5s ease-in-out";
+          setTimeout(() => {
+            errorAlert.style.animation = "";
+          }, 500);
         }
 
         function hideError() {
@@ -197,12 +742,12 @@
         function setLoading(loading) {
           if (loading) {
             loginButton.disabled = true;
-            loginButton.innerHTML =
-              '<i class="fas fa-spinner fa-spin me-2"></i>Signing In...';
+            loginButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Signing In...';
+            loginButton.classList.add("loading");
           } else {
             loginButton.disabled = false;
-            loginButton.innerHTML =
-              '<i class="fas fa-sign-in-alt me-2"></i>Sign In';
+            loginButton.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Sign In';
+            loginButton.classList.remove("loading");
           }
         }
 
@@ -210,6 +755,20 @@
           console.log("handleLogin called");
           hideError();
           setLoading(true);
+
+          // Check if we're in VS Code browser
+          const isVSCodeBrowser = window.location.search.includes('vscodeBrowser') || 
+                                 navigator.userAgent.includes('Code/');
+
+          if (isVSCodeBrowser) {
+            // Use form-based submission for VS Code browser
+            console.log("VS Code browser detected, using form submission");
+            const form = document.getElementById("loginForm");
+            form.action = '/auth/web-login';
+            form.method = 'POST';
+            form.submit();
+            return;
+          }
 
           const data = {
             email: emailInput.value.trim(),
@@ -245,22 +804,22 @@
             });
 
             if (response.ok && result.success) {
-              // Store the token
-              if (result.data && result.data.token) {
-                localStorage.setItem("token", result.data.token);
+              // Store user data (session is handled server-side)
+              if (result.data && result.data.user) {
                 localStorage.setItem("user", JSON.stringify(result.data.user));
-                console.log("Token and user data stored");
+                console.log("User data stored");
               }
 
               // Show success message briefly then redirect
-              loginButton.innerHTML =
-                '<i class="fas fa-check me-2"></i>Success!';
+              loginButton.innerHTML = '<i class="fas fa-check me-2"></i>Success!';
+              loginButton.classList.add("success");
               console.log("Login successful, redirecting...");
 
-              // Redirect to dashboard
+              // Redirect based on role-specific URL from server
+              const redirectUrl = result.data.redirectUrl || "/dashboard";
               setTimeout(() => {
-                window.location.href = "/dashboard";
-              }, 500);
+                window.location.href = redirectUrl;
+              }, 1000);
             } else {
               setLoading(false);
               showError(result.message || "Login failed. Please try again.");
@@ -268,17 +827,87 @@
             }
           } catch (error) {
             setLoading(false);
-            showError(
-              "Network error. Please check your connection and try again."
-            );
+            showError("Network error. Please check your connection and try again.");
             console.error("Login error:", error);
           }
         }
+
+        // Social login handlers
+        document.querySelectorAll('.teams-btn-social').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const provider = this.textContent.includes('Microsoft') ? 'Microsoft' : 'Google';
+            showNotification(`Signing in with ${provider}...`, 'info');
+            
+            // Add loading state
+            this.disabled = true;
+            this.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>Connecting...`;
+            
+            // Simulate social login
+            setTimeout(() => {
+              showNotification(`${provider} login not implemented yet`, 'warning');
+              this.disabled = false;
+              this.innerHTML = this.innerHTML.replace('Connecting...', provider);
+            }, 2000);
+          });
+        });
 
         // Make functions globally available
         window.handleLogin = handleLogin;
         window.setLoading = setLoading;
       });
+
+      function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+          <div class="notification-content">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <span>${message}</span>
+          </div>
+        `;
+        
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 9999;
+          background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+          color: white;
+          padding: 12px 16px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Animate in
+        requestAnimationFrame(() => {
+          notification.style.transform = 'translateX(0)';
+        });
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+          notification.style.transform = 'translateX(100%)';
+          setTimeout(() => {
+            notification.remove();
+          }, 300);
+        }, 3000);
+      }
+
+      function handleSocialLogin(provider) {
+        alert(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login is not implemented yet. This would redirect to ${provider} OAuth.`);
+      }
+
+      function handleForgotPassword() {
+        const email = prompt('Enter your email address to reset password:');
+        if (email && email.includes('@')) {
+          alert(`Password reset link would be sent to: ${email}`);
+        } else if (email) {
+          alert('Please enter a valid email address');
+        }
+      }
     </script>
   </body>
 </html>

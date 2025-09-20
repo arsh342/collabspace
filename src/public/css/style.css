@@ -36,6 +36,15 @@ body {
   color: rgba(255, 255, 255, 0.8) !important;
 }
 
+/* Enhanced Navbar Theme Alignment */
+.navbar.bg-primary {
+  background: linear-gradient(90deg, #1e40af, #312e81) !important;
+}
+.navbar .navbar-brand svg { transition: transform .3s ease; }
+.navbar .navbar-brand:hover svg { transform: scale(1.08); }
+.navbar .nav-link { position: relative; }
+.navbar .nav-link.active::after, .navbar .nav-link:hover::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0.25rem; height: 2px; background: #fff; border-radius: 2px; }
+
 /* Sidebar */
 .sidebar {
   background: white;
