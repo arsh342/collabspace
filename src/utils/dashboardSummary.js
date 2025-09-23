@@ -48,10 +48,14 @@ async function computeOrganiserSummary(organiserId) {
     ? Math.round((completedTasks / totalTasks) * 100)
     : 0;
 
+  const activeTasks = totalTasks - completedTasks;
+
   return {
     totalTeams,
     totalMembers,
     totalTasks,
+    activeTasks,
+    completedTasks,
     completionRate,
     timestamp: new Date().toISOString(),
   };

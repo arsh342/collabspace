@@ -5,7 +5,7 @@ const Team = require("../models/Team");
 const User = require("../models/User");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
 const { authenticateSession } = require("../middleware/auth");
-const logger = require("../middleware/logger");
+const { logger } = require("../middleware/logger");
 
 const router = express.Router();
 
@@ -32,18 +32,11 @@ router.get("/conversations", authenticateSession, catchAsync(async (req, res) =>
       members: req.user._id 
     })
     .populate('members', 'username email avatar')
-    .populate({
-      path: 'lastMessage',
-      populate: {
-        path: 'sender',
-        select: 'username avatar'
-      }
-    })
-    .sort({ lastActivity: -1 });
+    .sort({ updatedAt: -1 });
 
     const conversations = teams.map(team => {
       const onlineMembers = team.members.filter(member => 
-        member.isOnline // Assuming we track online status
+        member.isOnline || false // Assuming we track online status
       ).length;
 
       return {
@@ -51,16 +44,11 @@ router.get("/conversations", authenticateSession, catchAsync(async (req, res) =>
         name: team.name,
         type: 'group',
         avatar: team.avatar || null,
-        lastMessage: team.lastMessage ? {
-          content: team.lastMessage.content,
-          sender: team.lastMessage.sender.username,
-          timestamp: team.lastMessage.createdAt,
-          type: team.lastMessage.messageType
-        } : null,
+        lastMessage: null, // We'll fetch this separately if needed
         members: team.members.length,
         onlineMembers: onlineMembers,
         unreadCount: 0, // TODO: Implement unread count logic
-        lastActivity: team.lastActivity || team.updatedAt
+        lastActivity: team.updatedAt
       };
     });
 
@@ -81,12 +69,11 @@ router.get("/conversations", authenticateSession, catchAsync(async (req, res) =>
 // @desc    Get messages for a conversation
 // @access  Private
 router.get("/messages/:conversationId", authenticateSession, catchAsync(async (req, res) => {
-  try {
-    const { conversationId } = req.params;
-    const { page = 1, limit = 50 } = req.query;
+  const { conversationId } = req.params;
+  const { page = 1, limit = 50 } = req.query;
 
-    // Check if user has access to this conversation
-    const team = await Team.findOne({
+  // Check if user has access to this conversation
+  const team = await Team.findOne({
       _id: conversationId,
       members: req.user._id
     });
@@ -102,33 +89,48 @@ router.get("/messages/:conversationId", authenticateSession, catchAsync(async (r
       team: conversationId,
       isDeleted: false
     })
-    .populate('sender', 'username avatar email')
-    .populate('replyTo.sender', 'username avatar')
+    .populate('sender', 'username firstName lastName avatar email lastSeen')
+    .populate('replyTo.sender', 'username firstName lastName avatar lastSeen')
     .sort({ createdAt: -1 })
     .limit(limit * 1)
     .skip((page - 1) * limit);
 
-    const formattedMessages = messages.reverse().map(message => ({
-      id: message._id,
-      content: message.content,
-      type: message.messageType,
-      sender: {
-        id: message.sender._id,
-        name: message.sender.username,
-        avatar: message.sender.avatar || `https://ui-avatars.com/api/?name=${message.sender.username}&background=7B61FF&color=fff`
-      },
-      timestamp: message.createdAt.toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        hour12: false 
-      }),
-      status: 'delivered', // TODO: Implement read status
-      attachments: message.attachments || [],
-      reactions: message.reactions || [],
-      replyTo: message.replyTo || null,
-      isEdited: message.isEdited,
-      editedAt: message.editedAt
-    }));
+    const formattedMessages = messages.reverse().map(message => {
+      console.log('Chat message sender:', message.sender); // Debug log
+      console.log('Sender lastSeen:', message.sender.lastSeen); // Debug lastSeen
+      console.log('Current time:', new Date()); // Debug current time
+      console.log('Five minutes ago:', new Date(Date.now() - 5 * 60 * 1000)); // Debug threshold
+      return {
+        _id: message._id,
+        content: message.content,
+        messageType: message.messageType,
+        sender: {
+          _id: message.sender._id,
+          username: message.sender.username,
+          firstName: message.sender.firstName,
+          lastName: message.sender.lastName,
+          avatar: message.sender.avatar || `https://ui-avatars.com/api/?name=${message.sender.username}&background=7B61FF&color=fff`
+        },
+        createdAt: message.createdAt,
+        updatedAt: message.updatedAt,
+        timestamp: message.createdAt.toLocaleTimeString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: false 
+        }),
+        status: 'delivered', // TODO: Implement read status
+        attachments: message.attachments || [],
+        reactions: message.reactions || [],
+        replyTo: message.replyTo || null,
+        isEdited: message.isEdited,
+        editedAt: message.editedAt,
+        // Include file data
+        fileName: message.fileName,
+        fileType: message.fileType,
+        fileSize: message.fileSize,
+        fileUrl: message.fileUrl
+      };
+    });
 
     res.json({
       success: true,
@@ -142,13 +144,6 @@ router.get("/messages/:conversationId", authenticateSession, catchAsync(async (r
         })
       }
     });
-  } catch (error) {
-    logger.error('Error fetching messages:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching messages'
-    });
-  }
 }));
 
 // @route   POST /api/chat/messages
@@ -165,7 +160,7 @@ router.post("/messages", authenticateSession, validateMessage, catchAsync(async 
       });
     }
 
-    const { content, teamId, messageType = 'text', replyTo } = req.body;
+    const { content, teamId, messageType = 'text', replyTo, fileName, fileType, fileSize, fileUrl } = req.body;
 
     // Check if user has access to this team
     const team = await Team.findOne({
@@ -181,13 +176,23 @@ router.post("/messages", authenticateSession, validateMessage, catchAsync(async 
     }
 
     // Create the message
-    const message = new Message({
+    const messageData = {
       team: teamId,
       sender: req.user._id,
       content,
       messageType,
       replyTo: replyTo ? { message: replyTo } : undefined
-    });
+    };
+
+    // Add file data if this is a file message
+    if (messageType === 'file' && fileName) {
+      messageData.fileName = fileName;
+      messageData.fileType = fileType;
+      messageData.fileSize = fileSize;
+      messageData.fileUrl = fileUrl;
+    }
+
+    const message = new Message(messageData);
 
     await message.save();
 
@@ -197,34 +202,42 @@ router.post("/messages", authenticateSession, validateMessage, catchAsync(async 
     await team.save();
 
     // Populate the message for response
-    await message.populate('sender', 'username avatar email');
+    await message.populate('sender', 'username firstName lastName avatar email');
     if (replyTo) {
-      await message.populate('replyTo.sender', 'username avatar');
+      await message.populate('replyTo.sender', 'username firstName lastName avatar');
     }
 
     const formattedMessage = {
-      id: message._id,
+      _id: message._id,
       content: message.content,
-      type: message.messageType,
+      messageType: message.messageType,
       sender: {
-        id: message.sender._id,
-        name: message.sender.username,
+        _id: message.sender._id,
+        username: message.sender.username,
+        firstName: message.sender.firstName,
+        lastName: message.sender.lastName,
         avatar: message.sender.avatar || `https://ui-avatars.com/api/?name=${message.sender.username}&background=7B61FF&color=fff`
       },
-      timestamp: message.createdAt.toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        hour12: false 
-      }),
+      team: teamId,
+      teamId: teamId,
+      createdAt: message.createdAt,
+      timestamp: message.createdAt.toISOString(),
       status: 'delivered',
       attachments: message.attachments || [],
       reactions: message.reactions || [],
       replyTo: message.replyTo || null,
-      isEdited: false
+      isEdited: false,
+      // Include file data if it's a file message
+      fileName: message.fileName,
+      fileType: message.fileType,
+      fileSize: message.fileSize,
+      fileUrl: message.fileUrl
     };
 
-    // TODO: Emit to Socket.IO for real-time updates
-    // io.to(teamId).emit('new_message', formattedMessage);
+    // Emit to Socket.IO for real-time updates
+    if (req.io) {
+      req.io.to(`team-${teamId}`).emit('new message', formattedMessage);
+    }
 
     res.status(201).json({
       success: true,

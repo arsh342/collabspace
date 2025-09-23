@@ -107,7 +107,7 @@ router.get(
         .populate("admin", "username firstName lastName avatar")
         .populate("members", "username firstName lastName avatar")
         .populate("joinRequests.user", "username firstName lastName avatar")
-        .sort({ updatedAt: -1 })
+        .sort({ createdAt: 1 })
         .skip(skip)
         .limit(parseInt(limit));
 
@@ -360,14 +360,36 @@ router.delete(
   catchAsync(async (req, res) => {
     try {
       const teamName = req.team.name;
+      const teamId = req.params.id;
 
-      await Team.findByIdAndDelete(req.params.id);
+      // Delete all tasks associated with this team first
+      const Task = require("../models/Task");
+      const deletedTasks = await Task.find({ team: teamId });
+      const taskCount = deletedTasks.length;
+      
+      if (taskCount > 0) {
+        await Task.deleteMany({ team: teamId });
+        logger.info(`Deleted ${taskCount} tasks associated with team: ${teamName}`);
+      }
 
-      logger.info(`User ${req.user.username} deleted team: ${teamName}`);
+      // Delete all messages associated with this team
+      const Message = require("../models/Message");
+      const deletedMessages = await Message.find({ team: teamId });
+      const messageCount = deletedMessages.length;
+      
+      if (messageCount > 0) {
+        await Message.deleteMany({ team: teamId });
+        logger.info(`Deleted ${messageCount} messages associated with team: ${teamName}`);
+      }
+
+      // Finally delete the team
+      await Team.findByIdAndDelete(teamId);
+
+      logger.info(`User ${req.user.username} deleted team: ${teamName} (and ${taskCount} tasks, ${messageCount} messages)`);
 
       res.json({
         success: true,
-        message: "Team deleted successfully",
+        message: `Team deleted successfully along with ${taskCount} tasks and ${messageCount} messages`,
       });
     } catch (error) {
       logger.error("Delete team error:", error);

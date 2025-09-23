@@ -6,8 +6,8 @@ const fs = require("fs");
 const Message = require("../models/Message");
 const Team = require("../models/Team");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
-const { requireTeamMembership } = require("../middleware/auth");
-const logger = require("../middleware/logger");
+const { requireTeamMembership, authenticateSession } = require("../middleware/auth");
+const { logger } = require("../middleware/logger");
 
 const router = express.Router();
 
@@ -58,8 +58,19 @@ const upload = multer({
 const validateMessage = [
   body("content")
     .trim()
-    .isLength({ min: 1, max: 2000 })
-    .withMessage("Message content must be between 1 and 2000 characters"),
+    .custom((value, { req }) => {
+      // Allow empty content for file messages, require content for text messages
+      if (req.body.messageType === 'file' || req.body.messageType === 'image') {
+        return true; // Allow empty content for file/image messages
+      }
+      if (!value || value.length < 1) {
+        throw new Error('Message content is required for text messages');
+      }
+      if (value.length > 2000) {
+        throw new Error('Message content cannot exceed 2000 characters');
+      }
+      return true;
+    }),
   body("teamId").isMongoId().withMessage("Valid team ID is required"),
   body("messageType")
     .optional()
@@ -137,10 +148,32 @@ router.get(
 
       const total = await Message.countDocuments(query);
 
+      // Format messages for dashboard compatibility
+      const formattedMessages = messages.map(message => {
+        console.log('Message sender:', message.sender); // Debug log
+        return {
+          _id: message._id,
+          content: message.content,
+          messageType: message.messageType,
+          sender: {
+            _id: message.sender._id,
+            username: message.sender.username,
+            firstName: message.sender.firstName,
+            lastName: message.sender.lastName,
+            avatar: message.sender.avatar
+          },
+          team: message.team,
+          createdAt: message.createdAt,
+          updatedAt: message.updatedAt,
+          formattedDate: message.createdAt.toLocaleString(),
+          senderName: `${message.sender.firstName} ${message.sender.lastName}`
+        };
+      });
+
       res.json({
         success: true,
         data: {
-          messages,
+          messages: formattedMessages,
           pagination: {
             page: parseInt(page),
             limit: parseInt(limit),
@@ -161,11 +194,13 @@ router.get(
 // @access  Private
 router.post(
   "/",
+  authenticateSession,
   validateMessage,
   catchAsync(async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        logger.error('Message validation failed:', errors.array());
         return res.status(400).json({
           success: false,
           message: "Validation failed",
@@ -174,10 +209,20 @@ router.post(
       }
 
       const { content, teamId, messageType = "text", replyTo } = req.body;
+      logger.info(`Attempting to send message: content="${content}", teamId="${teamId}", user="${req.user._id}"`);
 
       // Verify user is member of the team
       const team = await Team.findById(teamId);
-      if (!team || !team.members.includes(req.user._id)) {
+      if (!team) {
+        logger.error(`Team not found: ${teamId}`);
+        return res.status(404).json({
+          success: false,
+          message: "Team not found",
+        });
+      }
+
+      if (!team.members.includes(req.user._id)) {
+        logger.error(`User ${req.user._id} is not a member of team ${teamId}`);
         return res.status(403).json({
           success: false,
           message: "You are not a member of this team",
@@ -222,10 +267,31 @@ router.post(
         `User ${req.user.username} sent message in team: ${team.name}`
       );
 
+      // Format response for dashboard compatibility
+      const responseMessage = {
+        _id: message._id,
+        content: message.content,
+        messageType: message.messageType,
+        sender: {
+          _id: message.sender._id,
+          username: message.sender.username,
+          firstName: message.sender.firstName,
+          lastName: message.sender.lastName,
+          avatar: message.sender.avatar
+        },
+        team: message.team,
+        createdAt: message.createdAt,
+        updatedAt: message.updatedAt,
+        formattedDate: message.createdAt.toLocaleString(),
+        senderName: `${message.sender.firstName} ${message.sender.lastName}`
+      };
+
       res.status(201).json({
         success: true,
         message: "Message sent successfully",
-        data: { message },
+        data: {
+          message: responseMessage
+        }
       });
     } catch (error) {
       logger.error("Send message error:", error);

@@ -15,6 +15,9 @@ const errorHandler = require("./middleware/errorHandler");
 const { authenticateSession, authenticateWeb, requireOrganiser, requireOrganiserWeb, requireTeamMember, requireTeamMemberWeb } = require("./middleware/auth");
 const { apiLimiter, authLimiter, dashboardLimiter } = require("./middleware/rateLimiter");
 
+// Import models
+const User = require("./models/User");
+
 // Import routes
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
@@ -23,6 +26,7 @@ const taskRoutes = require("./routes/tasks");
 const messageRoutes = require("./routes/messages");
 const chatRoutes = require("./routes/chat");
 const dashboardRoutes = require("./routes/dashboard");
+const uploadRoutes = require("./routes/upload");
 
 const app = express();
 const server = http.createServer(app);
@@ -77,8 +81,15 @@ app.use("/api/users", userRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/messages", messageRoutes);
-app.use("/api/chat", chatRoutes);
+app.use("/api/chat", (req, res, next) => {
+  req.io = io;
+  next();
+}, chatRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api", uploadRoutes); // This will handle /api/files/:filename
 app.use("/api/dashboard", dashboardLimiter, dashboardRoutes);
+app.use("/api/member", require("./routes/member-api-simple"));
+app.use("/api/invitations", require("./routes/invitations"));
 
 // Frontend Routes
 app.get("/", (req, res) => {
@@ -126,7 +137,23 @@ app.get("/organiser-dashboard", authenticateWeb, requireOrganiserWeb, (req, res)
   });
 });
 
-app.get("/member-dashboard", authenticateWeb, requireTeamMemberWeb, (req, res) => {
+app.get("/member-dashboard", authenticateWeb, (req, res) => {
+  console.log("Member dashboard route accessed");
+  console.log("User:", req.user);
+  console.log("User role:", req.user?.role);
+  
+  // Check if user has the right role
+  if (!req.user) {
+    console.log("No user found, redirecting to login");
+    return res.redirect('/login');
+  }
+  
+  if (req.user.role !== 'Team Member') {
+    console.log("User role is not Team Member, role is:", req.user.role);
+    return res.status(403).send(`Access denied. Your role is: ${req.user.role}. Team Member access required.`);
+  }
+  
+  console.log("Rendering member dashboard for user:", req.user.username);
   res.render("member-dashboard", {
     title: "Team Member Dashboard", 
     user: req.user,
@@ -162,15 +189,10 @@ app.get("/tasks", (req, res) => {
   });
 });
 
-app.get("/chat", (req, res) => {
-  const mockUser = {
-    firstName: "John",
-    lastName: "Doe",
-    role: "admin",
-  };
+app.get("/chat", authenticateSession, (req, res) => {
   res.render("chat", {
     title: "Chat - CollabSpace",
-    user: mockUser,
+    user: req.user,
     path: "/chat",
   });
 });
@@ -293,6 +315,10 @@ app.get("/guides", (req, res) => {
   });
 });
 
+// Store organiser socket connections
+// Store team user connections
+const teamUsers = new Map(); // Map of teamId -> Set of userIds
+
 // Socket.IO connection handling
 io.on("connection", (socket) => {
   logger.logger.info(`User connected: ${socket.id}`);
@@ -305,6 +331,11 @@ io.on("connection", (socket) => {
         organiserSockets.set(organiserId, new Set());
       }
       organiserSockets.get(organiserId).add(socket.id);
+      
+      // Join user room for personal notifications
+      socket.join(`user_${organiserId}`);
+      socket.currentUserId = organiserId;
+      
       logger.logger.info(`Socket ${socket.id} registered for organiser ${organiserId}`);
       // Send initial summary
       const summary = await computeOrganiserSummary(organiserId);
@@ -314,17 +345,70 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Register member dashboard listener
+  socket.on('registerMember', async (memberId) => {
+    try {
+      if (!memberId) return;
+      
+      // Join user room for personal notifications
+      socket.join(`user_${memberId}`);
+      socket.currentUserId = memberId;
+      
+      logger.logger.info(`Socket ${socket.id} registered for member ${memberId}`);
+    } catch (e) {
+      logger.logger.error('Error registering member socket', e);
+    }
+  });
+
   // Join team room
-  socket.on("join team", (data) => {
-    socket.join(`team-${data.teamId}`);
-    logger.logger.info(`User ${socket.id} joined team ${data.teamId}`);
+  socket.on("join team", async (data) => {
+    const { teamId, userId } = data;
+    
+    try {
+      // Update user's lastSeen timestamp for online status
+      await User.findByIdAndUpdate(userId, { lastSeen: new Date() });
+      
+      // Leave previous team if any
+      if (socket.currentTeam && socket.currentUserId) {
+        socket.leave(`team-${socket.currentTeam}`);
+        removeUserFromTeam(socket.currentTeam, socket.currentUserId);
+        updateOnlineCount(socket.currentTeam);
+      }
+      
+      // Join new team
+      socket.join(`team-${teamId}`);
+      socket.currentTeam = teamId;
+      socket.currentUserId = userId;
+      
+      // Track user in team
+      if (!teamUsers.has(teamId)) {
+        teamUsers.set(teamId, new Set());
+      }
+      teamUsers.get(teamId).add(userId);
+      
+      logger.logger.info(`User ${userId} (${socket.id}) joined team ${teamId}`);
+      
+      // Update online count for this team
+      updateOnlineCount(teamId);
+    } catch (error) {
+      logger.logger.error(`Error updating user lastSeen for ${userId}:`, error);
+    }
   });
 
   // Handle chat messages
-  socket.on("send message", (data) => {
-    // Broadcast message to team
-    socket.to(`team-${data.teamId}`).emit("new message", data);
-    logger.logger.info(`Message sent in team ${data.teamId}: ${data.content}`);
+  socket.on("send message", async (data) => {
+    try {
+      // Update user's lastSeen timestamp
+      if (data.userId) {
+        await User.findByIdAndUpdate(data.userId, { lastSeen: new Date() });
+      }
+      
+      // Broadcast message to team
+      socket.to(`team-${data.teamId}`).emit("new message", data);
+      logger.logger.info(`Message sent in team ${data.teamId}: ${data.content}`);
+    } catch (error) {
+      logger.logger.error(`Error updating user lastSeen for message:`, error);
+    }
   });
 
   // Handle typing indicators
@@ -348,18 +432,50 @@ io.on("connection", (socket) => {
     logger.logger.info(`User status changed: ${data.userId} - ${data.status}`);
   });
 
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
     logger.logger.info(`User disconnected: ${socket.id}`);
-    // Cleanup organiser socket registration
-    for (const [orgId, set] of organiserSockets.entries()) {
-      if (set.has(socket.id)) {
-        set.delete(socket.id);
-        if (set.size === 0) organiserSockets.delete(orgId);
-        break;
+    
+    try {
+      // Update user's lastSeen timestamp on disconnect
+      if (socket.currentUserId) {
+        await User.findByIdAndUpdate(socket.currentUserId, { lastSeen: new Date() });
       }
+      
+      // Remove user from team tracking
+      if (socket.currentTeam && socket.currentUserId) {
+        removeUserFromTeam(socket.currentTeam, socket.currentUserId);
+        updateOnlineCount(socket.currentTeam);
+      }
+      
+      // Cleanup organiser socket registration
+      for (const [orgId, set] of organiserSockets.entries()) {
+        if (set.has(socket.id)) {
+          set.delete(socket.id);
+          if (set.size === 0) organiserSockets.delete(orgId);
+          break;
+        }
+      }
+    } catch (error) {
+      logger.logger.error(`Error updating user lastSeen on disconnect:`, error);
     }
   });
 });
+
+// Helper functions for team user tracking
+function removeUserFromTeam(teamId, userId) {
+  if (teamUsers.has(teamId)) {
+    teamUsers.get(teamId).delete(userId);
+    if (teamUsers.get(teamId).size === 0) {
+      teamUsers.delete(teamId);
+    }
+  }
+}
+
+function updateOnlineCount(teamId) {
+  const onlineCount = teamUsers.has(teamId) ? teamUsers.get(teamId).size : 0;
+  io.to(`team-${teamId}`).emit('onlineCountUpdate', { teamId, count: onlineCount });
+  logger.logger.info(`Team ${teamId} online count: ${onlineCount}`);
+}
 
 // Helper to emit updated summary to organiser sockets
 async function emitOrganiserSummary(organiserId) {
@@ -376,6 +492,7 @@ async function emitOrganiserSummary(organiserId) {
 
 // Export helper so routes can trigger emits
 module.exports.emitOrganiserSummary = emitOrganiserSummary;
+module.exports.io = io;
 
 // Error handling middleware (must be last)
 app.use(errorHandler.errorHandler);
