@@ -15,7 +15,10 @@ const messageSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: [true, "Message content is required"],
+      required: function() {
+        // Content is required for text messages, but optional for file/image messages
+        return this.messageType === 'text' || this.messageType === 'system' || this.messageType === 'task_update';
+      },
       maxlength: [2000, "Message content cannot exceed 2000 characters"],
     },
     messageType: {
@@ -33,6 +36,11 @@ const messageSchema = new mongoose.Schema(
         thumbnail: String,
       },
     ],
+    // Single file attachment for simpler access
+    fileName: String,
+    fileType: String,
+    fileSize: Number,
+    fileUrl: String,
     mentions: [
       {
         user: {

@@ -350,6 +350,13 @@ taskSchema.methods.updateStatus = async function (newStatus, userId) {
 
     await this.save();
 
+    // Update team stats when task status changes
+    const Team = require('./Team');
+    const team = await Team.findById(this.team);
+    if (team) {
+      await team.updateTaskStats();
+    }
+
     logger.info(
       `Task ${this._id} status changed from ${oldStatus} to ${newStatus} by user ${userId}`
     );

@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 // Import models
@@ -195,7 +196,214 @@ async function showStatistics() {
   }
 }
 
-// Show help information
+// Clean up orphaned tasks (tasks without valid teams)
+async function cleanupOrphanedTasks() {
+  try {
+    console.log("🧹 Starting orphaned tasks cleanup...");
+
+    // Find tasks where team reference is invalid
+    const orphanedTasks = await Task.aggregate([
+      {
+        $lookup: {
+          from: "teams",
+          localField: "team",
+          foreignField: "_id",
+          as: "teamData"
+        }
+      },
+      {
+        $match: {
+          teamData: { $size: 0 } // No matching team found
+        }
+      }
+    ]);
+
+    console.log(`Found ${orphanedTasks.length} orphaned tasks`);
+
+    if (orphanedTasks.length > 0) {
+      const taskIds = orphanedTasks.map(task => task._id);
+      const result = await Task.deleteMany({ _id: { $in: taskIds } });
+      
+      console.log(`✅ Cleaned up ${result.deletedCount} orphaned tasks`);
+      
+      // Log details of cleaned tasks
+      orphanedTasks.forEach(task => {
+        console.log(`   - "${task.title}" (ID: ${task._id})`);
+      });
+    } else {
+      console.log("✅ No orphaned tasks found");
+    }
+
+    return orphanedTasks.length;
+  } catch (error) {
+    console.error("❌ Error cleaning up orphaned tasks:", error.message);
+    throw error;
+  }
+}
+
+// List all teams
+async function listTeams() {
+  try {
+    console.log("🏢 Listing all teams...");
+    
+    const teams = await Team.find({}).populate('admin', 'username').populate('members', 'username');
+    
+    if (teams.length === 0) {
+      console.log("No teams found in the database.");
+      return;
+    }
+    
+    teams.forEach((team, index) => {
+      console.log(`\n${index + 1}. Team: ${team.name}`);
+      console.log(`   ID: ${team._id}`);
+      console.log(`   Type: ${team.type}`);
+      console.log(`   Status: ${team.status}`);
+      console.log(`   Admin: ${team.admin ? team.admin.username : 'None'}`);
+      console.log(`   Members: ${team.members.length} member(s)`);
+      if (team.members.length > 0) {
+        team.members.forEach(member => {
+          console.log(`     - ${member.username}`);
+        });
+      }
+      console.log(`   Created: ${team.createdAt}`);
+    });
+    
+    console.log(`\n✅ Total teams found: ${teams.length}`);
+  } catch (error) {
+    console.error("❌ Error listing teams:", error.message);
+  }
+}
+
+// Remove a team by ID
+async function removeTeam(teamId) {
+  try {
+    console.log(`🗑️  Removing team with ID: ${teamId}...`);
+    
+    // First check if team exists
+    const team = await Team.findById(teamId);
+    if (!team) {
+      console.log("❌ Team not found with the provided ID.");
+      return;
+    }
+    
+    console.log(`Found team: ${team.name}`);
+    
+    // Delete associated tasks
+    const deletedTasks = await Task.deleteMany({ team: teamId });
+    console.log(`🗑️  Deleted ${deletedTasks.deletedCount} associated tasks`);
+    
+    // Delete associated messages
+    const deletedMessages = await Message.deleteMany({ team: teamId });
+    console.log(`🗑️  Deleted ${deletedMessages.deletedCount} associated messages`);
+    
+    // Delete the team
+    await Team.findByIdAndDelete(teamId);
+    console.log(`✅ Team "${team.name}" removed successfully`);
+    
+  } catch (error) {
+    console.error("❌ Error removing team:", error.message);
+  }
+}
+
+// Set a user's password by username
+async function setUserPassword(username, newPassword) {
+  try {
+    if (!username || !newPassword) {
+      console.error("❌ Username and new password required");
+      process.exit(1);
+    }
+    const user = await User.findOne({ username });
+    if (!user) {
+      console.error(`❌ User not found: ${username}`);
+      return;
+    }
+    const hashed = await bcrypt.hash(newPassword, 12);
+    user.password = hashed;
+    await user.save();
+    console.log(`✅ Password updated for user: ${username}`);
+  } catch (error) {
+    console.error("❌ Error setting password:", error.message);
+  }
+}
+
+// Show user info by username
+async function showUserInfo(username) {
+  try {
+    if (!username) {
+      console.error("❌ Username required");
+      process.exit(1);
+    }
+    const user = await User.findOne({ username }).lean();
+    if (!user) {
+      console.error(`❌ User not found: ${username}`);
+      return;
+    }
+    console.log(`User Info for '${username}':`);
+    console.log(`  Email: ${user.email}`);
+    console.log(`  First Name: ${user.firstName}`);
+    console.log(`  Last Name: ${user.lastName}`);
+    console.log(`  Role: ${user.role}`);
+    console.log(`  Active: ${user.isActive}`);
+    console.log(`  Last Seen: ${user.lastSeen}`);
+  } catch (error) {
+    console.error("❌ Error showing user info:", error.message);
+  }
+}
+
+// Show full user debug info by username
+async function showUserDebug(username) {
+  try {
+    if (!username) {
+      console.error("❌ Username required");
+      process.exit(1);
+    }
+    const user = await User.findOne({ username }).select('+password').lean();
+    if (!user) {
+      console.error(`❌ User not found: ${username}`);
+      return;
+    }
+    console.log(`User Debug Info for '${username}':`);
+    console.log(user);
+  } catch (error) {
+    console.error("❌ Error showing user debug info:", error.message);
+  }
+}
+
+// Delete user and all related data by username
+async function deleteUserAndData(username) {
+  try {
+    if (!username) {
+      console.error("❌ Username required");
+      process.exit(1);
+    }
+    const user = await User.findOne({ username });
+    if (!user) {
+      console.error(`❌ User not found: ${username}`);
+      return;
+    }
+    // Delete teams where user is admin
+    const teams = await Team.find({ admin: user._id });
+    for (const team of teams) {
+      await Task.deleteMany({ team: team._id });
+      await Message.deleteMany({ team: team._id });
+      await Team.findByIdAndDelete(team._id);
+      console.log(`Deleted team: ${team.name}`);
+    }
+    // Remove user from other teams' members
+    await Team.updateMany({ members: user._id }, { $pull: { members: user._id } });
+    // Delete tasks assigned to user
+    await Task.deleteMany({ assignee: user._id });
+    // Delete messages sent by user
+    await Message.deleteMany({ sender: user._id });
+    // Delete the user
+    await User.findByIdAndDelete(user._id);
+    console.log(`✅ Deleted user and all related data for: ${username}`);
+  } catch (error) {
+    console.error("❌ Error deleting user and data:", error.message);
+  }
+}
+
+// Show help message
 function showHelp() {
   console.log(`
 🚀 CollabSpace CLI Tool
@@ -203,13 +411,27 @@ function showHelp() {
 Usage: node cli.js [command]
 
 Commands:
-  --backup, -b    Backup database collections to JSON files
-  --stats, -s     Show database statistics and analytics
-  --help, -h      Show this help message
+  --backup, -b          Backup database collections to JSON files
+  --stats, -s           Show database statistics and analytics
+  --cleanup, -c         Clean up orphaned tasks (tasks without valid teams)
+  --list-teams, -l      List all teams in the database
+  --remove-team <id>    Remove a team by ID (with cascade deletion)
+  --set-password         Set a user's password by username
+  --show-user            Show user info (username, email, etc) for any user
+  --show-user-debug      Show full user debug info (including password hash) for any user
+  --delete-user          Delete a user and all related data (teams, tasks, messages) by username
+  --help, -h            Show this help message
 
 Examples:
   node cli.js --backup
   node cli.js --stats
+  node cli.js --cleanup
+  node cli.js --list-teams
+  node cli.js --remove-team 507f1f77bcf86cd799439011
+  node cli.js --set-password john_doe newSecureP@ssw0rd
+  node cli.js --show-user john_doe
+  node cli.js --show-user-debug john_doe
+  node cli.js --delete-user john_doe
   node cli.js --help
 
 Environment Variables:
@@ -234,6 +456,51 @@ async function main() {
       await backupDatabase();
     } else if (args.includes("--stats") || args.includes("-s")) {
       await showStatistics();
+    } else if (args.includes("--cleanup") || args.includes("-c")) {
+      await cleanupOrphanedTasks();
+    } else if (args.includes("--list-teams") || args.includes("-l")) {
+      await listTeams();
+    } else if (args.includes("--remove-team")) {
+      const teamIdIndex = args.indexOf("--remove-team");
+      const teamId = args[teamIdIndex + 1];
+      if (!teamId) {
+        console.error("❌ Please provide a team ID");
+        process.exit(1);
+      }
+      await removeTeam(teamId);
+    } else if (args.includes("--set-password")) {
+      const idx = args.indexOf("--set-password");
+      const username = args[idx + 1];
+      const newPassword = args[idx + 2];
+      if (!username || !newPassword) {
+        console.error("❌ Usage: --set-password <username> <newPassword>");
+        process.exit(1);
+      }
+      await setUserPassword(username, newPassword);
+    } else if (args.includes("--show-user")) {
+      const idx = args.indexOf("--show-user");
+      const username = args[idx + 1];
+      if (!username) {
+        console.error("❌ Usage: --show-user <username>");
+        process.exit(1);
+      }
+      await showUserInfo(username);
+    } else if (args.includes("--show-user-debug")) {
+      const idx = args.indexOf("--show-user-debug");
+      const username = args[idx + 1];
+      if (!username) {
+        console.error("❌ Usage: --show-user-debug <username>");
+        process.exit(1);
+      }
+      await showUserDebug(username);
+    } else if (args.includes("--delete-user")) {
+      const idx = args.indexOf("--delete-user");
+      const username = args[idx + 1];
+      if (!username) {
+        console.error("❌ Usage: --delete-user <username>");
+        process.exit(1);
+      }
+      await deleteUserAndData(username);
     } else {
       console.log("❌ Unknown command. Use --help for usage information.");
       process.exit(1);
@@ -259,4 +526,11 @@ module.exports = {
   disconnectDB,
   backupDatabase,
   showStatistics,
+  cleanupOrphanedTasks,
+  listTeams,
+  removeTeam,
+  setUserPassword,
+  showUserInfo,
+  showUserDebug,
+  deleteUserAndData,
 };

@@ -21,7 +21,7 @@ router.get(
       const teams = await Team.find({ admin: userId })
         .populate('admin', 'firstName lastName email')
         .populate('members', 'firstName lastName email')
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: 1 });
 
       // Get tasks for organiser's teams
       const teamIds = teams.map(team => team._id);
@@ -36,7 +36,7 @@ router.get(
       .sort({ createdAt: -1 });
 
       // Get user info
-      const user = await User.findById(userId).select('firstName lastName email role');
+      const user = await User.findById(userId).select('firstName lastName email role createdAt bio');
 
       // Calculate stats
       const totalTeams = teams.length;
@@ -48,9 +48,10 @@ router.get(
 
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter(task => task.status === 'completed').length;
+      const activeTasks = totalTasks - completedTasks; // Active tasks = total - completed
       const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-      console.log('Calculated stats:', { totalTeams, totalMembers, totalTasks, completedTasks, completionRate });
+      console.log('Calculated stats:', { totalTeams, totalMembers, totalTasks, activeTasks, completedTasks, completionRate });
 
       res.json({
         success: true,
@@ -62,6 +63,7 @@ router.get(
             totalTeams,
             totalMembers,
             totalTasks,
+            activeTasks,
             completedTasks,
             completionRate
           }

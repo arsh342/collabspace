@@ -329,7 +329,7 @@ teamSchema.methods.updateTaskStats = async function () {
   try {
     const Task = require("./Task");
     const taskStats = await Task.aggregate([
-      { $match: { team: this._id } },
+      { $match: { team: this._id, isArchived: false } }, // Only count non-archived tasks
       {
         $group: {
           _id: null,
@@ -346,8 +346,12 @@ teamSchema.methods.updateTaskStats = async function () {
     if (taskStats.length > 0) {
       this.stats.totalTasks = taskStats[0].totalTasks;
       this.stats.completedTasks = taskStats[0].completedTasks;
-      await this.save();
+    } else {
+      // No tasks found, reset stats
+      this.stats.totalTasks = 0;
+      this.stats.completedTasks = 0;
     }
+    await this.save();
   } catch (error) {
     logger.error("Error updating team task stats:", error);
   }

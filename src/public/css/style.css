@@ -203,6 +203,47 @@ body {
   color: #d63031;
 }
 
+/* Ensure priority styles work in modals and task lists */
+.modal .task-priority,
+.task-item .task-priority,
+.tasks-list .task-priority {
+  display: inline-block !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  margin: 0 0.25rem !important;
+}
+
+.modal .task-priority.low,
+.task-item .task-priority.low,
+.tasks-list .task-priority.low {
+  background-color: #d4edda !important;
+  color: #155724 !important;
+}
+
+.modal .task-priority.medium,
+.task-item .task-priority.medium,
+.tasks-list .task-priority.medium {
+  background-color: #fff3cd !important;
+  color: #856404 !important;
+}
+
+.modal .task-priority.high,
+.task-item .task-priority.high,
+.tasks-list .task-priority.high {
+  background-color: #ffeaa7 !important;
+  color: #d63031 !important;
+}
+
+.modal .task-priority.urgent,
+.task-item .task-priority.urgent,
+.tasks-list .task-priority.urgent {
+  background-color: #fab1a0 !important;
+  color: #d63031 !important;
+}
+
 /* Team Cards */
 .team-card {
   background: white;
