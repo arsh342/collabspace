@@ -239,8 +239,31 @@ router.get('/my-invitations', authenticateSession, async (req, res) => {
     }
 });
 
-// Get organiser's pending requests
+// Get organiser's pending requests (requests sent by members to join organizer's teams)
 router.get('/my-requests', authenticateSession, async (req, res) => {
+    try {
+        const userId = req.session.userId;
+
+        // Find requests where this user is the team admin (invitedUser) - requests sent TO the organizer
+        const requests = await TeamInvitation.find({
+            invitedUser: userId,
+            type: 'request',
+            status: 'pending'
+        }).populate([
+            { path: 'team', select: 'name description' },
+            { path: 'invitedBy', select: 'firstName lastName username email' }
+        ]).sort({ createdAt: -1 });
+
+        res.json({ requests });
+
+    } catch (error) {
+        console.error('Get requests error:', error);
+        res.status(500).json({ message: 'Failed to load requests' });
+    }
+});
+
+// Get member's own pending requests (requests sent by the member to join teams)
+router.get('/my-sent-requests', authenticateSession, async (req, res) => {
     try {
         const userId = req.session.userId;
 
@@ -249,13 +272,16 @@ router.get('/my-requests', authenticateSession, async (req, res) => {
             invitedBy: userId,
             type: 'request',
             status: 'pending'
-        }).populate(['team', 'invitedUser']).sort({ createdAt: -1 });
+        }).populate([
+            { path: 'team', select: 'name description' },
+            { path: 'invitedUser', select: 'firstName lastName username email' }
+        ]).sort({ createdAt: -1 });
 
         res.json({ requests });
 
     } catch (error) {
-        console.error('Get requests error:', error);
-        res.status(500).json({ message: 'Failed to load requests' });
+        console.error('Get sent requests error:', error);
+        res.status(500).json({ message: 'Failed to load sent requests' });
     }
 });
 

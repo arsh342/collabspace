@@ -12,8 +12,19 @@ require("dotenv").config();
 const connectDB = require("./config/database");
 const logger = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
-const { authenticateSession, authenticateWeb, requireOrganiser, requireOrganiserWeb, requireTeamMember, requireTeamMemberWeb } = require("./middleware/auth");
-const { apiLimiter, authLimiter, dashboardLimiter } = require("./middleware/rateLimiter");
+const {
+  authenticateSession,
+  authenticateWeb,
+  requireOrganiser,
+  requireOrganiserWeb,
+  requireTeamMember,
+  requireTeamMemberWeb,
+} = require("./middleware/auth");
+const {
+  apiLimiter,
+  authLimiter,
+  dashboardLimiter,
+} = require("./middleware/rateLimiter");
 
 // Import models
 const User = require("./models/User");
@@ -33,7 +44,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 // In-memory map organiserId -> Set of socket ids
 const organiserSockets = new Map();
-const { computeOrganiserSummary } = require('./utils/dashboardSummary');
+const { computeOrganiserSummary } = require("./utils/dashboardSummary");
 
 // Connect to MongoDB
 connectDB();
@@ -42,28 +53,33 @@ connectDB();
 app.use(cors());
 
 // Apply rate limiting
-app.use('/api/', apiLimiter); // General API rate limiting
+app.use("/api/", apiLimiter); // General API rate limiting
 
 // Body parsing middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Session configuration
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-fallback-secret-key-change-in-production',
-  resave: false,
-  saveUninitialized: false,
-  name: 'connect.sid', // Explicitly set session name
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/collabspace'
-  }),
-  cookie: {
-    secure: false, // Allow HTTP for development (VS Code browser)
-    httpOnly: false, // Allow JS access for debugging
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'lax' // More permissive for embedded browsers
-  }
-}));
+app.use(
+  session({
+    secret:
+      process.env.SESSION_SECRET ||
+      "your-fallback-secret-key-change-in-production",
+    resave: false,
+    saveUninitialized: false,
+    name: "connect.sid", // Explicitly set session name
+    store: MongoStore.create({
+      mongoUrl:
+        process.env.MONGODB_URI || "mongodb://localhost:27017/collabspace",
+    }),
+    cookie: {
+      secure: false, // Allow HTTP for development (VS Code browser)
+      httpOnly: false, // Allow JS access for debugging
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: "lax", // More permissive for embedded browsers
+    },
+  })
+);
 
 // Custom logging middleware
 app.use(logger.loggerMiddleware);
@@ -81,10 +97,14 @@ app.use("/api/users", userRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/messages", messageRoutes);
-app.use("/api/chat", (req, res, next) => {
-  req.io = io;
-  next();
-}, chatRoutes);
+app.use(
+  "/api/chat",
+  (req, res, next) => {
+    req.io = io;
+    next();
+  },
+  chatRoutes
+);
 app.use("/api/upload", uploadRoutes);
 app.use("/api", uploadRoutes); // This will handle /api/files/:filename
 app.use("/api/dashboard", dashboardLimiter, dashboardRoutes);
@@ -129,33 +149,42 @@ app.get("/dashboard", (req, res) => {
   });
 });
 
-app.get("/organiser-dashboard", authenticateWeb, requireOrganiserWeb, (req, res) => {
-  res.render("organiser-dashboard", {
-    title: "Organiser Dashboard",
-    user: req.user,
-    path: "/organiser-dashboard",
-  });
-});
+app.get(
+  "/organiser-dashboard",
+  authenticateWeb,
+  requireOrganiserWeb,
+  (req, res) => {
+    res.render("organiser-dashboard", {
+      title: "Organiser Dashboard",
+      user: req.user,
+      path: "/organiser-dashboard",
+    });
+  }
+);
 
 app.get("/member-dashboard", authenticateWeb, (req, res) => {
   console.log("Member dashboard route accessed");
   console.log("User:", req.user);
   console.log("User role:", req.user?.role);
-  
+
   // Check if user has the right role
   if (!req.user) {
     console.log("No user found, redirecting to login");
-    return res.redirect('/login');
+    return res.redirect("/login");
   }
-  
-  if (req.user.role !== 'Team Member') {
+
+  if (req.user.role !== "Team Member") {
     console.log("User role is not Team Member, role is:", req.user.role);
-    return res.status(403).send(`Access denied. Your role is: ${req.user.role}. Team Member access required.`);
+    return res
+      .status(403)
+      .send(
+        `Access denied. Your role is: ${req.user.role}. Team Member access required.`
+      );
   }
-  
+
   console.log("Rendering member dashboard for user:", req.user.username);
   res.render("member-dashboard", {
-    title: "Team Member Dashboard", 
+    title: "Team Member Dashboard",
     user: req.user,
     path: "/member-dashboard",
   });
@@ -324,70 +353,74 @@ io.on("connection", (socket) => {
   logger.logger.info(`User connected: ${socket.id}`);
 
   // Register organiser dashboard listener
-  socket.on('registerOrganiser', async (organiserId) => {
+  socket.on("registerOrganiser", async (organiserId) => {
     try {
       if (!organiserId) return;
       if (!organiserSockets.has(organiserId)) {
         organiserSockets.set(organiserId, new Set());
       }
       organiserSockets.get(organiserId).add(socket.id);
-      
+
       // Join user room for personal notifications
       socket.join(`user_${organiserId}`);
       socket.currentUserId = organiserId;
-      
-      logger.logger.info(`Socket ${socket.id} registered for organiser ${organiserId}`);
+
+      logger.logger.info(
+        `Socket ${socket.id} registered for organiser ${organiserId}`
+      );
       // Send initial summary
       const summary = await computeOrganiserSummary(organiserId);
-      socket.emit('dashboardSummary', summary);
+      socket.emit("dashboardSummary", summary);
     } catch (e) {
-      logger.logger.error('Error registering organiser socket', e);
+      logger.logger.error("Error registering organiser socket", e);
     }
   });
 
   // Register member dashboard listener
-  socket.on('registerMember', async (memberId) => {
+  socket.on("registerMember", async (memberId) => {
     try {
       if (!memberId) return;
-      
+
       // Join user room for personal notifications
       socket.join(`user_${memberId}`);
       socket.currentUserId = memberId;
-      
-      logger.logger.info(`Socket ${socket.id} registered for member ${memberId}`);
+
+      logger.logger.info(
+        `Socket ${socket.id} registered for member ${memberId}`
+      );
     } catch (e) {
-      logger.logger.error('Error registering member socket', e);
+      logger.logger.error("Error registering member socket", e);
     }
   });
 
   // Join team room
   socket.on("join team", async (data) => {
     const { teamId, userId } = data;
-    
+
     try {
       // Update user's lastSeen timestamp for online status
       await User.findByIdAndUpdate(userId, { lastSeen: new Date() });
-      
+
       // Leave previous team if any
       if (socket.currentTeam && socket.currentUserId) {
         socket.leave(`team-${socket.currentTeam}`);
         removeUserFromTeam(socket.currentTeam, socket.currentUserId);
         updateOnlineCount(socket.currentTeam);
       }
-      
+
       // Join new team
       socket.join(`team-${teamId}`);
       socket.currentTeam = teamId;
       socket.currentUserId = userId;
-      
+
       // Track user in team
       if (!teamUsers.has(teamId)) {
         teamUsers.set(teamId, new Set());
       }
       teamUsers.get(teamId).add(userId);
-      
+
       logger.logger.info(`User ${userId} (${socket.id}) joined team ${teamId}`);
-      
+
       // Update online count for this team
       updateOnlineCount(teamId);
     } catch (error) {
@@ -402,10 +435,12 @@ io.on("connection", (socket) => {
       if (data.userId) {
         await User.findByIdAndUpdate(data.userId, { lastSeen: new Date() });
       }
-      
+
       // Broadcast message to team
       socket.to(`team-${data.teamId}`).emit("new message", data);
-      logger.logger.info(`Message sent in team ${data.teamId}: ${data.content}`);
+      logger.logger.info(
+        `Message sent in team ${data.teamId}: ${data.content}`
+      );
     } catch (error) {
       logger.logger.error(`Error updating user lastSeen for message:`, error);
     }
@@ -434,19 +469,21 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", async () => {
     logger.logger.info(`User disconnected: ${socket.id}`);
-    
+
     try {
       // Update user's lastSeen timestamp on disconnect
       if (socket.currentUserId) {
-        await User.findByIdAndUpdate(socket.currentUserId, { lastSeen: new Date() });
+        await User.findByIdAndUpdate(socket.currentUserId, {
+          lastSeen: new Date(),
+        });
       }
-      
+
       // Remove user from team tracking
       if (socket.currentTeam && socket.currentUserId) {
         removeUserFromTeam(socket.currentTeam, socket.currentUserId);
         updateOnlineCount(socket.currentTeam);
       }
-      
+
       // Cleanup organiser socket registration
       for (const [orgId, set] of organiserSockets.entries()) {
         if (set.has(socket.id)) {
@@ -473,7 +510,10 @@ function removeUserFromTeam(teamId, userId) {
 
 function updateOnlineCount(teamId) {
   const onlineCount = teamUsers.has(teamId) ? teamUsers.get(teamId).size : 0;
-  io.to(`team-${teamId}`).emit('onlineCountUpdate', { teamId, count: onlineCount });
+  io.to(`team-${teamId}`).emit("onlineCountUpdate", {
+    teamId,
+    count: onlineCount,
+  });
   logger.logger.info(`Team ${teamId} online count: ${onlineCount}`);
 }
 
@@ -483,10 +523,10 @@ async function emitOrganiserSummary(organiserId) {
     if (!organiserSockets.has(organiserId)) return;
     const summary = await computeOrganiserSummary(organiserId);
     for (const socketId of organiserSockets.get(organiserId)) {
-      io.to(socketId).emit('dashboardSummary', summary);
+      io.to(socketId).emit("dashboardSummary", summary);
     }
   } catch (e) {
-    logger.logger.error('Failed emitting organiser summary', e);
+    logger.logger.error("Failed emitting organiser summary", e);
   }
 }
 
