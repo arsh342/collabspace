@@ -428,6 +428,28 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Leave team room
+  socket.on("leave team", (data) => {
+    const { teamId } = data;
+
+    try {
+      if (socket.currentTeam === teamId && socket.currentUserId) {
+        socket.leave(`team-${teamId}`);
+        removeUserFromTeam(teamId, socket.currentUserId);
+        updateOnlineCount(teamId);
+
+        logger.logger.info(
+          `User ${socket.currentUserId} (${socket.id}) left team ${teamId}`
+        );
+
+        // Clear current team info
+        socket.currentTeam = null;
+      }
+    } catch (error) {
+      logger.logger.error(`Error leaving team ${teamId}:`, error);
+    }
+  });
+
   // Handle chat messages
   socket.on("send message", async (data) => {
     try {
