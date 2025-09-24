@@ -3152,6 +3152,14 @@
         setupGlobalChatHandlers(); // Add global chat handlers
         // Try delayed socket init (session may not be ready instantly)
         setTimeout(initOrganiserSocket, 1500);
+        // Restore last section
+        try {
+          const saved =
+            localStorage.getItem("organiserCurrentSection") || "overview";
+          switchSection(saved);
+        } catch (e) {
+          switchSection("overview");
+        }
       });
 
       function initOrganiserSocket() {
@@ -3372,6 +3380,9 @@
         }
 
         currentSection = section;
+        try {
+          localStorage.setItem("organiserCurrentSection", section);
+        } catch (e) {}
 
         // Update page title based on section
         updatePageTitle(section);

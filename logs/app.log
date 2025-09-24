@@ -996,3 +996,403 @@
 [2025-09-24T15:57:29.966Z] INFO: GET /api/invitations/my-invitations?t=1758729449962 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:29.966Z"}
 [2025-09-24T15:57:29.968Z] INFO: Socket HotG0Bx1itN06W7eAAAj registered for member 68d401821c4cade08207ba25
 [2025-09-24T15:57:29.971Z] INFO: GET /api/invitations/my-invitations?t=1758729449962 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T15:58:06.811Z] INFO: GET /organiser-dashboard?_t=1758728742353 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:58:06.811Z"}
+[2025-09-24T15:58:06.828Z] INFO: GET /organiser-dashboard?_t=1758728742353 - 200 | {"statusCode":200,"duration":"17ms","ip":"::1"}
+[2025-09-24T15:58:06.830Z] INFO: User disconnected: LTUN_YiycJPFjwCGAAAP
+[2025-09-24T15:58:06.855Z] INFO: GET /api/dashboard/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:58:06.855Z"}
+[2025-09-24T15:58:06.868Z] INFO: GET /api/dashboard/stats - 200 | {"statusCode":200,"duration":"13ms","ip":"::1"}
+[2025-09-24T15:58:08.363Z] INFO: User connected: y3h2NgQ7QPh4YJnbAAAl
+[2025-09-24T15:58:08.367Z] INFO: Socket y3h2NgQ7QPh4YJnbAAAl registered for organiser 68d4014f1c4cade08207ba19
+[2025-09-24T16:06:33.005Z] INFO: GET /organiser-dashboard?_t=1758728742353 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:33.005Z"}
+[2025-09-24T16:06:33.027Z] INFO: GET /organiser-dashboard?_t=1758728742353 - 200 | {"statusCode":200,"duration":"21ms","ip":"::1"}
+[2025-09-24T16:06:33.030Z] INFO: User disconnected: y3h2NgQ7QPh4YJnbAAAl
+[2025-09-24T16:06:33.049Z] INFO: GET /api/dashboard/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:33.049Z"}
+[2025-09-24T16:06:33.061Z] INFO: GET /api/dashboard/stats - 200 | {"statusCode":200,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:06:34.553Z] INFO: User connected: RzabP5gqFrVNbVbBAAAn
+[2025-09-24T16:06:34.556Z] INFO: Socket RzabP5gqFrVNbVbBAAAn registered for organiser 68d4014f1c4cade08207ba19
+[2025-09-24T16:06:36.107Z] INFO: GET /organiser-dashboard?_t=1758728742353 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:36.107Z"}
+[2025-09-24T16:06:36.129Z] INFO: GET /organiser-dashboard?_t=1758728742353 - 304 | {"statusCode":304,"duration":"23ms","ip":"::1"}
+[2025-09-24T16:06:36.133Z] INFO: User disconnected: RzabP5gqFrVNbVbBAAAn
+[2025-09-24T16:06:36.150Z] INFO: GET /api/dashboard/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:36.150Z"}
+[2025-09-24T16:06:36.152Z] INFO: GET /api/teams?admin=true | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:36.152Z"}
+[2025-09-24T16:06:36.164Z] INFO: GET /api/dashboard/stats - 200 | {"statusCode":200,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:06:36.165Z] INFO: GET /api/teams?admin=true - 200 | {"statusCode":200,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:06:37.238Z] INFO: GET /api/tasks?organiser=true | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:37.238Z"}
+[2025-09-24T16:06:37.252Z] INFO: GET /api/tasks?organiser=true - 304 | {"statusCode":304,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:06:37.658Z] INFO: User connected: LiOFrMCqGF-T_4-aAAAp
+[2025-09-24T16:06:37.661Z] INFO: Socket LiOFrMCqGF-T_4-aAAAp registered for organiser 68d4014f1c4cade08207ba19
+[2025-09-24T16:06:37.844Z] INFO: GET /organiser-dashboard?_t=1758728742353 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:37.844Z"}
+[2025-09-24T16:06:37.862Z] INFO: GET /organiser-dashboard?_t=1758728742353 - 304 | {"statusCode":304,"duration":"18ms","ip":"::1"}
+[2025-09-24T16:06:37.865Z] INFO: User disconnected: LiOFrMCqGF-T_4-aAAAp
+[2025-09-24T16:06:37.876Z] INFO: GET /api/dashboard/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:37.876Z"}
+[2025-09-24T16:06:37.878Z] INFO: GET /api/tasks?organiser=true | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:37.878Z"}
+[2025-09-24T16:06:37.888Z] INFO: GET /api/dashboard/stats - 200 | {"statusCode":200,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:06:37.888Z] INFO: GET /api/tasks?organiser=true - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T16:06:39.382Z] INFO: User connected: w9xYuXA4jWCho2WsAAAr
+[2025-09-24T16:06:39.387Z] INFO: Socket w9xYuXA4jWCho2WsAAAr registered for organiser 68d4014f1c4cade08207ba19
+[2025-09-24T16:06:39.464Z] INFO: GET /organiser-dashboard?_t=1758728742353 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:39.464Z"}
+[2025-09-24T16:06:39.480Z] INFO: GET /organiser-dashboard?_t=1758728742353 - 304 | {"statusCode":304,"duration":"16ms","ip":"::1"}
+[2025-09-24T16:06:39.482Z] INFO: User disconnected: w9xYuXA4jWCho2WsAAAr
+[2025-09-24T16:06:39.498Z] INFO: GET /api/dashboard/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:39.498Z"}
+[2025-09-24T16:06:39.509Z] INFO: GET /api/dashboard/stats - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:06:40.977Z] INFO: GET /organiser-dashboard?_t=1758728742353 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:40.977Z"}
+[2025-09-24T16:06:40.996Z] INFO: GET /organiser-dashboard?_t=1758728742353 - 304 | {"statusCode":304,"duration":"19ms","ip":"::1"}
+[2025-09-24T16:06:41.016Z] INFO: GET /api/dashboard/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:41.016Z"}
+[2025-09-24T16:06:41.025Z] INFO: GET /api/dashboard/stats - 200 | {"statusCode":200,"duration":"9ms","ip":"::1"}
+[2025-09-24T16:06:42.518Z] INFO: User connected: NCQe8VhfRaEW8bhXAAAu
+[2025-09-24T16:06:42.520Z] INFO: Socket NCQe8VhfRaEW8bhXAAAu registered for organiser 68d4014f1c4cade08207ba19
+[2025-09-24T16:06:43.104Z] INFO: GET /organiser-dashboard?_t=1758728742353 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:43.104Z"}
+[2025-09-24T16:06:43.119Z] INFO: GET /organiser-dashboard?_t=1758728742353 - 304 | {"statusCode":304,"duration":"15ms","ip":"::1"}
+[2025-09-24T16:06:43.124Z] INFO: User disconnected: NCQe8VhfRaEW8bhXAAAu
+[2025-09-24T16:06:43.141Z] INFO: GET /api/dashboard/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:43.141Z"}
+[2025-09-24T16:06:43.153Z] INFO: GET /api/dashboard/stats - 200 | {"statusCode":200,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:06:43.848Z] INFO: GET /organiser-dashboard?_t=1758728742353 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:43.848Z"}
+[2025-09-24T16:06:43.864Z] INFO: GET /organiser-dashboard?_t=1758728742353 - 304 | {"statusCode":304,"duration":"16ms","ip":"::1"}
+[2025-09-24T16:06:43.884Z] INFO: GET /api/dashboard/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:43.884Z"}
+[2025-09-24T16:06:43.893Z] INFO: GET /api/dashboard/stats - 200 | {"statusCode":200,"duration":"9ms","ip":"::1"}
+[2025-09-24T16:06:45.389Z] INFO: User connected: MOGPwD7kADtwqcCEAAAw
+[2025-09-24T16:06:45.391Z] INFO: Socket MOGPwD7kADtwqcCEAAAw registered for organiser 68d4014f1c4cade08207ba19
+[2025-09-24T16:06:46.727Z] INFO: User 68d4014f1c4cade08207ba19 (MOGPwD7kADtwqcCEAAAw) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:06:46.728Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:06:46.747Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:46.747Z"}
+[2025-09-24T16:06:46.771Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"24ms","ip":"::1"}
+[2025-09-24T16:06:46.782Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:46.782Z"}
+[2025-09-24T16:06:46.783Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:46.783Z"}
+[2025-09-24T16:06:46.801Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"18ms","ip":"::1"}
+[2025-09-24T16:06:46.804Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"22ms","ip":"::1"}
+[2025-09-24T16:06:49.357Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:49.357Z"}
+[2025-09-24T16:06:49.367Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T16:06:50.014Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:50.014Z"}
+[2025-09-24T16:06:50.029Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"15ms","ip":"::1"}
+[2025-09-24T16:06:50.031Z] INFO: User disconnected: HotG0Bx1itN06W7eAAAj
+[2025-09-24T16:06:50.070Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:50.070Z"}
+[2025-09-24T16:06:50.073Z] INFO: User connected: 72IAbXivHrjArsvdAAAy
+[2025-09-24T16:06:50.075Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"5ms","ip":"::1"}
+[2025-09-24T16:06:50.078Z] INFO: Socket 72IAbXivHrjArsvdAAAy registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:06:50.080Z] INFO: GET /api/invitations/my-invitations?t=1758730010077 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:50.080Z"}
+[2025-09-24T16:06:50.085Z] INFO: GET /api/invitations/my-invitations?t=1758730010077 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T16:06:51.338Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:51.338Z"}
+[2025-09-24T16:06:51.350Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:06:51.928Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:51.928Z"}
+[2025-09-24T16:06:51.946Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"18ms","ip":"::1"}
+[2025-09-24T16:06:51.949Z] INFO: User disconnected: 72IAbXivHrjArsvdAAAy
+[2025-09-24T16:06:51.968Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:51.968Z"}
+[2025-09-24T16:06:51.970Z] INFO: User connected: RMJb8010jz6HpNaSAAA0
+[2025-09-24T16:06:51.975Z] INFO: Socket RMJb8010jz6HpNaSAAA0 registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:06:51.975Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"7ms","ip":"::1"}
+[2025-09-24T16:06:53.104Z] INFO: GET /api/invitations/my-sent-requests?t=1758730013096 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:53.104Z"}
+[2025-09-24T16:06:53.118Z] INFO: GET /api/invitations/my-sent-requests?t=1758730013096 - 200 | {"statusCode":200,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:06:53.641Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:53.641Z"}
+[2025-09-24T16:06:53.658Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"17ms","ip":"::1"}
+[2025-09-24T16:06:53.659Z] INFO: User disconnected: RMJb8010jz6HpNaSAAA0
+[2025-09-24T16:06:53.681Z] INFO: GET /api/invitations/my-sent-requests?t=1758730013677 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:53.681Z"}
+[2025-09-24T16:06:53.682Z] INFO: User connected: iT-qB7Gv6IJdN2mbAAA2
+[2025-09-24T16:06:53.683Z] INFO: Socket iT-qB7Gv6IJdN2mbAAA2 registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:06:53.687Z] INFO: GET /api/invitations/my-sent-requests?t=1758730013677 - 200 | {"statusCode":200,"duration":"6ms","ip":"::1"}
+[2025-09-24T16:06:54.636Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:54.636Z"}
+[2025-09-24T16:06:54.646Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T16:06:55.299Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:55.299Z"}
+[2025-09-24T16:06:55.315Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"16ms","ip":"::1"}
+[2025-09-24T16:06:55.318Z] INFO: User disconnected: iT-qB7Gv6IJdN2mbAAA2
+[2025-09-24T16:06:55.342Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:55.342Z"}
+[2025-09-24T16:06:55.345Z] INFO: User connected: RYf6fKZOUCEqps2IAAA4
+[2025-09-24T16:06:55.346Z] INFO: Socket RYf6fKZOUCEqps2IAAA4 registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:06:55.348Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"6ms","ip":"::1"}
+[2025-09-24T16:06:55.924Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:55.924Z"}
+[2025-09-24T16:06:55.940Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"16ms","ip":"::1"}
+[2025-09-24T16:06:55.943Z] INFO: User disconnected: RYf6fKZOUCEqps2IAAA4
+[2025-09-24T16:06:55.961Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:06:55.961Z"}
+[2025-09-24T16:06:55.963Z] INFO: User connected: zChhSZKaSoRQbpeeAAA6
+[2025-09-24T16:06:55.966Z] INFO: Socket zChhSZKaSoRQbpeeAAA6 registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:06:55.967Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"6ms","ip":"::1"}
+[2025-09-24T16:07:05.152Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:07:05.152Z"}
+[2025-09-24T16:07:05.166Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:07:05.884Z] INFO: User 68d401821c4cade08207ba25 (zChhSZKaSoRQbpeeAAA6) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:07:05.885Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:07:05.887Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:07:05.887Z"}
+[2025-09-24T16:07:05.911Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"24ms","ip":"::1"}
+[2025-09-24T16:07:05.922Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:07:05.922Z"}
+[2025-09-24T16:07:05.923Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:07:05.923Z"}
+[2025-09-24T16:07:05.936Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"13ms","ip":"::1"}
+[2025-09-24T16:07:05.938Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"16ms","ip":"::1"}
+[2025-09-24T16:07:08.920Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:07:08.920Z"}
+[2025-09-24T16:07:08.938Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"18ms","ip":"::1"}
+[2025-09-24T16:07:08.941Z] INFO: User disconnected: zChhSZKaSoRQbpeeAAA6
+[2025-09-24T16:07:08.944Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:07:08.964Z] INFO: User connected: lCH6KELazc2y8s6BAAA8
+[2025-09-24T16:07:08.966Z] INFO: Socket lCH6KELazc2y8s6BAAA8 registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:07:58.087Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:07:58.087Z"}
+[2025-09-24T16:07:58.098Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T16:07:58.983Z] INFO: User 68d401821c4cade08207ba25 (lCH6KELazc2y8s6BAAA8) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:07:58.984Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:07:58.985Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:07:58.985Z"}
+[2025-09-24T16:07:59.000Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"15ms","ip":"::1"}
+[2025-09-24T16:07:59.010Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:07:59.010Z"}
+[2025-09-24T16:07:59.011Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:07:59.011Z"}
+[2025-09-24T16:07:59.026Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:07:59.027Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"17ms","ip":"::1"}
+[2025-09-24T16:10:20.875Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:20.875Z"}
+[2025-09-24T16:10:20.895Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"20ms","ip":"::1"}
+[2025-09-24T16:10:20.898Z] INFO: User disconnected: lCH6KELazc2y8s6BAAA8
+[2025-09-24T16:10:20.901Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:10:20.922Z] INFO: User connected: hR2RUPToKsLxofhNAAA-
+[2025-09-24T16:10:20.925Z] INFO: Socket hR2RUPToKsLxofhNAAA- registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:10:22.120Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:22.119Z"}
+[2025-09-24T16:10:22.131Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:10:23.217Z] INFO: User 68d401821c4cade08207ba25 (hR2RUPToKsLxofhNAAA-) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:10:23.218Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:10:23.221Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:23.221Z"}
+[2025-09-24T16:10:23.246Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"25ms","ip":"::1"}
+[2025-09-24T16:10:23.257Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:23.257Z"}
+[2025-09-24T16:10:23.259Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:23.259Z"}
+[2025-09-24T16:10:23.271Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:10:23.274Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"17ms","ip":"::1"}
+[2025-09-24T16:10:26.914Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:26.913Z"}
+[2025-09-24T16:10:26.926Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"13ms","ip":"::1"}
+[2025-09-24T16:10:26.929Z] INFO: User disconnected: hR2RUPToKsLxofhNAAA-
+[2025-09-24T16:10:26.930Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:10:26.947Z] INFO: User connected: Pez0YzTgVNWM4iPOAABA
+[2025-09-24T16:10:26.949Z] INFO: Socket Pez0YzTgVNWM4iPOAABA registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:10:34.318Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:34.318Z"}
+[2025-09-24T16:10:34.333Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"15ms","ip":"::1"}
+[2025-09-24T16:10:35.784Z] INFO: User 68d401821c4cade08207ba25 (Pez0YzTgVNWM4iPOAABA) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:10:35.784Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:10:35.787Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:35.787Z"}
+[2025-09-24T16:10:35.812Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"25ms","ip":"::1"}
+[2025-09-24T16:10:35.823Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:35.823Z"}
+[2025-09-24T16:10:35.825Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:10:35.825Z"}
+[2025-09-24T16:10:35.836Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:10:35.840Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"17ms","ip":"::1"}
+[2025-09-24T16:14:29.988Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:29.988Z"}
+[2025-09-24T16:14:30.007Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"19ms","ip":"::1"}
+[2025-09-24T16:14:30.009Z] INFO: User disconnected: Pez0YzTgVNWM4iPOAABA
+[2025-09-24T16:14:30.011Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:30.058Z] INFO: User connected: JRwt6GpsMekxpzRzAABC
+[2025-09-24T16:14:30.062Z] INFO: Socket JRwt6GpsMekxpzRzAABC registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:14:31.057Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:31.057Z"}
+[2025-09-24T16:14:31.065Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"8ms","ip":"::1"}
+[2025-09-24T16:14:31.067Z] INFO: User disconnected: JRwt6GpsMekxpzRzAABC
+[2025-09-24T16:14:31.089Z] INFO: User connected: 28vYHjxHkqSWLVbJAABE
+[2025-09-24T16:14:31.094Z] INFO: Socket 28vYHjxHkqSWLVbJAABE registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:14:32.385Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:32.385Z"}
+[2025-09-24T16:14:32.396Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:14:33.316Z] INFO: User 68d401821c4cade08207ba25 (28vYHjxHkqSWLVbJAABE) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:33.317Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:33.320Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:33.320Z"}
+[2025-09-24T16:14:33.341Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"21ms","ip":"::1"}
+[2025-09-24T16:14:33.352Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:33.352Z"}
+[2025-09-24T16:14:33.354Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:33.354Z"}
+[2025-09-24T16:14:33.366Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:14:33.368Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:14:34.244Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:34.244Z"}
+[2025-09-24T16:14:34.260Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"16ms","ip":"::1"}
+[2025-09-24T16:14:34.263Z] INFO: User disconnected: 28vYHjxHkqSWLVbJAABE
+[2025-09-24T16:14:34.266Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:34.282Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:34.282Z"}
+[2025-09-24T16:14:34.285Z] INFO: User connected: RWV3xsgKZNsRxNVYAABG
+[2025-09-24T16:14:34.295Z] INFO: User 68d401821c4cade08207ba25 (RWV3xsgKZNsRxNVYAABG) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:34.295Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:34.295Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"13ms","ip":"::1"}
+[2025-09-24T16:14:34.296Z] INFO: Socket RWV3xsgKZNsRxNVYAABG registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:14:34.297Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:34.298Z] INFO: User 68d401821c4cade08207ba25 (RWV3xsgKZNsRxNVYAABG) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:34.298Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:34.300Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:34.300Z"}
+[2025-09-24T16:14:34.300Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:34.300Z"}
+[2025-09-24T16:14:34.310Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"10ms","ip":"::1"}
+[2025-09-24T16:14:34.311Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:14:35.310Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:35.310Z"}
+[2025-09-24T16:14:35.324Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:14:35.327Z] INFO: User disconnected: RWV3xsgKZNsRxNVYAABG
+[2025-09-24T16:14:35.330Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:35.346Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:35.346Z"}
+[2025-09-24T16:14:35.349Z] INFO: User connected: k8ngIjrLsM_jVQxfAABI
+[2025-09-24T16:14:35.359Z] INFO: User 68d401821c4cade08207ba25 (k8ngIjrLsM_jVQxfAABI) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:35.359Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:35.360Z] INFO: Socket k8ngIjrLsM_jVQxfAABI registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:14:35.363Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:35.363Z] INFO: User 68d401821c4cade08207ba25 (k8ngIjrLsM_jVQxfAABI) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:35.363Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:35.365Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"20ms","ip":"::1"}
+[2025-09-24T16:14:35.370Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:35.370Z"}
+[2025-09-24T16:14:35.371Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:35.371Z"}
+[2025-09-24T16:14:35.379Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"8ms","ip":"::1"}
+[2025-09-24T16:14:35.381Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:14:39.152Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:39.152Z"}
+[2025-09-24T16:14:39.165Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"13ms","ip":"::1"}
+[2025-09-24T16:14:40.402Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:40.402Z] INFO: User 68d401821c4cade08207ba25 (k8ngIjrLsM_jVQxfAABI) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:40.403Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:40.403Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:40.403Z"}
+[2025-09-24T16:14:40.424Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"21ms","ip":"::1"}
+[2025-09-24T16:14:40.683Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:40.683Z"}
+[2025-09-24T16:14:40.698Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"15ms","ip":"::1"}
+[2025-09-24T16:14:40.701Z] INFO: User disconnected: k8ngIjrLsM_jVQxfAABI
+[2025-09-24T16:14:40.703Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:40.717Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:40.717Z"}
+[2025-09-24T16:14:40.721Z] INFO: User connected: Jyig3EH6LxQ1Q7y6AABK
+[2025-09-24T16:14:40.728Z] INFO: Socket Jyig3EH6LxQ1Q7y6AABK registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:14:40.732Z] INFO: User 68d401821c4cade08207ba25 (Jyig3EH6LxQ1Q7y6AABK) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:40.732Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:40.733Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:40.733Z] INFO: User 68d401821c4cade08207ba25 (Jyig3EH6LxQ1Q7y6AABK) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:40.733Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:40.734Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"17ms","ip":"::1"}
+[2025-09-24T16:14:40.740Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:40.740Z"}
+[2025-09-24T16:14:40.740Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:40.740Z"}
+[2025-09-24T16:14:40.749Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"9ms","ip":"::1"}
+[2025-09-24T16:14:40.751Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:14:42.013Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:42.013Z"}
+[2025-09-24T16:14:42.028Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"15ms","ip":"::1"}
+[2025-09-24T16:14:42.033Z] INFO: User disconnected: Jyig3EH6LxQ1Q7y6AABK
+[2025-09-24T16:14:42.036Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:42.052Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:42.052Z"}
+[2025-09-24T16:14:42.058Z] INFO: User connected: 1YAi6qGLHGUqXYkOAABM
+[2025-09-24T16:14:42.067Z] INFO: Socket 1YAi6qGLHGUqXYkOAABM registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:14:42.069Z] INFO: User 68d401821c4cade08207ba25 (1YAi6qGLHGUqXYkOAABM) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:42.069Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:42.070Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:14:42.070Z] INFO: User 68d401821c4cade08207ba25 (1YAi6qGLHGUqXYkOAABM) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:14:42.070Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:14:42.071Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"19ms","ip":"::1"}
+[2025-09-24T16:14:42.075Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:42.075Z"}
+[2025-09-24T16:14:42.075Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:42.075Z"}
+[2025-09-24T16:14:42.083Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"8ms","ip":"::1"}
+[2025-09-24T16:14:42.086Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:14:44.174Z] INFO: POST /api/chat/messages | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:14:44.174Z"}
+[2025-09-24T16:14:44.181Z] INFO: POST /api/chat/messages - 201 | {"statusCode":201,"duration":"7ms","ip":"::1"}
+[2025-09-24T16:21:17.088Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:17.088Z"}
+[2025-09-24T16:21:17.097Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"9ms","ip":"::1"}
+[2025-09-24T16:21:18.183Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:18.183Z"}
+[2025-09-24T16:21:18.186Z] INFO: GET /api/member/teams - 200 | {"statusCode":200,"duration":"3ms","ip":"::1"}
+[2025-09-24T16:21:19.198Z] INFO: GET /api/invitations/my-sent-requests?t=1758730879192 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:19.198Z"}
+[2025-09-24T16:21:19.207Z] INFO: GET /api/invitations/my-sent-requests?t=1758730879192 - 200 | {"statusCode":200,"duration":"9ms","ip":"::1"}
+[2025-09-24T16:21:21.117Z] INFO: GET /api/member/profile | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:21.117Z"}
+[2025-09-24T16:21:21.124Z] INFO: GET /api/member/profile - 200 | {"statusCode":200,"duration":"7ms","ip":"::1"}
+[2025-09-24T16:21:22.778Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:22.778Z"}
+[2025-09-24T16:21:22.795Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"17ms","ip":"::1"}
+[2025-09-24T16:21:22.796Z] INFO: User disconnected: 1YAi6qGLHGUqXYkOAABM
+[2025-09-24T16:21:22.798Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:21:22.836Z] INFO: GET /api/member/profile | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:22.836Z"}
+[2025-09-24T16:21:22.837Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:22.837Z"}
+[2025-09-24T16:21:22.839Z] INFO: User connected: KoJuOsWVRC8M1BhkAABO
+[2025-09-24T16:21:22.842Z] INFO: GET /api/member/profile - 304 | {"statusCode":304,"duration":"6ms","ip":"::1"}
+[2025-09-24T16:21:22.848Z] INFO: Socket KoJuOsWVRC8M1BhkAABO registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:21:22.852Z] INFO: User 68d401821c4cade08207ba25 (KoJuOsWVRC8M1BhkAABO) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:21:22.853Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:21:22.853Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:21:22.853Z] INFO: User 68d401821c4cade08207ba25 (KoJuOsWVRC8M1BhkAABO) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:21:22.853Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:21:22.854Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 200 | {"statusCode":200,"duration":"17ms","ip":"::1"}
+[2025-09-24T16:21:22.858Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:22.858Z"}
+[2025-09-24T16:21:22.858Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:22.858Z"}
+[2025-09-24T16:21:22.868Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"10ms","ip":"::1"}
+[2025-09-24T16:21:22.869Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:21:24.245Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:24.245Z"}
+[2025-09-24T16:21:24.268Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"23ms","ip":"::1"}
+[2025-09-24T16:21:24.270Z] INFO: User disconnected: KoJuOsWVRC8M1BhkAABO
+[2025-09-24T16:21:24.272Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:21:24.294Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:24.294Z"}
+[2025-09-24T16:21:24.296Z] INFO: User connected: wKUFK4O_MVGxqz9FAABQ
+[2025-09-24T16:21:24.300Z] INFO: User 68d401821c4cade08207ba25 (wKUFK4O_MVGxqz9FAABQ) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:21:24.300Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:21:24.300Z] INFO: Socket wKUFK4O_MVGxqz9FAABQ registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:21:24.304Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:21:24.304Z] INFO: User 68d401821c4cade08207ba25 (wKUFK4O_MVGxqz9FAABQ) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:21:24.304Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:21:24.309Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"15ms","ip":"::1"}
+[2025-09-24T16:21:24.312Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:24.312Z"}
+[2025-09-24T16:21:24.312Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:24.312Z"}
+[2025-09-24T16:21:24.321Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"9ms","ip":"::1"}
+[2025-09-24T16:21:24.323Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:21:25.319Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:25.319Z"}
+[2025-09-24T16:21:25.328Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"9ms","ip":"::1"}
+[2025-09-24T16:21:25.336Z] INFO: GET /api/invitations/my-invitations?t=1758730885331 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:25.336Z"}
+[2025-09-24T16:21:25.341Z] INFO: GET /api/invitations/my-invitations?t=1758730885331 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T16:21:26.567Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:26.567Z"}
+[2025-09-24T16:21:26.575Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"8ms","ip":"::1"}
+[2025-09-24T16:21:27.217Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:27.217Z"}
+[2025-09-24T16:21:27.228Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:21:27.752Z] INFO: GET /api/invitations/my-sent-requests?t=1758730887744 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:27.752Z"}
+[2025-09-24T16:21:27.764Z] INFO: GET /api/invitations/my-sent-requests?t=1758730887744 - 200 | {"statusCode":200,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:21:29.067Z] INFO: GET /api/member/profile | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:29.067Z"}
+[2025-09-24T16:21:29.074Z] INFO: GET /api/member/profile - 304 | {"statusCode":304,"duration":"6ms","ip":"::1"}
+[2025-09-24T16:21:30.101Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:30.101Z"}
+[2025-09-24T16:21:30.111Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"9ms","ip":"::1"}
+[2025-09-24T16:21:30.117Z] INFO: GET /api/invitations/my-invitations?t=1758730890112 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:30.117Z"}
+[2025-09-24T16:21:30.123Z] INFO: GET /api/invitations/my-invitations?t=1758730890112 - 200 | {"statusCode":200,"duration":"6ms","ip":"::1"}
+[2025-09-24T16:21:31.016Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:31.016Z"}
+[2025-09-24T16:21:31.019Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"3ms","ip":"::1"}
+[2025-09-24T16:21:31.500Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:31.500Z"}
+[2025-09-24T16:21:31.512Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:21:32.401Z] INFO: GET /api/invitations/my-sent-requests?t=1758730892394 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:32.401Z"}
+[2025-09-24T16:21:32.412Z] INFO: GET /api/invitations/my-sent-requests?t=1758730892394 - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:21:33.182Z] INFO: GET /api/member/profile | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:33.182Z"}
+[2025-09-24T16:21:33.184Z] INFO: GET /api/member/profile - 304 | {"statusCode":304,"duration":"2ms","ip":"::1"}
+[2025-09-24T16:21:33.900Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:33.900Z"}
+[2025-09-24T16:21:33.910Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T16:21:33.917Z] INFO: GET /api/invitations/my-invitations?t=1758730893912 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:33.917Z"}
+[2025-09-24T16:21:33.922Z] INFO: GET /api/invitations/my-invitations?t=1758730893912 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T16:21:34.266Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:34.266Z"}
+[2025-09-24T16:21:34.286Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"20ms","ip":"::1"}
+[2025-09-24T16:21:34.289Z] INFO: User disconnected: wKUFK4O_MVGxqz9FAABQ
+[2025-09-24T16:21:34.292Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:21:34.310Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:34.310Z"}
+[2025-09-24T16:21:34.311Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:34.311Z"}
+[2025-09-24T16:21:34.315Z] INFO: User connected: V2SMRBD4cr2iB940AABS
+[2025-09-24T16:21:34.317Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"7ms","ip":"::1"}
+[2025-09-24T16:21:34.325Z] INFO: GET /api/invitations/my-invitations?t=1758730894319 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:34.325Z"}
+[2025-09-24T16:21:34.326Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"15ms","ip":"::1"}
+[2025-09-24T16:21:34.328Z] INFO: User 68d401821c4cade08207ba25 (V2SMRBD4cr2iB940AABS) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:21:34.329Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:21:34.330Z] INFO: GET /api/invitations/my-invitations?t=1758730894319 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T16:21:34.331Z] INFO: Socket V2SMRBD4cr2iB940AABS registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:21:34.332Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:34.332Z"}
+[2025-09-24T16:21:34.332Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:34.332Z"}
+[2025-09-24T16:21:34.332Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:21:34.332Z] INFO: User 68d401821c4cade08207ba25 (V2SMRBD4cr2iB940AABS) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:21:34.333Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:21:34.341Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"9ms","ip":"::1"}
+[2025-09-24T16:21:34.344Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:21:35.266Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:35.266Z"}
+[2025-09-24T16:21:35.268Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"2ms","ip":"::1"}
+[2025-09-24T16:21:35.816Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:35.816Z"}
+[2025-09-24T16:21:35.827Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"11ms","ip":"::1"}
+[2025-09-24T16:21:36.601Z] INFO: GET /api/invitations/my-sent-requests?t=1758730896594 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:36.601Z"}
+[2025-09-24T16:21:36.613Z] INFO: GET /api/invitations/my-sent-requests?t=1758730896594 - 200 | {"statusCode":200,"duration":"12ms","ip":"::1"}
+[2025-09-24T16:21:37.266Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:21:37.266Z"}
+[2025-09-24T16:21:37.276Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T16:22:11.221Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:22:11.221Z"}
+[2025-09-24T16:22:11.243Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"21ms","ip":"::1"}
+[2025-09-24T16:22:11.247Z] INFO: User disconnected: V2SMRBD4cr2iB940AABS
+[2025-09-24T16:22:11.250Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:22:11.270Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:22:11.270Z"}
+[2025-09-24T16:22:11.273Z] INFO: User connected: zGOcHuJEgZOKhhM9AABU
+[2025-09-24T16:22:11.283Z] INFO: Socket zGOcHuJEgZOKhhM9AABU registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:22:11.284Z] INFO: User 68d401821c4cade08207ba25 (zGOcHuJEgZOKhhM9AABU) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:22:11.284Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:22:11.285Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"15ms","ip":"::1"}
+[2025-09-24T16:22:11.286Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:22:11.286Z] INFO: User 68d401821c4cade08207ba25 (zGOcHuJEgZOKhhM9AABU) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:22:11.286Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:22:11.290Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:22:11.290Z"}
+[2025-09-24T16:22:11.291Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:22:11.291Z"}
+[2025-09-24T16:22:11.305Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"14ms","ip":"::1"}
+[2025-09-24T16:22:11.306Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"16ms","ip":"::1"}
+[2025-09-24T16:22:12.175Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:22:12.175Z"}
+[2025-09-24T16:22:12.198Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"23ms","ip":"::1"}
+[2025-09-24T16:22:12.200Z] INFO: User disconnected: zGOcHuJEgZOKhhM9AABU
+[2025-09-24T16:22:12.203Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:22:12.215Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:22:12.215Z"}
+[2025-09-24T16:22:12.217Z] INFO: User connected: ThZ0GFZ-z7Bzxl3GAABW
+[2025-09-24T16:22:12.224Z] INFO: Socket ThZ0GFZ-z7Bzxl3GAABW registered for member 68d401821c4cade08207ba25
+[2025-09-24T16:22:12.226Z] INFO: User 68d401821c4cade08207ba25 (ThZ0GFZ-z7Bzxl3GAABW) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:22:12.226Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:22:12.229Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-24T16:22:12.229Z] INFO: User 68d401821c4cade08207ba25 (ThZ0GFZ-z7Bzxl3GAABW) joined team 68d401981c4cade08207ba3c
+[2025-09-24T16:22:12.229Z] INFO: Team 68d401981c4cade08207ba3c online count: 2
+[2025-09-24T16:22:12.231Z] INFO: GET /api/chat/messages/68d401981c4cade08207ba3c - 304 | {"statusCode":304,"duration":"16ms","ip":"::1"}
+[2025-09-24T16:22:12.241Z] INFO: GET /api/files/1758727773701-79077629.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:22:12.241Z"}
+[2025-09-24T16:22:12.242Z] INFO: GET /api/files/1758727779911-408536871.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T16:22:12.242Z"}
+[2025-09-24T16:22:12.261Z] INFO: GET /api/files/1758727779911-408536871.png - 200 | {"statusCode":200,"duration":"19ms","ip":"::1"}
+[2025-09-24T16:22:12.262Z] INFO: GET /api/files/1758727773701-79077629.png - 200 | {"statusCode":200,"duration":"21ms","ip":"::1"}
