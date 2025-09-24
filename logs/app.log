@@ -841,3 +841,158 @@
 [2025-09-24T15:45:49.683Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"12ms","ip":"::1"}
 [2025-09-24T15:45:50.253Z] INFO: GET /api/invitations/my-sent-requests?t=1758728750247 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:45:50.253Z"}
 [2025-09-24T15:45:50.258Z] INFO: GET /api/invitations/my-sent-requests?t=1758728750247 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T15:52:13.328Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:13.328Z"}
+[2025-09-24T15:52:13.341Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"13ms","ip":"::1"}
+[2025-09-24T15:52:13.937Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:13.937Z"}
+[2025-09-24T15:52:13.945Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"8ms","ip":"::1"}
+[2025-09-24T15:52:14.708Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:14.708Z"}
+[2025-09-24T15:52:14.717Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"9ms","ip":"::1"}
+[2025-09-24T15:52:14.724Z] INFO: GET /api/invitations/my-invitations?t=1758729134719 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:14.724Z"}
+[2025-09-24T15:52:14.729Z] INFO: GET /api/invitations/my-invitations?t=1758729134719 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T15:52:15.908Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:15.908Z"}
+[2025-09-24T15:52:15.918Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T15:52:16.741Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:16.741Z"}
+[2025-09-24T15:52:16.753Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"12ms","ip":"::1"}
+[2025-09-24T15:52:17.473Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:17.473Z"}
+[2025-09-24T15:52:17.482Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"9ms","ip":"::1"}
+[2025-09-24T15:52:17.490Z] INFO: GET /api/invitations/my-invitations?t=1758729137485 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:17.490Z"}
+[2025-09-24T15:52:17.496Z] INFO: GET /api/invitations/my-invitations?t=1758729137485 - 200 | {"statusCode":200,"duration":"6ms","ip":"::1"}
+[2025-09-24T15:52:18.390Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:18.390Z"}
+[2025-09-24T15:52:18.398Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"8ms","ip":"::1"}
+[2025-09-24T15:52:19.157Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:19.157Z"}
+[2025-09-24T15:52:19.169Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"12ms","ip":"::1"}
+[2025-09-24T15:52:20.090Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:20.090Z"}
+[2025-09-24T15:52:20.099Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"9ms","ip":"::1"}
+[2025-09-24T15:52:20.107Z] INFO: GET /api/invitations/my-invitations?t=1758729140101 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:20.107Z"}
+[2025-09-24T15:52:20.113Z] INFO: GET /api/invitations/my-invitations?t=1758729140101 - 200 | {"statusCode":200,"duration":"6ms","ip":"::1"}
+[2025-09-24T15:52:20.724Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:20.724Z"}
+[2025-09-24T15:52:20.733Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"9ms","ip":"::1"}
+[2025-09-24T15:52:21.224Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:21.224Z"}
+[2025-09-24T15:52:21.234Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T15:52:21.708Z] INFO: GET /api/invitations/my-sent-requests?t=1758729141701 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:21.708Z"}
+[2025-09-24T15:52:21.720Z] INFO: GET /api/invitations/my-sent-requests?t=1758729141701 - 200 | {"statusCode":200,"duration":"12ms","ip":"::1"}
+[2025-09-24T15:52:23.374Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:23.374Z"}
+[2025-09-24T15:52:23.382Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"8ms","ip":"::1"}
+[2025-09-24T15:52:23.392Z] INFO: GET /api/invitations/my-invitations?t=1758729143386 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:52:23.392Z"}
+[2025-09-24T15:52:23.397Z] INFO: GET /api/invitations/my-invitations?t=1758729143386 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T15:53:22.320Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:53:22.320Z"}
+[2025-09-24T15:53:22.335Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"15ms","ip":"::1"}
+[2025-09-24T15:53:22.337Z] INFO: User disconnected: p6feN1IZsgJ6MAvDAAAR
+[2025-09-24T15:53:22.377Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:53:22.377Z"}
+[2025-09-24T15:53:22.380Z] INFO: User connected: zjltr40uzECGRnC3AAAT
+[2025-09-24T15:53:22.385Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"8ms","ip":"::1"}
+[2025-09-24T15:53:22.386Z] INFO: Socket zjltr40uzECGRnC3AAAT registered for member 68d401821c4cade08207ba25
+[2025-09-24T15:53:22.387Z] INFO: GET /api/invitations/my-invitations?t=1758729202385 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:53:22.387Z"}
+[2025-09-24T15:53:22.389Z] INFO: GET /api/invitations/my-invitations?t=1758729202385 - 200 | {"statusCode":200,"duration":"2ms","ip":"::1"}
+[2025-09-24T15:53:44.283Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:53:44.283Z"}
+[2025-09-24T15:53:44.303Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"20ms","ip":"::1"}
+[2025-09-24T15:53:44.307Z] INFO: User disconnected: zjltr40uzECGRnC3AAAT
+[2025-09-24T15:53:44.336Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:53:44.336Z"}
+[2025-09-24T15:53:44.337Z] INFO: User connected: 6xytJOg3-_HEQlGLAAAV
+[2025-09-24T15:53:44.340Z] INFO: Socket 6xytJOg3-_HEQlGLAAAV registered for member 68d401821c4cade08207ba25
+[2025-09-24T15:53:44.342Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"6ms","ip":"::1"}
+[2025-09-24T15:53:44.345Z] INFO: GET /api/invitations/my-invitations?t=1758729224343 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:53:44.345Z"}
+[2025-09-24T15:53:44.347Z] INFO: GET /api/invitations/my-invitations?t=1758729224343 - 200 | {"statusCode":200,"duration":"2ms","ip":"::1"}
+[2025-09-24T15:57:04.959Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:04.959Z"}
+[2025-09-24T15:57:04.983Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"24ms","ip":"::1"}
+[2025-09-24T15:57:04.988Z] INFO: User disconnected: 6xytJOg3-_HEQlGLAAAV
+[2025-09-24T15:57:05.035Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:05.035Z"}
+[2025-09-24T15:57:05.036Z] INFO: User connected: DTYM2Ob2Y5NyXi7-AAAX
+[2025-09-24T15:57:05.040Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"5ms","ip":"::1"}
+[2025-09-24T15:57:05.042Z] INFO: Socket DTYM2Ob2Y5NyXi7-AAAX registered for member 68d401821c4cade08207ba25
+[2025-09-24T15:57:05.044Z] INFO: GET /api/invitations/my-invitations?t=1758729425041 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:05.044Z"}
+[2025-09-24T15:57:05.048Z] INFO: GET /api/invitations/my-invitations?t=1758729425041 - 200 | {"statusCode":200,"duration":"4ms","ip":"::1"}
+[2025-09-24T15:57:07.180Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:07.180Z"}
+[2025-09-24T15:57:07.200Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"20ms","ip":"::1"}
+[2025-09-24T15:57:07.203Z] INFO: User disconnected: DTYM2Ob2Y5NyXi7-AAAX
+[2025-09-24T15:57:07.221Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:07.221Z"}
+[2025-09-24T15:57:07.224Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"3ms","ip":"::1"}
+[2025-09-24T15:57:07.225Z] INFO: User connected: W3WmIRapTd26d4qaAAAZ
+[2025-09-24T15:57:07.229Z] INFO: Socket W3WmIRapTd26d4qaAAAZ registered for member 68d401821c4cade08207ba25
+[2025-09-24T15:57:07.230Z] INFO: GET /api/invitations/my-invitations?t=1758729427226 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:07.230Z"}
+[2025-09-24T15:57:07.233Z] INFO: GET /api/invitations/my-invitations?t=1758729427226 - 200 | {"statusCode":200,"duration":"3ms","ip":"::1"}
+[2025-09-24T15:57:07.702Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:07.702Z"}
+[2025-09-24T15:57:07.718Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"17ms","ip":"::1"}
+[2025-09-24T15:57:07.722Z] INFO: User disconnected: W3WmIRapTd26d4qaAAAZ
+[2025-09-24T15:57:07.741Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:07.741Z"}
+[2025-09-24T15:57:07.745Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"4ms","ip":"::1"}
+[2025-09-24T15:57:07.747Z] INFO: User connected: ODV1cZleXBUSRUv8AAAb
+[2025-09-24T15:57:07.750Z] INFO: Socket ODV1cZleXBUSRUv8AAAb registered for member 68d401821c4cade08207ba25
+[2025-09-24T15:57:07.751Z] INFO: GET /api/invitations/my-invitations?t=1758729427746 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:07.751Z"}
+[2025-09-24T15:57:07.755Z] INFO: GET /api/invitations/my-invitations?t=1758729427746 - 200 | {"statusCode":200,"duration":"4ms","ip":"::1"}
+[2025-09-24T15:57:08.726Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:08.726Z"}
+[2025-09-24T15:57:08.736Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T15:57:09.424Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:09.424Z"}
+[2025-09-24T15:57:09.436Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"12ms","ip":"::1"}
+[2025-09-24T15:57:10.274Z] INFO: GET /api/invitations/my-sent-requests?t=1758729430267 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:10.274Z"}
+[2025-09-24T15:57:10.286Z] INFO: GET /api/invitations/my-sent-requests?t=1758729430267 - 200 | {"statusCode":200,"duration":"12ms","ip":"::1"}
+[2025-09-24T15:57:12.690Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:12.690Z"}
+[2025-09-24T15:57:12.699Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"9ms","ip":"::1"}
+[2025-09-24T15:57:12.705Z] INFO: GET /api/invitations/my-invitations?t=1758729432700 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:12.705Z"}
+[2025-09-24T15:57:12.711Z] INFO: GET /api/invitations/my-invitations?t=1758729432700 - 200 | {"statusCode":200,"duration":"6ms","ip":"::1"}
+[2025-09-24T15:57:13.835Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:13.835Z"}
+[2025-09-24T15:57:13.852Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"17ms","ip":"::1"}
+[2025-09-24T15:57:13.855Z] INFO: User disconnected: ODV1cZleXBUSRUv8AAAb
+[2025-09-24T15:57:13.880Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:13.880Z"}
+[2025-09-24T15:57:13.881Z] INFO: User connected: SScTmM27JWSpnQvFAAAd
+[2025-09-24T15:57:13.885Z] INFO: Socket SScTmM27JWSpnQvFAAAd registered for member 68d401821c4cade08207ba25
+[2025-09-24T15:57:13.885Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"5ms","ip":"::1"}
+[2025-09-24T15:57:13.888Z] INFO: GET /api/invitations/my-invitations?t=1758729433886 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:13.888Z"}
+[2025-09-24T15:57:13.893Z] INFO: GET /api/invitations/my-invitations?t=1758729433886 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T15:57:15.190Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:15.190Z"}
+[2025-09-24T15:57:15.218Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"28ms","ip":"::1"}
+[2025-09-24T15:57:15.219Z] INFO: User disconnected: SScTmM27JWSpnQvFAAAd
+[2025-09-24T15:57:15.230Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:15.230Z"}
+[2025-09-24T15:57:15.235Z] INFO: User connected: PrRodNeGvVed7x4_AAAf
+[2025-09-24T15:57:15.236Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"6ms","ip":"::1"}
+[2025-09-24T15:57:15.237Z] INFO: Socket PrRodNeGvVed7x4_AAAf registered for member 68d401821c4cade08207ba25
+[2025-09-24T15:57:15.239Z] INFO: GET /api/invitations/my-invitations?t=1758729435236 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:15.239Z"}
+[2025-09-24T15:57:15.243Z] INFO: GET /api/invitations/my-invitations?t=1758729435236 - 200 | {"statusCode":200,"duration":"4ms","ip":"::1"}
+[2025-09-24T15:57:16.623Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:16.623Z"}
+[2025-09-24T15:57:16.634Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"11ms","ip":"::1"}
+[2025-09-24T15:57:17.607Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:17.607Z"}
+[2025-09-24T15:57:17.617Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T15:57:17.625Z] INFO: GET /api/invitations/my-invitations?t=1758729437619 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:17.625Z"}
+[2025-09-24T15:57:17.631Z] INFO: GET /api/invitations/my-invitations?t=1758729437619 - 200 | {"statusCode":200,"duration":"6ms","ip":"::1"}
+[2025-09-24T15:57:18.407Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:18.407Z"}
+[2025-09-24T15:57:18.415Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"8ms","ip":"::1"}
+[2025-09-24T15:57:18.424Z] INFO: GET /api/invitations/my-invitations?t=1758729438418 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:18.424Z"}
+[2025-09-24T15:57:18.429Z] INFO: GET /api/invitations/my-invitations?t=1758729438418 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T15:57:19.007Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:19.007Z"}
+[2025-09-24T15:57:19.036Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"29ms","ip":"::1"}
+[2025-09-24T15:57:19.042Z] INFO: GET /api/invitations/my-invitations?t=1758729439037 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:19.042Z"}
+[2025-09-24T15:57:19.045Z] INFO: GET /api/invitations/my-invitations?t=1758729439037 - 200 | {"statusCode":200,"duration":"3ms","ip":"::1"}
+[2025-09-24T15:57:19.240Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:19.240Z"}
+[2025-09-24T15:57:19.248Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"7ms","ip":"::1"}
+[2025-09-24T15:57:19.256Z] INFO: GET /api/invitations/my-invitations?t=1758729439249 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:19.256Z"}
+[2025-09-24T15:57:19.261Z] INFO: GET /api/invitations/my-invitations?t=1758729439249 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
+[2025-09-24T15:57:20.641Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:20.641Z"}
+[2025-09-24T15:57:20.650Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T15:57:21.523Z] INFO: GET /api/member/teams | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:21.523Z"}
+[2025-09-24T15:57:21.535Z] INFO: GET /api/member/teams - 304 | {"statusCode":304,"duration":"12ms","ip":"::1"}
+[2025-09-24T15:57:22.190Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:22.190Z"}
+[2025-09-24T15:57:22.200Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"10ms","ip":"::1"}
+[2025-09-24T15:57:22.207Z] INFO: GET /api/invitations/my-invitations?t=1758729442202 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:22.207Z"}
+[2025-09-24T15:57:22.218Z] INFO: GET /api/invitations/my-invitations?t=1758729442202 - 200 | {"statusCode":200,"duration":"11ms","ip":"::1"}
+[2025-09-24T15:57:22.702Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:22.702Z"}
+[2025-09-24T15:57:22.720Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"19ms","ip":"::1"}
+[2025-09-24T15:57:22.723Z] INFO: User disconnected: PrRodNeGvVed7x4_AAAf
+[2025-09-24T15:57:22.743Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:22.743Z"}
+[2025-09-24T15:57:22.745Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"2ms","ip":"::1"}
+[2025-09-24T15:57:22.748Z] INFO: User connected: ghEg29GRUgk4A00SAAAh
+[2025-09-24T15:57:22.752Z] INFO: GET /api/invitations/my-invitations?t=1758729442747 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:22.752Z"}
+[2025-09-24T15:57:22.753Z] INFO: Socket ghEg29GRUgk4A00SAAAh registered for member 68d401821c4cade08207ba25
+[2025-09-24T15:57:22.754Z] INFO: GET /api/invitations/my-invitations?t=1758729442747 - 200 | {"statusCode":200,"duration":"2ms","ip":"::1"}
+[2025-09-24T15:57:25.258Z] INFO: GET /api/member/tasks | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:25.258Z"}
+[2025-09-24T15:57:25.265Z] INFO: GET /api/member/tasks - 304 | {"statusCode":304,"duration":"7ms","ip":"::1"}
+[2025-09-24T15:57:29.241Z] INFO: GET /api/invitations/my-sent-requests?t=1758729449234 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:29.241Z"}
+[2025-09-24T15:57:29.254Z] INFO: GET /api/invitations/my-sent-requests?t=1758729449234 - 200 | {"statusCode":200,"duration":"13ms","ip":"::1"}
+[2025-09-24T15:57:29.918Z] INFO: GET /member-dashboard | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:29.918Z"}
+[2025-09-24T15:57:29.936Z] INFO: GET /member-dashboard - 200 | {"statusCode":200,"duration":"18ms","ip":"::1"}
+[2025-09-24T15:57:29.939Z] INFO: User disconnected: ghEg29GRUgk4A00SAAAh
+[2025-09-24T15:57:29.957Z] INFO: GET /api/member/stats | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:29.957Z"}
+[2025-09-24T15:57:29.960Z] INFO: GET /api/member/stats - 304 | {"statusCode":304,"duration":"3ms","ip":"::1"}
+[2025-09-24T15:57:29.962Z] INFO: User connected: HotG0Bx1itN06W7eAAAj
+[2025-09-24T15:57:29.966Z] INFO: GET /api/invitations/my-invitations?t=1758729449962 | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-24T15:57:29.966Z"}
+[2025-09-24T15:57:29.968Z] INFO: Socket HotG0Bx1itN06W7eAAAj registered for member 68d401821c4cade08207ba25
+[2025-09-24T15:57:29.971Z] INFO: GET /api/invitations/my-invitations?t=1758729449962 - 200 | {"statusCode":200,"duration":"5ms","ip":"::1"}
