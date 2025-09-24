@@ -2283,7 +2283,7 @@
       </div>
 
       <!-- Chat Section -->
-      <div id="chat-section" class="content-section" style="display: none">
+      <div id="chat-section" class="content-section" style="display: block">
         <div class="section-header">
           <h2 class="section-title">Team Chat</h2>
           <div class="chat-controls">
@@ -2300,8 +2300,20 @@
           </div>
         </div>
 
-        <div class="chat-container">
-          <div class="chat-messages" id="chatMessages">
+        <div
+          class="chat-container"
+          style="
+            height: calc(100vh - 160px);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+          "
+        >
+          <div
+            class="chat-messages"
+            id="chatMessages"
+            style="flex: 1; overflow-y: auto"
+          >
             <div class="chat-welcome">
               <div class="welcome-icon">
                 <i class="fas fa-comments"></i>
@@ -2326,7 +2338,7 @@
             <span class="typing-text">Someone is typing...</span>
           </div>
 
-          <div class="chat-input-container">
+          <div class="chat-input-container" style="padding-bottom: 8px">
             <div class="chat-input-wrapper">
               <input
                 type="text"

@@ -2767,8 +2767,15 @@
         </div>
 
         <!-- Chat Section -->
-        <div id="chat-section" class="content-section">
-          <div class="section-content">
+        <div id="chat-section" class="content-section" style="display: block">
+          <div
+            class="section-content"
+            style="
+              height: calc(100vh - 120px);
+              display: flex;
+              flex-direction: column;
+            "
+          >
             <div class="section-header">
               <h2 class="section-title">
                 <i class="fas fa-comments"></i>
@@ -2788,8 +2795,20 @@
               </div>
             </div>
 
-            <div class="chat-container">
-              <div class="chat-messages" id="chatMessages">
+            <div
+              class="chat-container"
+              style="
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+              "
+            >
+              <div
+                class="chat-messages"
+                id="chatMessages"
+                style="flex: 1; overflow-y: auto"
+              >
                 <div class="chat-welcome">
                   <div class="welcome-icon">
                     <i class="fas fa-comments"></i>
@@ -2814,7 +2833,7 @@
                 <span class="typing-text">Someone is typing...</span>
               </div>
 
-              <div class="chat-input-container">
+              <div class="chat-input-container" style="padding-bottom: 8px">
                 <div class="chat-input-wrapper">
                   <input
                     type="text"
@@ -5670,7 +5689,7 @@
       async function loadPendingRequests() {
         try {
           const response = await fetch(
-            `/api/invitations/my-requests?t=${Date.now()}`,
+            `/api/invitations/my-sent-requests?t=${Date.now()}`,
             {
               credentials: "include",
               cache: "no-cache",
