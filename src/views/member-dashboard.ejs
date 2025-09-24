@@ -2983,25 +2983,25 @@
           }
         });
 
-        socket.on("dashboard refresh", (data) => {
+        memberSocket.on("dashboard refresh", (data) => {
           console.log("Dashboard refresh event received:", data);
           // Refresh current section data
           loadSectionData(currentSection || "overview");
         });
 
-        socket.on("team update", (data) => {
+        memberSocket.on("team update", (data) => {
           handleTeamUpdate(data);
         });
 
-        socket.on("new message", (data) => {
-          handleNewMessage(data);
-        });
+        // Remove generic socket listener to avoid duplicate events
 
         // Chat message handler for team chat
         memberSocket.on("new message", (message) => {
           if (currentChatTeam === message.teamId) {
-            chatMessages.push(message);
-            addMessageToChat(message);
+            if (!renderedMessageIds.has(message._id)) {
+              chatMessages.push(message);
+              addMessageToChat(message);
+            }
           }
         });
 
@@ -4518,6 +4518,11 @@
       let currentChatTeam = null;
       let chatMessages = [];
 
+      // Ensure chat listeners are initialized only once
+      if (typeof chatListenersInitialized === "undefined") {
+        var chatListenersInitialized = false;
+      }
+
       function loadChat() {
         loadChatTeamSelects();
         setupChatEventListeners();
@@ -4540,6 +4545,9 @@
       }
 
       function setupChatEventListeners() {
+        if (chatListenersInitialized) {
+          return;
+        }
         const chatTeamSelect = document.getElementById("chatTeamSelect");
         const messageInput = document.getElementById("messageInput");
         const sendButton = document.getElementById("sendButton");
@@ -4595,6 +4603,8 @@
             }
           });
         }
+
+        chatListenersInitialized = true;
       }
 
       function switchChatTeam(teamId) {
@@ -4668,6 +4678,9 @@
           chatMessagesContainer.innerHTML = "";
         }
         chatMessages = [];
+        if (typeof renderedMessageIds !== "undefined" && renderedMessageIds) {
+          renderedMessageIds.clear();
+        }
       }
 
       function showChatWelcome() {
@@ -4696,10 +4709,22 @@
         chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
       }
 
+      // Track rendered messages to avoid duplicates
+      if (typeof renderedMessageIds === "undefined") {
+        var renderedMessageIds = new Set();
+      }
+
       function addMessageToChat(message) {
+        if (message && message._id && renderedMessageIds.has(message._id)) {
+          return; // already rendered
+        }
         console.log("Adding message to chat:", message); // Debug log
         const chatMessagesContainer = document.getElementById("chatMessages");
         if (!chatMessagesContainer) return;
+
+        if (message && message._id) {
+          renderedMessageIds.add(message._id);
+        }
 
         const messageElement = document.createElement("div");
         messageElement.className = `chat-message ${
@@ -4835,7 +4860,15 @@
           .then((data) => {
             if (data.success) {
               messageInput.value = "";
-              // Message will be added via socket event
+              // Optimistically add the message so the sender sees it immediately
+              if (
+                data.message &&
+                data.message.teamId === currentChatTeam &&
+                !renderedMessageIds.has(data.message._id)
+              ) {
+                chatMessages.push(data.message);
+                addMessageToChat(data.message);
+              }
             } else {
               console.error("Error sending message:", data.message);
               showSystemMessage("Failed to send message");
@@ -5213,6 +5246,7 @@
         // Upload file first
         fetch("/api/upload", {
           method: "POST",
+          credentials: "include",
           body: formData,
         })
           .then((response) => response.json())
@@ -5235,6 +5269,7 @@
                 headers: {
                   "Content-Type": "application/json",
                 },
+                credentials: "include",
                 body: JSON.stringify(messageData),
               });
             } else {
@@ -5243,8 +5278,22 @@
           })
           .then((response) => response.json())
           .then((data) => {
-            if (data.success) {
-              // Clear the input and preview
+            if (data.success && data.message) {
+              // Add the returned message to chat immediately
+              if (!renderedMessageIds.has(data.message._id)) {
+                chatMessages.push(data.message);
+                addMessageToChat(data.message);
+              }
+              document.getElementById("messageInput").value = "";
+              cancelFileUpload();
+              showSystemMessage("File sent successfully");
+            } else if (data.success && data.data && data.data.message) {
+              // Fallback for alternative response shape
+              const msg = data.data.message;
+              if (!renderedMessageIds.has(msg._id)) {
+                chatMessages.push(msg);
+                addMessageToChat(msg);
+              }
               document.getElementById("messageInput").value = "";
               cancelFileUpload();
               showSystemMessage("File sent successfully");
