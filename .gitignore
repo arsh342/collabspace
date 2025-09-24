@@ -55,5 +55,4 @@ build/
 *.tmp
 *.temp
 
-logs/
 uploads/
