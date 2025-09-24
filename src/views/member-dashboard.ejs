@@ -297,8 +297,8 @@
       .dashboard-header {
         background: var(--color-white);
         border-radius: var(--radius-xl);
-        padding: var(--space-8);
-        margin-bottom: var(--space-8);
+        padding: var(--space-5);
+        margin-bottom: var(--space-6);
         border: 1px solid var(--color-gray-200);
         box-shadow: var(--shadow-sm);
       }
@@ -307,17 +307,18 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: var(--space-4);
       }
 
       .dashboard-title {
-        font-size: var(--font-size-3xl);
+        font-size: var(--font-size-2xl);
         font-weight: var(--font-weight-bold);
         color: var(--color-gray-900);
-        margin-bottom: var(--space-2);
+        margin-bottom: var(--space-1);
       }
 
       .dashboard-subtitle {
-        font-size: var(--font-size-lg);
+        font-size: var(--font-size-md);
         color: var(--color-gray-600);
         margin: 0;
       }
@@ -2527,12 +2528,6 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="javascript:void(0)" class="nav-link" data-section="chat">
-                <i class="fas fa-comments"></i>
-                Team Chat
-              </a>
-            </li>
-            <li class="nav-item">
               <a
                 href="javascript:void(0)"
                 class="nav-link"
@@ -2782,13 +2777,6 @@
                 Team Chat
               </h2>
               <div class="chat-controls">
-                <select
-                  id="chatTeamSelect"
-                  class="form-select"
-                  style="width: 200px; margin-right: 16px"
-                >
-                  <option value="">Select a team</option>
-                </select>
                 <div class="online-indicator">
                   <span id="onlineCount">0</span> online
                 </div>
@@ -2956,7 +2944,32 @@
           console.error("Error initializing socket:", error);
         }
 
-        loadSectionData("overview");
+        // Restore last open section
+        try {
+          const savedSection =
+            localStorage.getItem("memberCurrentSection") || "teams";
+          showSection(savedSection);
+          if (savedSection === "teams") {
+            // Ensure chat is shown while Teams remains highlighted
+            showSection("chat");
+            document
+              .querySelectorAll(".nav-link")
+              .forEach((link) => link.classList.remove("active"));
+            const teamsLink = document.querySelector('[data-section="teams"]');
+            if (teamsLink) teamsLink.classList.add("active");
+          }
+          // Restore previously selected chat team if exists
+          const savedTeam = localStorage.getItem("memberCurrentChatTeam");
+          if (savedTeam) {
+            // Rejoin room and reload messages without resetting selection
+            switchChatTeam(savedTeam);
+          }
+        } catch (e) {
+          showSection("teams");
+          showSection("chat");
+          const teamsLink = document.querySelector('[data-section="teams"]');
+          if (teamsLink) teamsLink.classList.add("active");
+        }
       });
 
       // Socket.IO initialization
@@ -3084,6 +3097,11 @@
       function showSection(sectionName) {
         console.log("Switching to section:", sectionName);
         currentSection = sectionName; // Track current section
+
+        // Persist current section
+        try {
+          localStorage.setItem("memberCurrentSection", sectionName);
+        } catch (e) {}
 
         // Update navigation active state
         document.querySelectorAll(".nav-link").forEach((link) => {
@@ -4548,37 +4566,21 @@
       }
 
       function loadChatTeamSelects() {
-        const chatTeamSelect = document.getElementById("chatTeamSelect");
-        if (chatTeamSelect && teams.length > 0) {
-          chatTeamSelect.innerHTML =
-            '<option value="">Choose a team to chat...</option>' +
-            teams
-              .map(
-                (team) =>
-                  `<option value="${team._id}">${escapeHtml(
-                    team.name
-                  )}</option>`
-              )
-              .join("");
-        }
+        // Team switching UI is hidden for members now
       }
 
       function setupChatEventListeners() {
         if (chatListenersInitialized) {
           return;
         }
-        const chatTeamSelect = document.getElementById("chatTeamSelect");
+        const chatTeamSelect = null; // hidden in UI
         const messageInput = document.getElementById("messageInput");
         const sendButton = document.getElementById("sendButton");
         const emojiBtn = document.getElementById("emojiBtn");
         const attachFileBtn = document.getElementById("attachFileBtn");
         const fileInput = document.getElementById("fileInput");
 
-        if (chatTeamSelect) {
-          chatTeamSelect.addEventListener("change", function () {
-            switchChatTeam(this.value);
-          });
-        }
+        // team switcher removed
 
         if (messageInput) {
           messageInput.addEventListener("keypress", function (e) {
@@ -4635,6 +4637,9 @@
           document.getElementById("sendButton").disabled = true;
           clearChatMessages();
           showChatWelcome();
+          try {
+            localStorage.removeItem("memberCurrentChatTeam");
+          } catch (e) {}
           return;
         }
 
@@ -4647,6 +4652,9 @@
         }
 
         currentChatTeam = teamId;
+        try {
+          localStorage.setItem("memberCurrentChatTeam", teamId);
+        } catch (e) {}
 
         // Join new team room
         if (memberSocket) {
