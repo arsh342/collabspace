@@ -3161,7 +3161,8 @@
           // Chat events
           organiserSocket.on("new message", (messageData) => {
             console.log("Received via Socket.IO:", messageData); // Debug log
-            if (currentChatTeam === messageData.teamId) {
+            const incomingTeamId = messageData.teamId || messageData.team;
+            if (currentChatTeam === incomingTeamId) {
               const message = {
                 content: messageData.content,
                 sender: messageData.sender,
@@ -4202,17 +4203,13 @@
           sender: currentUser.data,
         };
 
-        // Send via Socket.IO
-        if (organiserSocket) {
-          organiserSocket.emit("send message", messageData);
-        }
-
-        // Also send to API for persistence
-        fetch("/api/messages", {
+        // Send to API; server will emit to sockets
+        fetch("/api/chat/messages", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             content: content,
             teamId: currentChatTeam,
@@ -4221,20 +4218,14 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            if (data.success) {
-              // Display the message locally for the sender
-              const localMessage = {
-                content: content,
-                sender: currentUser.data,
-                createdAt: new Date().toISOString(),
-                messageType: "text",
-              };
-
-              displayMessage(localMessage);
-
-              // Message sent successfully
+            if (data.success && data.message) {
+              // Render the server-formatted message so sender sees it
+              displayMessage(data.message);
               messageInput.value = "";
               stopTyping();
+            } else {
+              console.error("Error sending message:", data.message || data);
+              showNotification("Failed to send message", "error");
             }
           })
           .catch((error) => {
@@ -4335,6 +4326,7 @@
         console.log("Starting file upload...", window.pendingFile); // Debug log
         fetch("/api/upload", {
           method: "POST",
+          credentials: "include",
           body: formData,
         })
           .then((response) => {
@@ -4361,43 +4353,24 @@
 
               console.log("Sending message data:", messageData); // Debug log
 
-              // Send the message via Socket.IO
-              if (organiserSocket && currentChatTeam) {
-                organiserSocket.emit("send message", messageData);
-                console.log("Sent via Socket.IO"); // Debug log
-              }
-
-              // Also send to API for persistence
-              fetch("/api/messages", {
+              // Send to API (server will broadcast)
+              fetch("/api/chat/messages", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
+                credentials: "include",
                 body: JSON.stringify(messageData),
               })
                 .then((response) => response.json())
                 .then((data) => {
-                  if (data.success) {
-                    // Display the message locally for the sender
-                    const localMessage = {
-                      content: messageData.content,
-                      sender: currentUser.data,
-                      createdAt: new Date().toISOString(),
-                      messageType: messageData.messageType,
-                      fileName: messageData.fileName,
-                      fileType: messageData.fileType,
-                      fileSize: messageData.fileSize,
-                      fileUrl: messageData.fileUrl,
-                    };
-
-                    console.log(
-                      "Displaying sent file message locally:",
-                      localMessage
-                    ); // Debug log
-                    displayMessage(localMessage);
-
+                  if (data.success && data.message) {
+                    // Render returned message
+                    displayMessage(data.message);
                     cancelFileUpload();
                     showNotification("File sent successfully", "success");
+                  } else {
+                    throw new Error(data.message || "Failed to send file");
                   }
                 })
                 .catch((error) => {
