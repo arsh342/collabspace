@@ -6,7 +6,13 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "prod": "pm2 start src/app.js --name collabspace",
+    "build": "node build.js",
+    "build:css": "node build.js",
+    "build:css:watch": "echo 'Watch mode not implemented yet. Use build:css for now.'",
+    "build:prod": "npm run build && cd dist && npm install --production",
+    "clean": "rm -rf dist src/public/css/dist src/public/js/dist",
+    "prod": "npm run build && pm2 start src/app.js --name collabspace",
+    "prod:dist": "npm run build:prod && cd dist && pm2 start app.js --name collabspace-prod",
     "stop": "pm2 stop collabspace",
     "restart": "pm2 restart collabspace",
     "test": "echo \"Error: no test specified\" && exit 1"
