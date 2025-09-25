@@ -10,7 +10,7 @@ const apiLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-});
+}); 
 
 // Strict rate limiter for authentication routes (more lenient for development)
 const authLimiter = rateLimit({
