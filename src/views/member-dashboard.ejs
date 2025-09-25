@@ -192,6 +192,13 @@
         color: var(--color-white);
       }
 
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
       .user-info h3 {
         font-size: var(--font-size-xl);
         font-weight: var(--font-weight-semibold);
@@ -1899,128 +1906,149 @@
         color: var(--color-gray-600);
       }
 
-      .chat-message {
-        margin-bottom: 16px;
-        padding: 12px 16px;
-        border-radius: 18px;
+      .message {
+        display: flex;
+        gap: var(--space-3);
+        margin-bottom: var(--space-4);
+      }
+
+      .message.own {
+        flex-direction: row-reverse;
+      }
+
+      .message-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: var(--radius-full);
+        background: var(--primary-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-white);
+        font-weight: var(--font-weight-semibold);
+        font-size: var(--font-size-sm);
+        flex-shrink: 0;
+        box-shadow: var(--shadow-md);
+      }
+
+      .message-content {
         max-width: 70%;
-        word-wrap: break-word;
-        position: relative;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .chat-message:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      }
-
-      .chat-message.own-message {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        margin-left: auto;
-        text-align: right;
-        border-bottom-right-radius: 4px;
-      }
-
-      .chat-message.own-message::before {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        right: -8px;
-        width: 0;
-        height: 0;
-        border: 8px solid transparent;
-        border-left-color: #764ba2;
-        border-bottom: none;
-        border-right: none;
-      }
-
-      .chat-message.other-message {
-        background: #f1f3f4;
-        color: #202124;
-        margin-right: auto;
-        border-bottom-left-radius: 4px;
-        border: 1px solid #e8eaed;
-      }
-
-      .chat-message.other-message::before {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: -8px;
-        width: 0;
-        height: 0;
-        border: 8px solid transparent;
-        border-right-color: #f1f3f4;
-        border-bottom: none;
-        border-left: none;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
       }
 
       .message-header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 4px;
-        font-size: 12px;
-        opacity: 0.9;
+        gap: var(--space-2);
+        font-size: var(--font-size-xs);
+        color: var(--color-gray-500);
+        font-weight: var(--font-weight-medium);
       }
 
-      .chat-message.own-message .message-header {
-        color: rgba(255, 255, 255, 0.9);
+      .message.own .message-header {
+        flex-direction: row-reverse;
       }
 
-      .chat-message.other-message .message-header {
-        color: rgba(32, 33, 36, 0.7);
+      .message-bubble {
+        padding: var(--space-3) var(--space-4);
+        border-radius: var(--radius-2xl);
+        background: var(--color-gray-100);
+        color: var(--color-gray-900);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-relaxed);
+        word-wrap: break-word;
+        box-shadow: var(--shadow-sm);
       }
 
-      .sender-name {
-        font-weight: 600;
+      .message.own .message-bubble {
+        background: var(--primary-gradient);
+        color: var(--color-white);
+        border-radius: var(--radius-2xl) var(--radius-2xl) var(--radius-sm)
+          var(--radius-2xl);
       }
 
-      .message-content {
-        line-height: 1.4;
-        font-size: 14px;
+      .message:not(.own) .message-bubble {
+        border-radius: var(--radius-2xl) var(--radius-2xl) var(--radius-2xl)
+          var(--radius-sm);
       }
 
-      .chat-message.own-message .message-content {
-        color: white;
+      .typing-indicator {
+        padding: var(--space-4) var(--space-6);
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        background: rgba(var(--color-primary), 0.05);
+        border-top: 1px solid var(--color-gray-200);
+        font-size: var(--font-size-sm);
+        color: var(--color-gray-600);
       }
 
-      .chat-message.other-message .message-content {
-        color: #202124;
+      .typing-dots {
+        display: flex;
+        gap: var(--space-1);
+      }
+
+      .typing-dots span {
+        width: var(--space-2);
+        height: var(--space-2);
+        border-radius: var(--radius-full);
+        background: var(--color-primary);
+        animation: typing 1.4s infinite ease-in-out;
+      }
+
+      .typing-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .typing-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typing {
+        0%,
+        80%,
+        100% {
+          transform: scale(0.8);
+          opacity: 0.5;
+        }
+        40% {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       .system-message {
         text-align: center;
-        padding: 8px;
-        color: var(--text-secondary);
-        font-size: 12px;
+        padding: var(--space-2);
+        color: var(--color-gray-500);
+        font-size: var(--font-size-xs);
         font-style: italic;
       }
 
       .chat-input-container {
         border-top: 1px solid var(--color-gray-200);
-        padding: 20px 24px;
+        padding: var(--space-5) var(--space-6);
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
       }
 
       .chat-input-wrapper {
         display: flex;
-        gap: 12px;
+        gap: var(--space-3);
         align-items: center;
-        margin-bottom: 12px;
+        margin-bottom: var(--space-3);
       }
 
       .chat-input {
         flex: 1;
-        padding: 12px 16px;
+        padding: var(--space-3) var(--space-4);
         border: 2px solid var(--color-gray-200);
-        border-radius: 25px;
-        font-size: 14px;
-        background: white;
-        transition: all 0.2s ease;
+        border-radius: var(--radius-2xl);
+        font-size: var(--font-size-sm);
+        background: var(--color-white);
+        transition: all var(--transition-fast);
         outline: none;
       }
 
@@ -2036,15 +2064,15 @@
       }
 
       .send-button {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: var(--radius-full);
         background: var(--primary-gradient);
         border: none;
-        color: white;
-        font-size: 16px;
+        color: var(--color-white);
+        font-size: var(--font-size-base);
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all var(--transition-fast);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2925,8 +2953,50 @@
         currentUser = null;
       }
 
+      // Function to update user info in sidebar
+      function updateUserInfo() {
+        console.log("updateUserInfo called, currentUser:", currentUser); // Debug log
+
+        const userNameElement = document.getElementById("userName");
+        const userAvatar = document.getElementById("userAvatar");
+
+        if (currentUser) {
+          const user = currentUser;
+          console.log("Updating user info with:", user); // Debug log
+
+          if (userNameElement) {
+            // Try different possible user name properties
+            const userName = user.name || user.firstName || user.username;
+            if (userName) {
+              userNameElement.textContent = userName;
+              console.log("Set username to:", userName); // Debug log
+            } else {
+              console.log(
+                "No username found in user object, keeping current value:",
+                userNameElement.textContent
+              );
+            }
+          }
+
+          // Update avatar with initials
+          if (userAvatar) {
+            const userName = user.name || user.firstName || user.username;
+            const initials = userName ? userName.charAt(0).toUpperCase() : "M";
+            userAvatar.textContent = initials;
+            console.log("Set avatar initials to:", initials); // Debug log
+          }
+        } else {
+          console.log("No currentUser found, keeping server-rendered values"); // Debug log
+          // Don't change anything if we don't have user data
+          // The server-rendered content should remain
+        }
+      }
+
       document.addEventListener("DOMContentLoaded", function () {
         console.log("DOM loaded");
+
+        // Always try to update user info to ensure it's displayed correctly
+        updateUserInfo();
 
         // Try to setup navigation first
         try {
@@ -3029,11 +3099,27 @@
 
         // Chat message handler for team chat
         memberSocket.on("new message", (message) => {
-          if (currentChatTeam === message.teamId) {
+          console.log(
+            "Received new message:",
+            message,
+            "current team:",
+            currentChatTeam
+          );
+          if (
+            currentChatTeam === message.teamId ||
+            currentChatTeam === message.team
+          ) {
             if (!renderedMessageIds.has(message._id)) {
               chatMessages.push(message);
               addMessageToChat(message);
+            } else {
+              console.log("Message already rendered:", message._id);
             }
+          } else {
+            console.log(
+              "Ignoring message for different team:",
+              message.teamId || message.team
+            );
           }
         });
 
@@ -3193,6 +3279,10 @@
               await loadTeamRequestsData();
               break;
             case "chat":
+              // Load teams first if not already loaded, then load chat
+              if (teams.length === 0) {
+                await loadTeamsData();
+              }
               loadChat();
               break;
             case "profile":
@@ -3489,6 +3579,19 @@
           if (response.ok) {
             teams = await response.json();
             displayTeams(teams);
+
+            // If we're currently in chat section and no team is selected, auto-select first team
+            if (
+              currentSection === "chat" &&
+              !currentChatTeam &&
+              teams.length > 0
+            ) {
+              console.log(
+                "Teams loaded, auto-selecting first team for chat:",
+                teams[0]._id
+              );
+              switchChatTeam(teams[0]._id);
+            }
           } else {
             throw new Error("Failed to fetch teams");
           }
@@ -4390,17 +4493,17 @@
       }
 
       function viewTeamChat(teamId) {
+        console.log("viewTeamChat called with teamId:", teamId);
         // Switch to chat section and load team chat
         showSection("chat");
-        loadChat();
-        // Set the team in the chat dropdown
-        setTimeout(() => {
-          const chatTeamSelect = document.getElementById("chatTeamSelect");
-          if (chatTeamSelect) {
-            chatTeamSelect.value = teamId;
-            switchChatTeam(teamId);
-          }
-        }, 100);
+
+        // Setup chat listeners if not already done
+        if (!chatListenersInitialized) {
+          setupChatEventListeners();
+        }
+
+        // Directly switch to the specific team
+        switchChatTeam(teamId);
       }
 
       async function loadTeamMessages(teamId) {
@@ -4563,10 +4666,26 @@
       function loadChat() {
         loadChatTeamSelects();
         setupChatEventListeners();
+
+        // Only auto-select first team if no team is currently selected AND we're not in the middle of switching
+        if (!currentChatTeam && teams && teams.length > 0) {
+          console.log("Auto-selecting first team for chat:", teams[0]._id);
+          switchChatTeam(teams[0]._id);
+        } else if (!currentChatTeam) {
+          // If no teams available, show welcome message
+          showChatWelcome();
+        } else {
+          console.log("Team already selected:", currentChatTeam);
+        }
       }
 
       function loadChatTeamSelects() {
         // Team switching UI is hidden for members now
+        // But we can auto-select a team if available
+        if (teams && teams.length > 0 && !currentChatTeam) {
+          console.log("Auto-selecting first team:", teams[0]._id);
+          switchChatTeam(teams[0]._id);
+        }
       }
 
       function setupChatEventListeners() {
@@ -4629,7 +4748,10 @@
       }
 
       function switchChatTeam(teamId) {
+        console.log("switchChatTeam called with teamId:", teamId);
+
         if (!teamId) {
+          console.log("No teamId provided, clearing chat");
           // Stop typing when clearing team selection
           stopTyping();
           currentChatTeam = null;
@@ -4643,13 +4765,23 @@
           return;
         }
 
+        console.log(
+          "Switching to team:",
+          teamId,
+          "from previous team:",
+          currentChatTeam
+        );
         // Stop typing when switching teams
         stopTyping();
 
         // Leave current team room
         if (currentChatTeam && memberSocket) {
+          console.log("Leaving previous team room:", currentChatTeam);
           memberSocket.emit("leave team", { teamId: currentChatTeam });
         }
+
+        // Clear previous team's messages before switching
+        clearChatMessages();
 
         currentChatTeam = teamId;
         try {
@@ -4668,34 +4800,79 @@
             teamId: teamId,
             userId: currentUser._id,
           });
+        } else {
+          console.warn("Member socket not available");
         }
 
         // Enable chat input
-        document.getElementById("messageInput").disabled = false;
-        document.getElementById("sendButton").disabled = false;
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+
+        if (messageInput) {
+          messageInput.disabled = false;
+          messageInput.placeholder = `Message team...`;
+          console.log("Message input enabled");
+        } else {
+          console.error("Message input element not found");
+        }
+
+        if (sendButton) {
+          sendButton.disabled = false;
+          console.log("Send button enabled");
+        } else {
+          console.error("Send button element not found");
+        }
+
+        // Update chat header with team name
+        updateChatHeader(teamId);
 
         // Load chat messages for this team
         loadChatMessages(teamId);
       }
 
+      function updateChatHeader(teamId) {
+        const chatTitle = document.querySelector(
+          "#chat-section .section-title"
+        );
+        if (chatTitle && teams) {
+          const team = teams.find((t) => t._id === teamId);
+          if (team) {
+            chatTitle.innerHTML = `
+              <i class="fas fa-comments"></i>
+              Team Chat - ${escapeHtml(team.name)}
+            `;
+            console.log("Updated chat header for team:", team.name);
+          }
+        }
+      }
+
       function loadChatMessages(teamId) {
+        console.log("Loading chat messages for team:", teamId);
         clearChatMessages();
         showLoadingState("chatMessages");
 
         fetch(`/api/chat/messages/${teamId}`)
-          .then((response) => response.json())
+          .then((response) => {
+            console.log("Chat messages response status:", response.status);
+            return response.json();
+          })
           .then((data) => {
+            console.log("Chat messages data:", data);
             if (data.success) {
               chatMessages = data.messages;
+              console.log("Loaded", chatMessages.length, "chat messages");
               displayChatMessages();
             } else {
               console.error("Error loading chat messages:", data.message);
-              showSystemMessage("Failed to load chat messages");
+              showSystemMessage(
+                "Failed to load chat messages: " +
+                  (data.message || "Unknown error")
+              );
             }
           })
           .catch((error) => {
             console.error("Error loading chat messages:", error);
-            showSystemMessage("Failed to load chat messages");
+            showSystemMessage("Failed to load chat messages: " + error.message);
           });
       }
 
@@ -4713,12 +4890,35 @@
       function showChatWelcome() {
         const chatMessagesContainer = document.getElementById("chatMessages");
         if (chatMessagesContainer) {
+          let welcomeMessage = "Welcome to Team Chat";
+          let welcomeDescription =
+            "Select a team above to start chatting with your team members";
+
+          if (!teams || teams.length === 0) {
+            welcomeMessage = "No Teams Available";
+            welcomeDescription =
+              "You're not a member of any teams yet. Ask your admin to add you to a team!";
+          }
+
           chatMessagesContainer.innerHTML = `
             <div class="chat-welcome">
-              <i class="fas fa-comments"></i>
-              <h3>Welcome to Team Chat</h3>
-              <p>Select a team above to start chatting with your team members</p>
+              <div class="welcome-icon">
+                <i class="fas fa-comments"></i>
+              </div>
+              <h3>${welcomeMessage}</h3>
+              <p>${welcomeDescription}</p>
             </div>
+          `;
+        }
+
+        // Reset chat header
+        const chatTitle = document.querySelector(
+          "#chat-section .section-title"
+        );
+        if (chatTitle) {
+          chatTitle.innerHTML = `
+            <i class="fas fa-comments"></i>
+            Team Chat
           `;
         }
       }
@@ -4754,16 +4954,19 @@
         }
 
         const messageElement = document.createElement("div");
-        messageElement.className = `chat-message ${
-          message.sender._id === currentUser._id
-            ? "own-message"
-            : "other-message"
-        }`;
-
         const isOwnMessage = message.sender._id === currentUser._id;
+        messageElement.className = `message ${isOwnMessage ? "own" : ""}`;
+
         const senderName = isOwnMessage
           ? "You"
           : `${message.sender.firstName} ${message.sender.lastName}`;
+
+        // Get sender initials for avatar
+        const senderInitials = isOwnMessage
+          ? (currentUser.firstName?.charAt(0) || "") +
+            (currentUser.lastName?.charAt(0) || "")
+          : (message.sender.firstName?.charAt(0) || "") +
+            (message.sender.lastName?.charAt(0) || "");
 
         let contentHtml = "";
 
@@ -4837,23 +5040,24 @@
           }
         } else {
           // Regular text message
-          contentHtml = `<div class="message-content">${escapeHtml(
-            message.content
-          )}</div>`;
+          contentHtml = escapeHtml(message.content);
         }
 
         messageElement.innerHTML = `
-          <div class="message-header">
-            <span class="sender-name">${escapeHtml(senderName)}</span>
-            <span class="message-time">${new Date(
-              message.createdAt
-            ).toLocaleTimeString("en-US", {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
-            })}</span>
+          <div class="message-avatar">${senderInitials.toUpperCase()}</div>
+          <div class="message-content">
+            <div class="message-header">
+              <span class="sender-name">${escapeHtml(senderName)}</span>
+              <span class="message-time">${new Date(
+                message.createdAt
+              ).toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}</span>
+            </div>
+            <div class="message-bubble">${contentHtml}</div>
           </div>
-          ${contentHtml}
         `;
 
         chatMessagesContainer.appendChild(messageElement);
@@ -5430,18 +5634,15 @@
             const updatedProfile = await response.json();
             showNotification("Profile updated successfully!", "success");
 
-            // Update the user display in the sidebar
-            const userName = document.getElementById("userName");
-            if (userName) {
-              userName.textContent = `${updatedProfile.firstName} ${updatedProfile.lastName}`;
+            // Update currentUser object with new data
+            if (currentUser) {
+              currentUser.name = `${updatedProfile.firstName} ${updatedProfile.lastName}`;
+              currentUser.firstName = updatedProfile.firstName;
+              currentUser.lastName = updatedProfile.lastName;
             }
 
-            const userAvatar = document.getElementById("userAvatar");
-            if (userAvatar && updatedProfile.firstName) {
-              userAvatar.textContent = updatedProfile.firstName
-                .charAt(0)
-                .toUpperCase();
-            }
+            // Update the user display in the sidebar
+            updateUserInfo();
           } else {
             throw new Error("Failed to update profile");
           }
