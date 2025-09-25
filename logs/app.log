@@ -3234,3 +3234,54 @@
 [2025-09-25T10:44:47.178Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
 [2025-09-25T10:44:57.220Z] WARN: MongoDB disconnected
 [2025-09-25T10:44:57.220Z] INFO: MongoDB connection closed through app termination
+[2025-09-25T17:22:24.507Z] INFO: Server running on port 3003
+[2025-09-25T17:22:24.508Z] ERROR: Uncaught Exception: | {"code":"EADDRINUSE","errno":-48,"syscall":"listen","address":"::","port":3003}
+[2025-09-25T17:22:24.508Z] INFO: Environment: development
+[2025-09-25T17:22:24.513Z] INFO: MongoDB Connected: localhost
+[2025-09-25T17:22:26.010Z] INFO: User connected: 0TPSXbOao1f4OMQsAAAC
+[2025-09-25T17:22:26.012Z] INFO: User connected: p2xmePFcagvgubbHAAAD
+[2025-09-25T17:22:26.019Z] INFO: Socket 0TPSXbOao1f4OMQsAAAC registered for organiser 68d4014f1c4cade08207ba19
+[2025-09-25T17:22:26.030Z] INFO: Socket p2xmePFcagvgubbHAAAD registered for member 68d401821c4cade08207ba25
+[2025-09-25T17:22:26.035Z] INFO: User 68d401821c4cade08207ba25 (p2xmePFcagvgubbHAAAD) joined team 68d401981c4cade08207ba3c
+[2025-09-25T17:22:26.035Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-25T17:22:58.717Z] WARN: MongoDB disconnected
+[2025-09-25T17:22:58.719Z] INFO: MongoDB connection closed through app termination
+[2025-09-25T17:23:04.115Z] INFO: Server running on port 3003
+[2025-09-25T17:23:04.116Z] INFO: Environment: development
+[2025-09-25T17:23:04.178Z] ERROR: Unhandled Promise Rejection: | {"code":"EREFUSED","syscall":"querySrv","hostname":"_mongodb._tcp.cluster0.kgbc2av.mongodb.net"}
+[2025-09-25T17:26:14.017Z] INFO: Server running on port 3003
+[2025-09-25T17:26:14.019Z] INFO: Environment: development
+[2025-09-25T17:26:15.014Z] INFO: User connected: w5AsT0vgzpI7EgFbAAAB
+[2025-09-25T17:26:15.025Z] INFO: Socket w5AsT0vgzpI7EgFbAAAB registered for organiser 68d4014f1c4cade08207ba19
+[2025-09-25T17:26:17.001Z] INFO: User connected: wlDyW3WS2FU1WFl6AAAD
+[2025-09-25T17:26:17.007Z] INFO: Socket wlDyW3WS2FU1WFl6AAAD registered for member 68d401821c4cade08207ba25
+[2025-09-25T17:26:17.960Z] INFO: MongoDB Connected: ac-xfqcs00-shard-00-00.kgbc2av.mongodb.net
+[2025-09-25T17:26:18.010Z] INFO: User 68d401821c4cade08207ba25 (wlDyW3WS2FU1WFl6AAAD) joined team 68d401981c4cade08207ba3c
+[2025-09-25T17:26:18.011Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-25T17:26:29.455Z] ERROR: Uncaught Exception: | {"code":"EADDRINUSE","errno":-48,"syscall":"listen","address":"::","port":3003}
+[2025-09-25T17:27:07.479Z] INFO: Server running on port 3003
+[2025-09-25T17:27:07.480Z] INFO: Environment: development
+[2025-09-25T17:27:07.485Z] ERROR: Unhandled Promise Rejection: | {"code":"EREFUSED","syscall":"querySrv","hostname":"_mongodb._tcp.cluster0.kgbc2av.mongodb.net"}
+[2025-09-25T17:29:29.077Z] INFO: Server running on port 3003
+[2025-09-25T17:29:29.078Z] INFO: Environment: development
+[2025-09-25T17:29:29.084Z] ERROR: Unhandled Promise Rejection: | {"code":"EREFUSED","syscall":"querySrv","hostname":"_mongodb._tcp.cluster0.kgbc2av.mongodb.net"}
+[2025-09-25T17:30:10.206Z] INFO: Server running on port 3003
+[2025-09-25T17:30:10.207Z] INFO: Environment: development
+[2025-09-25T17:30:10.218Z] ERROR: Unhandled Promise Rejection: | {"code":"EREFUSED","syscall":"querySrv","hostname":"_mongodb._tcp.cluster0.kgbc2av.mongodb.net"}
+[2025-09-25T17:31:19.981Z] INFO: Server running on port 3003
+[2025-09-25T17:31:19.982Z] INFO: Environment: development
+[2025-09-25T17:31:21.200Z] INFO: MongoDB Connected: ac-xfqcs00-shard-00-00.kgbc2av.mongodb.net
+[2025-09-25T17:31:22.014Z] INFO: User connected: vzoWVvN3BfpweK0JAAAB
+[2025-09-25T17:31:22.022Z] INFO: Socket vzoWVvN3BfpweK0JAAAB registered for member 68d401821c4cade08207ba25
+[2025-09-25T17:31:22.228Z] INFO: User 68d401821c4cade08207ba25 (vzoWVvN3BfpweK0JAAAB) joined team 68d401981c4cade08207ba3c
+[2025-09-25T17:31:22.231Z] INFO: Team 68d401981c4cade08207ba3c online count: 1
+[2025-09-25T17:31:24.003Z] INFO: User connected: EFlZsFPVo0OyxcVHAAAD
+[2025-09-25T17:31:24.009Z] INFO: Socket EFlZsFPVo0OyxcVHAAAD registered for organiser 68d4014f1c4cade08207ba19
+[2025-09-25T17:31:34.734Z] INFO: GET / | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-25T17:31:34.734Z"}
+[2025-09-25T17:31:34.750Z] INFO: GET / - 304 | {"statusCode":304,"duration":"16ms","ip":"::1"}
+[2025-09-25T17:31:34.774Z] INFO: GET /public/images/Image_prev.png | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-25T17:31:34.774Z"}
+[2025-09-25T17:31:34.777Z] INFO: GET /public/images/Image_prev.png - 404 | {"statusCode":404,"duration":"3ms","ip":"::1"}
+[2025-09-25T17:31:34.976Z] INFO: GET /favicon.ico | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-25T17:31:34.976Z"}
+[2025-09-25T17:31:34.979Z] INFO: GET /favicon.ico - 404 | {"statusCode":404,"duration":"2ms","ip":"::1"}
+[2025-09-25T17:31:36.544Z] INFO: GET /login | {"ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36","timestamp":"2025-09-25T17:31:36.544Z"}
+[2025-09-25T17:31:36.549Z] INFO: GET /login - 304 | {"statusCode":304,"duration":"5ms","ip":"::1"}
