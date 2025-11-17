@@ -126,10 +126,6 @@ router.get(
       .skip((page - 1) * limit);
 
     const formattedMessages = messages.reverse().map((message) => {
-      console.log("Chat message sender:", message.sender); // Debug log
-      console.log("Sender lastSeen:", message.sender.lastSeen); // Debug lastSeen
-      console.log("Current time:", new Date()); // Debug current time
-      console.log("Five minutes ago:", new Date(Date.now() - 5 * 60 * 1000)); // Debug threshold
       return {
         _id: message._id,
         content: message.content,

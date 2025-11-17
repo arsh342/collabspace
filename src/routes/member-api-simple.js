@@ -48,7 +48,7 @@ router.get(
         unreadMessages: 0, // Simplified for now
       };
 
-      console.log("Member stats calculated:", stats);
+      // Member stats calculated
       res.json(stats);
     } catch (error) {
       console.error("Error fetching member stats:", error);

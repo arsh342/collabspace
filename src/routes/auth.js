@@ -236,7 +236,7 @@ router.post(
             console.error("Session save error:", err);
             reject(err);
           } else {
-            console.log("✅ Session saved successfully for user:", user.email);
+            // Session saved successfully
             resolve();
           }
         });
@@ -494,10 +494,7 @@ router.post(
             console.error("Session save error:", err);
             reject(err);
           } else {
-            console.log(
-              "✅ Web login session saved successfully for user:",
-              user.email,
-            );
+            // Web login session saved successfully
             resolve();
           }
         });

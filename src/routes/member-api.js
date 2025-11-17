@@ -39,7 +39,7 @@ router.get("/stats", auth, async (req, res) => {
       unreadMessages: unreadMessages,
     };
 
-    console.log("Member stats calculated:", stats);
+    // Member stats calculated
     res.json(stats);
   } catch (error) {
     console.error("Error fetching member stats:", error);
