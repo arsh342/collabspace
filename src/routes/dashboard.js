@@ -38,7 +38,7 @@ router.get(
 
       // Get user info
       const user = await User.findById(userId).select(
-        "firstName lastName email role createdAt bio"
+        "firstName lastName email role createdAt bio",
       );
 
       // Calculate stats
@@ -58,7 +58,7 @@ router.get(
 
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter(
-        (task) => task.status === "completed"
+        (task) => task.status === "completed",
       ).length;
       const activeTasks = totalTasks - completedTasks; // Active tasks = total - completed
       const completionRate =
@@ -89,7 +89,7 @@ router.get(
         message: "Failed to load dashboard stats",
       });
     }
-  })
+  }),
 );
 
 // @desc    Get dashboard updates for real-time notifications
@@ -123,7 +123,7 @@ router.get(
       success: true,
       data: mockUpdates,
     });
-  })
+  }),
 );
 
 module.exports = router;

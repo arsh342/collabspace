@@ -4,7 +4,7 @@ const logger = require("../middleware/logger");
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(
-      process.env.MONGODB_URI || "mongodb://localhost:27017/collabspace"
+      process.env.MONGODB_URI || "mongodb://localhost:27017/collabspace",
     );
 
     console.log(`✓ MongoDB Connected: ${conn.connection.host}`);

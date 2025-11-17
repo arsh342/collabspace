@@ -88,7 +88,7 @@ const authenticateWeb = async (req, res, next) => {
         await user.updateLastSeen();
         console.log(
           "✅ Updated last seen for persistent session user:",
-          user.email
+          user.email,
         );
       } catch (error) {
         logger.error("Failed to update user last seen:", error);

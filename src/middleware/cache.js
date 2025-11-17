@@ -93,11 +93,11 @@ function invalidateCacheMiddleware(patterns) {
                 .replace(":userId", req.session?.user?.id || "*")
                 .replace(
                   ":teamId",
-                  req.params?.teamId || req.body?.teamId || "*"
+                  req.params?.teamId || req.body?.teamId || "*",
                 )
                 .replace(
                   ":taskId",
-                  req.params?.taskId || req.body?.taskId || "*"
+                  req.params?.taskId || req.body?.taskId || "*",
                 );
             }
 

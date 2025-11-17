@@ -16,17 +16,10 @@ async function computeOrganiserSummary(organiserId) {
     .lean();
 
   const totalTeams = teams.length;
-  
-  // Count unique members across all teams
-  const uniqueMembers = new Set();
-  teams.forEach((team) => {
-    if (Array.isArray(team.members)) {
-      team.members.forEach((memberId) => {
-        uniqueMembers.add(memberId.toString());
-      });
-    }
-  });
-  const totalMembers = uniqueMembers.size;
+  const totalMembers = teams.reduce(
+    (sum, t) => sum + (Array.isArray(t.members) ? t.members.length : 0),
+    0,
+  );
 
   // Aggregate tasks for these teams (only non-archived)
   let totalTasks = 0;

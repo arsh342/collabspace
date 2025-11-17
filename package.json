@@ -18,7 +18,9 @@
     "reset-password": "node scripts/reset-password.js",
     "test": "NODE_ENV=test jest --runInBand",
     "test:bootstrap": "node scripts/test-app.js",
-    "test:created": "node scripts/test-createdAt.js"
+    "test:created": "node scripts/test-createdAt.js",
+    "status-check": "./scripts/status-checks.sh",
+    "ci": "npm install && npm run status-check"
   },
   "keywords": [
     "collaboration",

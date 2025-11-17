@@ -146,7 +146,7 @@ const taskSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Virtual for overdue status
@@ -269,7 +269,7 @@ taskSchema.methods.addComment = async function (content, authorId) {
 taskSchema.methods.updateComment = async function (
   commentId,
   content,
-  authorId
+  authorId,
 ) {
   try {
     const comment = this.comments.id(commentId);
@@ -311,7 +311,7 @@ taskSchema.methods.logTime = async function (userId, hours, description = "") {
     await this.save();
 
     logger.info(
-      `Time logged to task ${this._id}: ${hours} hours by user ${userId}`
+      `Time logged to task ${this._id}: ${hours} hours by user ${userId}`,
     );
     return this.timeLogs[this.timeLogs.length - 1];
   } catch (error) {
@@ -341,7 +341,7 @@ taskSchema.methods.updateStatus = async function (newStatus, userId) {
     }
 
     logger.info(
-      `Task ${this._id} status changed from ${oldStatus} to ${newStatus} by user ${userId}`
+      `Task ${this._id} status changed from ${oldStatus} to ${newStatus} by user ${userId}`,
     );
     return true;
   } catch (error) {
@@ -355,7 +355,7 @@ taskSchema.methods.addDependency = async function (taskId, type = "blocks") {
   try {
     // Check if dependency already exists
     const existingDependency = this.dependencies.find(
-      (dep) => dep.task.toString() === taskId.toString()
+      (dep) => dep.task.toString() === taskId.toString(),
     );
 
     if (existingDependency) {
@@ -429,7 +429,7 @@ taskSchema.post("findOneAndDelete", async function (doc) {
         },
       });
       logger.info(
-        `Updated team stats after task deletion: team=${doc.team}, task=${doc._id}`
+        `Updated team stats after task deletion: team=${doc.team}, task=${doc._id}`,
       );
     } catch (error) {
       logger.error("Error updating team stats after task deletion:", error);

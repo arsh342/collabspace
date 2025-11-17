@@ -118,9 +118,8 @@ router.post(
         url: session.url,
       },
     });
-  })
+  }),
 );
 
 module.exports = router;
-
 
