@@ -149,7 +149,6 @@ build/
 *.swp
 *.swo
 
-
 # Database
 *.db
 *.sqlite
