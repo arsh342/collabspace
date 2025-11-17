@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment & Billing - CollabSpace</title>
+    <!-- Design System -->
+    <link rel="stylesheet" href="/public/css/design-system.css" />
+    <!-- Animation System -->
+    <link rel="stylesheet" href="/public/css/animations.css" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Payment page styles using Design System */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--font-family-primary);
+        line-height: var(--line-height-normal);
+        color: black;
+        background: white;
+      }
+
+      .payment-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .navbar {
+        background: var(--color-white);
+        box-shadow: var(--shadow-sm);
+        padding: var(--space-4) 0;
+      }
+
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        color: black;
+        text-decoration: none;
+        transition: var(--transition-all);
+      }
+
+      .brand-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .brand-logo svg {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      }
+
+      .brand-name {
+        font-size: 1.5rem;
+        font-weight: var(--font-weight-bold);
+        letter-spacing: -0.025em;
+        color: black;
+      }
+
+      .navbar-brand:hover {
+        color: var(--color-primary-dark);
+        text-decoration: none;
+      }
+
+      .hero {
+        color: black;
+        padding: var(--space-5) 0;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-bold);
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        font-size: var(--font-size-lg);
+        opacity: 0.95;
+        max-width: 600px;
+        line-height: 1.6;
+      }
+
+      .content {
+        flex: 1;
+        padding: 3rem 0;
+      }
+
+      .payment-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 5px;
+      }
+
+      .payment-card {
+        background: var(--color-white);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-sm);
+        padding: var(--space-8);
+        margin-bottom: var(--space-8);
+        transition: var(--transition-all);
+      }
+
+      .payment-card:hover {
+        box-shadow: var(--shadow-md);
+      }
+
+      .plan-summary {
+        border-bottom: 1px solid var(--color-gray-200);
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .plan-name {
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        margin-bottom: 0.5rem;
+      }
+
+      .plan-price {
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        color: black;
+      }
+
+      .plan-features {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+      }
+
+      .plan-features li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        color: black;
+      }
+
+      .plan-features .check {
+        color: black;
+        font-weight: var(--font-weight-bold);
+      }
+
+      .form-section {
+        margin-bottom: 1rem;
+      }
+
+      .form-section h3 {
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-bold);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 0.1 rem;
+      }
+
+      .form-label {
+        font-weight: var(--font-weight-sm);
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: var(--space-2) var(--space-2);
+        border: 1px solid gray;
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-sm);
+        font-family: var(--font-family-primary);
+        color: black;
+        background-color: var(--color-white);
+        box-shadow: var(--shadow-xs);
+        transition: var(--transition-all);
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px var(--color-primary-light);
+      }
+
+      .form-control::placeholder {
+        color: var(--color-text-muted);
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .payment-methods {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .payment-method {
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: var(--space-4);
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition-all);
+        background: var(--color-white);
+      }
+
+      .payment-method:hover {
+        border-color: var(--color-primary);
+        box-shadow: var(--shadow-sm);
+        transform: translateY(-2px);
+      }
+
+      .payment-method.active {
+        border-color: var(--color-primary);
+        background: var(--color-primary-light);
+        box-shadow: var(--shadow-md);
+      }
+
+      .payment-method i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--color-primary);
+      }
+
+      .order-summary {
+        background: var(--color-gray-50);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .summary-row.total {
+        border-top: 1px solid var(--color-gray-300);
+        padding-top: 0.5rem;
+        margin-top: 1rem;
+        font-weight: var(--font-weight-bold);
+        font-size: var(--font-size-lg);
+      }
+
+      .security-info {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .security-info i {
+        color: var(--color-success);
+        font-size: 1.25rem;
+      }
+
+      .security-info p {
+        margin: 0;
+        font-size: var(--font-size-sm);
+        color: var(--color-text-secondary);
+      }
+
+      .btn-pay {
+        width: 100%;
+        background: black;
+        color: var(--color-white);
+        border: 1px solid black;
+        padding: var(--space-4) var(--space-8);
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        font-family: var(--font-family-primary);
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: var(--transition-all);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-pay:hover {
+        background: var(--color-primary-hover);
+        border-color: var(--color-primary-hover);
+        color: var(--color-white);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-pay:disabled {
+        background: var(--color-gray-400);
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* Card Input Styles */
+      .form-control[type="text"]#cardNumber {
+        font-family: "Courier New", monospace;
+        letter-spacing: 2px;
+      }
+
+      .form-control[type="text"]#cvv {
+        font-family: "Courier New", monospace;
+        letter-spacing: 1px;
+      }
+
+      .form-control[type="text"]#expiryDate {
+        font-family: "Courier New", monospace;
+        letter-spacing: 1px;
+      }
+
+      /* Card type icons */
+      .card-type-icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        color: var(--color-gray-400);
+      }
+
+      .card-input-wrapper {
+        position: relative;
+      }
+
+      .fab.fa-cc-visa {
+        color: #1434cb;
+      }
+
+      .fab.fa-cc-mastercard {
+        color: #eb001b;
+      }
+
+      .fab.fa-cc-amex {
+        color: #006fcf;
+      }
+
+      .fab.fa-cc-discover {
+        color: #ff6000;
+      }
+
+      /* Form validation states */
+      .form-control.error {
+        border-color: var(--color-danger, #dc3545);
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+      }
+
+      .form-control.success {
+        border-color: var(--color-success, #28a745);
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+      }
+
+      .error-message {
+        color: var(--color-danger, #dc3545);
+        font-size: var(--font-size-sm);
+        margin-top: 0.25rem;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+      @media (max-width: 768px) {
+        .payment-container {
+          padding: 0 1rem;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .payment-methods {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body class="payment-page">
+    <nav class="navbar">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <div class="brand-logo">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 100 100"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <linearGradient
+                  id="logoGradient1"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" style="stop-color: #43e97b" />
+                  <stop offset="50%" style="stop-color: #00f2fe" />
+                  <stop offset="100%" style="stop-color: #4facfe" />
+                </linearGradient>
+                <linearGradient
+                  id="logoGradient2"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" style="stop-color: #00f2fe" />
+                  <stop offset="100%" style="stop-color: #667eea" />
+                </linearGradient>
+                <linearGradient
+                  id="logoGradient3"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" style="stop-color: #667eea" />
+                  <stop offset="100%" style="stop-color: #764ba2" />
+                </linearGradient>
+              </defs>
+              <!-- Outer hexagon -->
+              <path
+                d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z"
+                fill="url(#logoGradient1)"
+                opacity="0.9"
+              />
+              <!-- Inner C shape - top part -->
+              <path
+                d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z"
+                fill="white"
+              />
+              <!-- Inner C shape - bottom part -->
+              <path
+                d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z"
+                fill="white"
+              />
+              <!-- 3D effect - right side -->
+              <path
+                d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z"
+                fill="url(#logoGradient2)"
+                opacity="0.8"
+              />
+              <!-- 3D effect - bottom -->
+              <path
+                d="M25 80 L75 80 L80 85 L30 85 L25 80 Z"
+                fill="url(#logoGradient3)"
+                opacity="0.7"
+              />
+            </svg>
+          </div>
+          <span class="brand-name">CollabSpace</span>
+        </a>
+      </div>
+    </nav>
+
+    <section class="hero animate-on-scroll fade-in">
+      <div class="container">
+        <h1 class="animate-on-scroll slide-in-down animate-delay-1">
+          Complete Your Purchase
+        </h1>
+      </div>
+    </section>
+
+    <main class="content">
+      <div
+        class="payment-container animate-on-scroll slide-in-up animate-delay-2"
+      >
+        <div class="row">
+          <div class="col-lg-8">
+            <div
+              class="payment-card animate-on-scroll slide-in-left animate-delay-3 hover-lift"
+            >
+              <form id="paymentForm">
+                <div
+                  id="paymentAlert"
+                  class="alert alert-danger"
+                  style="display: none"
+                ></div>
+
+                <div class="form-section">
+                  <h3><i class="fas fa-layer-group"></i> Plan Details</h3>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="plan">Plan</label>
+                      <select id="plan" class="form-control" disabled>
+                        <option value="pro" selected>Pro (monthly)</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="seatCount">Seats</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="seatCount"
+                        name="seatCount"
+                        min="0"
+                        max="500"
+                        value="0"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <p class="text-muted" style="margin-top: 0.5rem">
+                    Need more than 500 seats or an annual contract?
+                    <a href="/contact">Get in touch with sales.</a>
+                  </p>
+                </div>
+
+                <div class="form-section" id="cardSection">
+                  <h3><i class="fas fa-lock"></i> Payment Information</h3>
+
+                  <div class="form-group">
+                    <label class="form-label" for="cardNumber">
+                      <i class="fas fa-credit-card"></i>
+                      Card Number
+                    </label>
+                    <input
+                      type="text"
+                      id="cardNumber"
+                      name="cardNumber"
+                      class="form-control"
+                      placeholder="1234 5678 9012 3456"
+                      maxlength="19"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="expiryDate">
+                        <i class="fas fa-calendar"></i>
+                        Expiry Date
+                      </label>
+                      <input
+                        type="text"
+                        id="expiryDate"
+                        name="expiryDate"
+                        class="form-control"
+                        placeholder="MM/YY"
+                        maxlength="5"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="cvv">
+                        <i class="fas fa-lock"></i>
+                        CVV
+                      </label>
+                      <input
+                        type="text"
+                        id="cvv"
+                        name="cvv"
+                        class="form-control"
+                        placeholder="123"
+                        maxlength="4"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="cardholderName">
+                      <i class="fas fa-user"></i>
+                      Cardholder Name
+                    </label>
+                    <input
+                      type="text"
+                      id="cardholderName"
+                      name="cardholderName"
+                      class="form-control"
+                      placeholder="John Doe"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="billingAddress">
+                      <i class="fas fa-map-marker-alt"></i>
+                      Billing Address
+                    </label>
+                    <textarea
+                      id="billingAddress"
+                      name="billingAddress"
+                      class="form-control"
+                      placeholder="123 Main St, City, State, ZIP"
+                      rows="3"
+                      required
+                      style="resize: vertical; min-height: 80px"
+                    ></textarea>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-pay">
+                  <i class="fas fa-lock"></i>
+                  Complete Payment
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="payment-card">
+              <div class="plan-summary">
+                <div class="plan-name">Professional Plan</div>
+                <div class="plan-price" id="planPrice">--</div>
+                <ul class="plan-features">
+                  <li><span class="check">✓</span> Everything in Starter</li>
+                  <li><span class="check">✓</span> Advanced team features</li>
+                  <li><span class="check">✓</span> Priority support</li>
+                  <li><span class="check">✓</span> Advanced integrations</li>
+                  <li><span class="check">✓</span> Custom workflows</li>
+                </ul>
+              </div>
+
+              <div class="order-summary">
+                <h4>Order Summary</h4>
+                <div class="summary-row">
+                  <span id="summarySeats">Professional Plan (5)</span>
+                  <span id="summarySubtotal">--</span>
+                </div>
+                <div class="summary-row">
+                  <span>Tax</span>
+                  <span id="summaryTax">Calculated at checkout</span>
+                </div>
+                <div class="summary-row total">
+                  <span>Total</span>
+                  <span id="summaryTotal">--</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <small class="text-muted">
+                  <i class="fas fa-info-circle"></i>
+                  Billed monthly. Cancel anytime. 30-day money-back guarantee.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      (function () {
+        const pricing = <%- JSON.stringify(pricing || {}) %>;
+        const state = {
+          publishableKey: "<%= stripePublishableKey %>",
+          plan: (pricing.plan || "pro"),
+          currency: (pricing.currency || "USD"),
+          unitAmount: Number.isFinite(pricing.unitAmount) ? pricing.unitAmount : 5900,
+          seatMax: Number.isFinite(pricing.seatMax) ? pricing.seatMax : 500,
+          isAuthenticated: <%= isAuthenticated ? "true" : "false" %>,
+        };
+
+        const formatter = new Intl.NumberFormat(undefined, {
+          style: "currency",
+          currency: state.currency || "USD",
+        });
+
+        const form = document.getElementById("paymentForm");
+        const seatInput = document.getElementById("seatCount");
+        const planPriceEl = document.getElementById("planPrice");
+        const summarySeats = document.getElementById("summarySeats");
+        const summarySubtotal = document.getElementById("summarySubtotal");
+        const summaryTotal = document.getElementById("summaryTotal");
+        const alertBox = document.getElementById("paymentAlert");
+        const submitBtn = form.querySelector(".btn-pay");
+
+        const stripe = state.publishableKey ? Stripe(state.publishableKey) : null;
+
+        // Card input formatting functions
+        function formatCardNumber(input) {
+          let value = input.value.replace(/\D/g, '');
+          value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+          input.value = value;
+          detectCardType(value.replace(/\s/g, ''));
+        }
+
+        function formatExpiryDate(input) {
+          let value = input.value.replace(/\D/g, '');
+          if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+          }
+          input.value = value;
+        }
+
+        function formatCVV(input) {
+          input.value = input.value.replace(/\D/g, '');
+        }
+
+        function detectCardType(cardNumber) {
+          const cardNumberInput = document.getElementById('cardNumber');
+          let icon = cardNumberInput.parentElement.querySelector('.card-type-icon');
+
+          if (!icon) {
+            icon = document.createElement('i');
+            icon.className = 'card-type-icon fas fa-credit-card';
+            cardNumberInput.parentElement.style.position = 'relative';
+            cardNumberInput.parentElement.appendChild(icon);
+          }
+
+          // Remove existing card type classes
+          icon.className = 'card-type-icon fas';
+
+          if (cardNumber.startsWith('4')) {
+            icon.className = 'card-type-icon fab fa-cc-visa';
+          } else if (cardNumber.startsWith('5') || cardNumber.startsWith('2')) {
+            icon.className = 'card-type-icon fab fa-cc-mastercard';
+          } else if (cardNumber.startsWith('3')) {
+            icon.className = 'card-type-icon fab fa-cc-amex';
+          } else if (cardNumber.startsWith('6')) {
+            icon.className = 'card-type-icon fab fa-cc-discover';
+          } else {
+            icon.className = 'card-type-icon fas fa-credit-card';
+          }
+        }
+
+        function isValidCardNumber(cardNumber) {
+          // Basic Luhn algorithm implementation
+          let sum = 0;
+          let isEven = false;
+
+          for (let i = cardNumber.length - 1; i >= 0; i--) {
+            let digit = parseInt(cardNumber.charAt(i));
+
+            if (isEven) {
+              digit *= 2;
+              if (digit > 9) {
+                digit -= 9;
+              }
+            }
+
+            sum += digit;
+            isEven = !isEven;
+          }
+
+          return (sum % 10) === 0 && cardNumber.length >= 13 && cardNumber.length <= 19;
+        }
+
+        function isValidExpiryDate(expiryDate) {
+          if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+            return false;
+          }
+
+          const [month, year] = expiryDate.split('/');
+          const expiry = new Date(2000 + parseInt(year), parseInt(month));
+          const now = new Date();
+
+          return expiry > now && parseInt(month) >= 1 && parseInt(month) <= 12;
+        }
+
+        // Add event listeners for card input formatting
+        const cardNumberInput = document.getElementById('cardNumber');
+        const expiryDateInput = document.getElementById('expiryDate');
+        const cvvInput = document.getElementById('cvv');
+
+        if (cardNumberInput) {
+          cardNumberInput.addEventListener('input', () => formatCardNumber(cardNumberInput));
+        }
+
+        if (expiryDateInput) {
+          expiryDateInput.addEventListener('input', () => formatExpiryDate(expiryDateInput));
+        }
+
+        if (cvvInput) {
+          cvvInput.addEventListener('input', () => formatCVV(cvvInput));
+        }
+
+        function showAlert(message, variant = "danger") {
+          if (!alertBox) return;
+          alertBox.className = `alert alert-${variant}`;
+          alertBox.textContent = message;
+          alertBox.style.display = "block";
+        }
+
+        function clearAlert() {
+          if (!alertBox) return;
+          alertBox.style.display = "none";
+        }
+
+        function clampSeats(value) {
+          const intValue = Number.parseInt(value, 10);
+          if (!Number.isFinite(intValue) || intValue < 1) {
+            return 1;
+          }
+          return Math.min(intValue, state.seatMax);
+        }
+
+        function updateDisplay() {
+          const seats = clampSeats(seatInput.value);
+          if (seats !== Number.parseInt(seatInput.value, 10)) {
+            seatInput.value = seats;
+          }
+
+          if (planPriceEl) {
+            planPriceEl.textContent = `${formatter.format(state.unitAmount / 100)}/user/month`;
+          }
+
+          if (summarySeats) {
+            summarySeats.textContent = `Professional Plan (${seats})`;
+          }
+
+          const subtotal = (state.unitAmount * seats) / 100;
+          if (summarySubtotal) {
+            summarySubtotal.textContent = formatter.format(subtotal);
+          }
+          if (summaryTotal) {
+            summaryTotal.textContent = `≈ ${formatter.format(subtotal)}`;
+          }
+        }
+
+        function setSubmitting(submitting) {
+          if (!submitBtn) return;
+          submitBtn.disabled = submitting;
+          submitBtn.innerHTML = submitting
+            ? '<i class="fas fa-spinner fa-spin"></i> Redirecting...'
+            : '<i class="fas fa-lock"></i> Complete Payment';
+        }
+
+        // if (!state.isAuthenticated) {
+        //   showAlert(
+        //   );
+        // }
+
+        if (!state.publishableKey) {
+          showAlert(
+            "Stripe payments are not configured yet. Contact support to complete your upgrade.",
+            "warning"
+          );
+          setSubmitting(true);
+        }
+
+        updateDisplay();
+        seatInput.addEventListener("input", updateDisplay);
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          if (!state.isAuthenticated) {
+            window.location.href = "/login?next=" + encodeURIComponent("/payment");
+            return;
+          }
+
+          clearAlert();
+          setSubmitting(true);
+
+          const seats = clampSeats(seatInput.value);
+
+          // Get form data
+          const formData = new FormData(form);
+          const paymentData = {
+            cardNumber: formData.get('cardNumber')?.replace(/\s/g, ''),
+            expiryDate: formData.get('expiryDate'),
+            cvv: formData.get('cvv'),
+            cardholderName: formData.get('cardholderName'),
+            billingAddress: formData.get('billingAddress'),
+            plan: state.plan,
+            seats: seats
+          };
+
+          // Validate card details
+          if (!paymentData.cardNumber || !isValidCardNumber(paymentData.cardNumber)) {
+            showAlert('Please enter a valid card number', 'danger');
+            setSubmitting(false);
+            return;
+          }
+
+          if (!paymentData.expiryDate || !isValidExpiryDate(paymentData.expiryDate)) {
+            showAlert('Please enter a valid expiry date', 'danger');
+            setSubmitting(false);
+            return;
+          }
+
+          if (!paymentData.cvv || paymentData.cvv.length < 3) {
+            showAlert('Please enter a valid CVV', 'danger');
+            setSubmitting(false);
+            return;
+          }
+
+          if (!paymentData.cardholderName?.trim()) {
+            showAlert('Please enter the cardholder name', 'danger');
+            setSubmitting(false);
+            return;
+          }
+
+          if (!paymentData.billingAddress?.trim()) {
+            showAlert('Please enter a billing address', 'danger');
+            setSubmitting(false);
+            return;
+          }
+
+          try {
+            const response = await fetch("/api/payments/process-card", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(paymentData),
+            });
+
+            if (response.status === 401) {
+              window.location.href = "/login?next=" + encodeURIComponent("/payment");
+              return;
+            }
+
+            const payload = await response.json();
+
+            if (!response.ok || !payload.success) {
+              const errorMessage =
+                payload?.message || "Payment processing failed. Please try again.";
+              showAlert(errorMessage, response.status >= 500 ? "warning" : "danger");
+              return;
+            }
+
+            // Payment successful
+            showAlert("Payment processed successfully! Redirecting...", "success");
+
+            // Clear form for security
+            form.reset();
+
+            // Redirect to success page or dashboard
+            setTimeout(() => {
+              window.location.href = payload.data?.redirectUrl || "/dashboard";
+            }, 2000);
+
+          } catch (error) {
+            showAlert(error.message || "Unexpected error processing payment.", "warning");
+          } finally {
+            setSubmitting(false);
+          }
+        });
+      })();
+    </script>
+
+    <!-- Animation System -->
+    <script src="/public/js/animations.js"></script>
+  </body>
+</html>

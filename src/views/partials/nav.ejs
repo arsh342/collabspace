@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
     <!-- Brand -->
-    <a class="navbar-brand" href="/">
-      <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2">
+    <a class="navbar-brand" href="/" aria-label="CollabSpace Home">
+      <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2" aria-hidden="true">
         <defs>
           <linearGradient id="navLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#43e97b"/>
@@ -29,7 +29,7 @@
         <!-- 3D effect - bottom -->
         <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#navLogoGradient3)" opacity="0.7"/>
       </svg>
-      CollabSpace
+      <span>CollabSpace</span>
     </a>
 
     <!-- Mobile Toggle -->
@@ -38,6 +38,9 @@
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>

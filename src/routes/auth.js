@@ -5,6 +5,7 @@ const User = require("../models/User");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
 const logger = require("../middleware/logger");
 const { authenticateSession } = require("../middleware/auth");
+const { verifyIdToken } = require("../config/firebase");
 
 const router = express.Router();
 
@@ -47,6 +48,10 @@ const validateLogin = [
     .normalizeEmail()
     .withMessage("Please provide a valid email address"),
   body("password").notEmpty().withMessage("Password is required"),
+  body("rememberMe")
+    .optional()
+    .isBoolean()
+    .withMessage("Remember me must be a boolean"),
 ];
 
 // @route   POST /api/auth/register
@@ -67,14 +72,7 @@ router.post(
         });
       }
 
-      const {
-        username,
-        email,
-        password,
-        firstName,
-        lastName,
-        role,
-      } = req.body;
+      const { username, email, password, firstName, lastName, role } = req.body;
 
       // Check if user already exists
       const existingUser = await User.findOne({
@@ -160,7 +158,7 @@ router.post(
         });
       }
 
-      const { email, password } = req.body;
+      const { email, password, rememberMe } = req.body;
 
       // Find user by email and include password for comparison
       const user = await User.findOne({ email }).select("+password");
@@ -214,14 +212,31 @@ router.post(
       req.session.userId = user._id;
       req.session.role = user.role;
 
+      // Set cookie options based on "Remember Me" choice
+      if (rememberMe) {
+        // Extend session for 30 days if "Remember Me" is checked
+        req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+        req.session.persistent = true;
+        logger.logger.info(
+          `Extended session for user: ${user.email} (Remember Me: enabled)`
+        );
+      } else {
+        // Standard session for 24 hours
+        req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
+        req.session.persistent = false;
+        logger.logger.info(
+          `Standard session for user: ${user.email} (Remember Me: disabled)`
+        );
+      }
+
       // Force session save to ensure persistence
       await new Promise((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
-            console.error('Session save error:', err);
+            console.error("Session save error:", err);
             reject(err);
           } else {
-            console.log('✅ Session saved successfully for user:', user.email);
+            console.log("✅ Session saved successfully for user:", user.email);
             resolve();
           }
         });
@@ -234,11 +249,11 @@ router.post(
       logger.logger.info(`User logged in: ${user.username} (${email})`);
 
       // Determine redirect URL based on role
-      let redirectUrl = '/dashboard'; // default
-      if (user.role === 'Organiser') {
-        redirectUrl = '/organiser-dashboard';
-      } else if (user.role === 'Team Member') {
-        redirectUrl = '/member-dashboard';
+      let redirectUrl = "/dashboard"; // default
+      if (user.role === "Organiser") {
+        redirectUrl = "/organiser-dashboard";
+      } else if (user.role === "Team Member") {
+        redirectUrl = "/member-dashboard";
       }
 
       res.json({
@@ -247,12 +262,139 @@ router.post(
         data: {
           user: userResponse,
           redirectUrl,
-          sessionId: req.sessionID // Include session ID for debugging
+          sessionId: req.sessionID, // Include session ID for debugging
         },
       });
     } catch (error) {
       logger.logger.error("User login error:", error);
       throw new AppError("Failed to authenticate user", 500);
+    }
+  })
+);
+
+// @route   POST /api/auth/firebase
+// @desc    Login or register via Firebase Google ID token
+// @access  Public
+router.post(
+  "/firebase",
+  catchAsync(async (req, res) => {
+    try {
+      const { idToken, role, plan } = req.body || {};
+      if (!idToken) {
+        return res.status(400).json({
+          success: false,
+          message: "idToken is required",
+        });
+      }
+
+      const decoded = await verifyIdToken(idToken);
+      if (!decoded) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid or expired ID token",
+        });
+      }
+
+      // Extract fields
+      const email = decoded.email;
+      const emailVerified = decoded.email_verified;
+      const uid = decoded.uid;
+      const name = decoded.name || "";
+      const picture = decoded.picture || null;
+
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          message: "Email is required on the identity token",
+        });
+      }
+
+      // Find or create user
+      let user = await User.findOne({ email });
+      if (!user) {
+        // Derive a username from email
+        const baseUsername = email.split("@")[0].replace(/[^a-zA-Z0-9_-]/g, "");
+        let username = baseUsername || `user_${uid.substring(0, 6)}`;
+        // Ensure uniqueness
+        let suffix = 1;
+        // eslint-disable-next-line no-await-in-loop
+        while (await User.findOne({ username })) {
+          username = `${baseUsername}_${suffix++}`;
+        }
+
+        const [firstName, ...rest] = name.split(" ");
+        const lastName = rest.join(" ") || "User";
+
+        user = new User({
+          username,
+          email,
+          password: `firebase:${uid}`, // never used for login; placeholder
+          firstName: firstName || "New",
+          lastName,
+          role:
+            role && ["Organiser", "Team Member"].includes(role)
+              ? role
+              : "Team Member",
+          plan:
+            plan && ["free", "pro"].includes(plan.toLowerCase())
+              ? plan.toLowerCase()
+              : "free",
+          isPro: plan?.toLowerCase() === "pro",
+          emailVerified: Boolean(emailVerified),
+          avatar: picture || null,
+        });
+
+        try {
+          if (!picture) {
+            await user.generateAvatar();
+          }
+        } catch (e) {
+          logger.logger.warn("Avatar generation failed for Firebase user");
+        }
+        await user.save();
+        logger.logger.info(
+          `Firebase auth created user: ${user.username} (${email})`
+        );
+      } else {
+        // Update verification and avatar if provided
+        const updates = {};
+        if (emailVerified && !user.emailVerified) updates.emailVerified = true;
+        if (picture && !user.avatar) updates.avatar = picture;
+        if (
+          plan &&
+          ["free", "pro"].includes(plan.toLowerCase()) &&
+          plan.toLowerCase() !== user.plan
+        ) {
+          updates.plan = plan.toLowerCase();
+          updates.isPro = plan.toLowerCase() === "pro";
+        }
+        if (Object.keys(updates).length) {
+          await User.updateOne({ _id: user._id }, { $set: updates });
+        }
+      }
+
+      // Session
+      req.session.userId = user._id;
+      req.session.role = user.role;
+
+      const userResponse = await User.findById(user._id)
+        .select("-password")
+        .lean();
+
+      return res.status(200).json({
+        success: true,
+        message: "Login successful",
+        data: {
+          user: userResponse,
+          redirectUrl:
+            user.role === "Organiser"
+              ? "/organiser-dashboard"
+              : "/member-dashboard",
+        },
+      });
+    } catch (error) {
+      logger.logger.error("Firebase auth error:", error);
+      throw new AppError("Failed to authenticate via Firebase", 500);
     }
   })
 );
@@ -268,37 +410,38 @@ router.post(
       // Check for validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.render('login', {
-          error: 'Please provide valid login credentials',
-          title: 'Login - CollabSpace'
+        return res.render("auth/login", {
+          error: "Please provide valid login credentials",
+          title: "Login - CollabSpace",
         });
       }
 
-      const { email, password } = req.body;
+      const { email, password, rememberMe } = req.body;
 
       // Find user by email and include password for comparison
       const user = await User.findOne({ email }).select("+password");
 
       if (!user) {
-        return res.render('login', {
-          error: 'Invalid email or password',
-          title: 'Login - CollabSpace'
+        return res.render("auth/login", {
+          error: "Invalid email or password",
+          title: "Login - CollabSpace",
         });
       }
 
       // Check if account is locked
       if (user.isLocked()) {
-        return res.render('login', {
-          error: 'Account is temporarily locked due to multiple failed login attempts. Please try again later.',
-          title: 'Login - CollabSpace'
+        return res.render("auth/login", {
+          error:
+            "Account is temporarily locked due to multiple failed login attempts. Please try again later.",
+          title: "Login - CollabSpace",
         });
       }
 
       // Check if account is active
       if (!user.isActive) {
-        return res.render('login', {
-          error: 'Account is deactivated',
-          title: 'Login - CollabSpace'
+        return res.render("auth/login", {
+          error: "Account is deactivated",
+          title: "Login - CollabSpace",
         });
       }
 
@@ -309,9 +452,9 @@ router.post(
         // Increment login attempts
         await user.incLoginAttempts();
 
-        return res.render('login', {
-          error: 'Invalid email or password',
-          title: 'Login - CollabSpace'
+        return res.render("auth/login", {
+          error: "Invalid email or password",
+          title: "Login - CollabSpace",
         });
       }
 
@@ -327,34 +470,56 @@ router.post(
       req.session.userId = user._id;
       req.session.role = user.role;
 
+      // Set cookie options based on "Remember Me" choice
+      if (rememberMe) {
+        // Extend session for 30 days if "Remember Me" is checked
+        req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+        req.session.persistent = true;
+        logger.logger.info(
+          `Extended web session for user: ${user.email} (Remember Me: enabled)`
+        );
+      } else {
+        // Standard session for 24 hours
+        req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
+        req.session.persistent = false;
+        logger.logger.info(
+          `Standard web session for user: ${user.email} (Remember Me: disabled)`
+        );
+      }
+
       // Force session save to ensure persistence
       await new Promise((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
-            console.error('Session save error:', err);
+            console.error("Session save error:", err);
             reject(err);
           } else {
-            console.log('✅ Web login session saved successfully for user:', user.email);
+            console.log(
+              "✅ Web login session saved successfully for user:",
+              user.email
+            );
             resolve();
           }
         });
       });
 
-      logger.logger.info(`User logged in via web form: ${user.username} (${email})`);
+      logger.logger.info(
+        `User logged in via web form: ${user.username} (${email})`
+      );
 
       // Redirect based on role
-      if (user.role === 'Organiser') {
-        res.redirect('/organiser-dashboard');
-      } else if (user.role === 'Team Member') {
-        res.redirect('/member-dashboard');
+      if (user.role === "Organiser") {
+        res.redirect("/organiser-dashboard");
+      } else if (user.role === "Team Member") {
+        res.redirect("/member-dashboard");
       } else {
-        res.redirect('/dashboard');
+        res.redirect("/dashboard");
       }
     } catch (error) {
       logger.logger.error("Web login error:", error);
-      res.render('login', {
-        error: 'Login failed. Please try again.',
-        title: 'Login - CollabSpace'
+      res.render("auth/login", {
+        error: "Login failed. Please try again.",
+        title: "Login - CollabSpace",
       });
     }
   })
@@ -367,6 +532,9 @@ router.post(
   "/logout",
   catchAsync(async (req, res) => {
     try {
+      const userId = req.session?.userId;
+      const userEmail = req.user?.email;
+
       if (req.session) {
         req.session.destroy((err) => {
           if (err) {
@@ -376,8 +544,19 @@ router.post(
               message: "Could not log out, please try again",
             });
           }
-          
-          res.clearCookie('connect.sid'); // Clear session cookie
+
+          // Clear all authentication cookies
+          res.clearCookie("collabspace.sid"); // Clear our custom session cookie
+          res.clearCookie("connect.sid"); // Clear default session cookie (fallback)
+
+          // Clear any other authentication-related cookies
+          res.clearCookie("user");
+          res.clearCookie("token");
+
+          logger.logger.info(
+            `User logged out successfully: ${userEmail || userId || "Unknown"}`
+          );
+
           res.json({
             success: true,
             message: "Logout successful",
@@ -600,6 +779,50 @@ router.get("/me", authenticateSession, async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to get user profile",
+    });
+  }
+});
+
+// @route   POST /api/auth/extend-session
+// @desc    Extend session for persistent authentication
+// @access  Private
+router.post("/extend-session", authenticateSession, async (req, res) => {
+  try {
+    // Only extend if this is a persistent session
+    if (req.session.persistent) {
+      // Extend session by 30 days
+      req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+
+      await new Promise((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) {
+            logger.logger.error("Session extension error:", err);
+            reject(err);
+          } else {
+            logger.logger.info(`Session extended for user: ${req.user.email}`);
+            resolve();
+          }
+        });
+      });
+
+      res.json({
+        success: true,
+        message: "Session extended successfully",
+        expiresAt: new Date(
+          Date.now() + req.session.cookie.maxAge
+        ).toISOString(),
+      });
+    } else {
+      res.json({
+        success: true,
+        message: "Session not persistent, no extension needed",
+      });
+    }
+  } catch (error) {
+    logger.logger.error("Session extension error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to extend session",
     });
   }
 });

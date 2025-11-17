@@ -10,6 +10,8 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <!-- Animation System -->
+    <link rel="stylesheet" href="/public/css/animations.css" />
     <!-- Font Awesome -->
     <link
       rel="stylesheet"
@@ -18,8 +20,8 @@
     <!-- Internal CSS -->
     <style>
       /* Teams Login Styles */
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-      
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
       :root {
         --color-primary: #1e40af;
         --color-primary-hover: #2563eb;
@@ -38,7 +40,8 @@
         --color-gray-700: #374151;
         --color-gray-800: #1f2937;
         --color-gray-900: #111827;
-        --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-family-primary: "Inter", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, sans-serif;
         --font-size-xs: 0.75rem;
         --font-size-sm: 0.875rem;
         --font-size-base: 1rem;
@@ -57,22 +60,25 @@
         --space-4: 1rem;
         --space-6: 1.5rem;
         --space-8: 2rem;
-        --radius-sm: 0.25rem;
-        --radius-lg: 0.5rem;
-        --radius-xl: 0.75rem;
+        --radius-sm: 2rem;
+        --radius-lg: 2rem;
+        --radius-xl: 2rem;
         --radius-full: 9999px;
         --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
       }
 
-      html, body {
+      html,
+      body {
         height: 100%;
         margin: 0;
         padding: 0;
@@ -84,42 +90,48 @@
         line-height: var(--line-height-normal);
         color: var(--color-gray-900);
         background: var(--color-gray-50);
-        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        overflow: hidden;
       }
 
       .teams-login-body {
-        background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-white) 100%);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: var(--space-4);
+        background: linear-gradient(
+          135deg,
+          var(--color-gray-50) 0%,
+          var(--color-white) 100%
+        );
+        height: 100vh;
+        width: 100vw;
       }
 
       .teams-login-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        max-width: 1200px;
-        width: 100%;
+        width: 100vw; /* Full viewport width */
+        height: 100vh; /* Full viewport height */
         background: var(--color-white);
-        border-radius: var(--radius-xl);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         overflow: hidden;
-        min-height: 600px;
       }
 
       .login-left {
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+        background: linear-gradient(
+          135deg,
+          var(--color-primary) 0%,
+          var(--color-primary-dark) 100%
+        );
         color: var(--color-white);
         padding: var(--space-8);
         display: flex;
         align-items: center;
         position: relative;
         overflow: hidden;
+        height: 100vh; /* Full height */
       }
 
       .login-left::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
@@ -140,8 +152,8 @@
         display: flex;
         align-items: center;
         gap: var(--space-3);
-        margin-bottom: var(--space-8);
-        font-size: var(--font-size-xl);
+        margin-bottom: var(--space-4); /* Reduced margin */
+        font-size: var(--font-size-lg); /* Reduced font size */
         font-weight: var(--font-weight-bold);
       }
 
@@ -157,33 +169,33 @@
       }
 
       .login-branding h1 {
-        font-size: 2.5rem;
+        font-size: 2rem; /* Reduced font size */
         font-weight: var(--font-weight-bold);
         line-height: 1.2;
-        margin-bottom: var(--space-4);
+        margin-bottom: var(--space-3); /* Reduced margin */
         color: var(--color-white);
       }
 
       .login-branding p {
-        font-size: var(--font-size-lg);
+        font-size: var(--font-size-base); /* Reduced font size */
         color: rgba(255, 255, 255, 0.9);
         line-height: var(--line-height-relaxed);
-        margin-bottom: var(--space-8);
+        margin-bottom: var(--space-4); /* Reduced margin */
       }
 
       .feature-list {
         display: flex;
         flex-direction: column;
-        gap: var(--space-4);
-        margin-bottom: var(--space-8);
+        gap: var(--space-2); /* Reduced gap */
+        margin-bottom: var(--space-4); /* Reduced margin */
       }
 
       .feature-item {
         display: flex;
         align-items: center;
-        gap: var(--space-3);
+        gap: var(--space-2); /* Reduced gap */
         color: rgba(255, 255, 255, 0.9);
-        font-size: var(--font-size-sm);
+        font-size: var(--font-size-xs); /* Reduced font size */
       }
 
       .feature-item i {
@@ -202,23 +214,25 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 100vh; /* Full height */
+        overflow-y: auto; /* Allow scrolling if needed */
       }
 
       .login-form-container {
         width: 100%;
-        max-width: 400px;
+        max-width: 350px; /* Reduced width */
       }
 
       .login-header {
         text-align: center;
-        margin-bottom: var(--space-8);
+        margin-bottom: var(--space-4); /* Reduced margin */
       }
 
       .login-header h2 {
-        font-size: var(--font-size-2xl);
+        font-size: var(--font-size-xl); /* Reduced font size */
         font-weight: var(--font-weight-bold);
         color: var(--color-gray-900);
-        margin-bottom: var(--space-2);
+        margin-bottom: var(--space-1); /* Reduced margin */
       }
 
       .login-header p {
@@ -229,13 +243,13 @@
       .teams-login-form {
         display: flex;
         flex-direction: column;
-        gap: var(--space-6);
+        gap: var(--space-4); /* Reduced gap */
       }
 
       .form-group {
         display: flex;
         flex-direction: column;
-        gap: var(--space-2);
+        gap: var(--space-1); /* Reduced gap */
       }
 
       .form-label {
@@ -261,10 +275,10 @@
 
       .teams-input {
         width: 100%;
-        padding: var(--space-3) var(--space-3) var(--space-3) 2.5rem;
+        padding: var(--space-2) var(--space-2) var(--space-2) 2.5rem; /* Reduced padding */
         border: 1px solid var(--color-gray-300);
         border-radius: var(--radius-lg);
-        font-size: var(--font-size-base);
+        font-size: var(--font-size-sm); /* Reduced font size */
         color: var(--color-gray-900);
         background: var(--color-white);
         transition: all var(--transition-fast);
@@ -381,7 +395,7 @@
       }
 
       .divider::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 0;
@@ -469,28 +483,61 @@
       }
 
       @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-        20%, 40%, 60%, 80% { transform: translateX(2px); }
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        10%,
+        30%,
+        50%,
+        70%,
+        90% {
+          transform: translateX(-2px);
+        }
+        20%,
+        40%,
+        60%,
+        80% {
+          transform: translateX(2px);
+        }
       }
 
       @media (max-width: 768px) {
+        body {
+          overflow-y: auto; /* Allow scrolling on mobile */
+        }
+
         .teams-login-container {
           grid-template-columns: 1fr;
-          max-width: 500px;
+          height: auto; /* Allow natural height */
+          min-height: 100vh; /* At least full height */
         }
-        
+
         .login-left {
-          padding: var(--space-6);
+          height: auto; /* Auto height */
+          padding: var(--space-4);
           text-align: center;
         }
-        
+
         .login-branding h1 {
-          font-size: 2rem;
+          font-size: 1.5rem; /* Further reduced font size */
         }
-        
+
+        .login-branding p {
+          font-size: var(--font-size-sm); /* Reduced font size */
+        }
+
+        .feature-list {
+          gap: var(--space-1); /* Reduced gap */
+        }
+
         .login-right {
-          padding: var(--space-6);
+          height: auto; /* Auto height */
+          padding: var(--space-4);
+        }
+
+        .login-form-container {
+          max-width: 100%; /* Full width on mobile */
         }
       }
     </style>
@@ -502,54 +549,104 @@
       <div class="login-left">
         <div class="login-branding">
           <div class="brand-logo">
-            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 100 100"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient id="loginLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style="stop-color:#43e97b"/>
-                  <stop offset="50%" style="stop-color:#00f2fe"/>
-                  <stop offset="100%" style="stop-color:#4facfe"/>
+                <linearGradient
+                  id="loginLogoGradient1"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" style="stop-color: #43e97b" />
+                  <stop offset="50%" style="stop-color: #00f2fe" />
+                  <stop offset="100%" style="stop-color: #4facfe" />
                 </linearGradient>
-                <linearGradient id="loginLogoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style="stop-color:#00f2fe"/>
-                  <stop offset="100%" style="stop-color:#667eea"/>
+                <linearGradient
+                  id="loginLogoGradient2"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" style="stop-color: #00f2fe" />
+                  <stop offset="100%" style="stop-color: #667eea" />
                 </linearGradient>
-                <linearGradient id="loginLogoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style="stop-color:#667eea"/>
-                  <stop offset="100%" style="stop-color:#764ba2"/>
+                <linearGradient
+                  id="loginLogoGradient3"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" style="stop-color: #667eea" />
+                  <stop offset="100%" style="stop-color: #764ba2" />
                 </linearGradient>
               </defs>
               <!-- Outer hexagon -->
-              <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#loginLogoGradient1)" opacity="0.9"/>
+              <path
+                d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z"
+                fill="url(#loginLogoGradient1)"
+                opacity="0.9"
+              />
               <!-- Inner C shape - top part -->
-              <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
+              <path
+                d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z"
+                fill="white"
+              />
               <!-- Inner C shape - bottom part -->
-              <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
+              <path
+                d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z"
+                fill="white"
+              />
               <!-- 3D effect - right side -->
-              <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#loginLogoGradient2)" opacity="0.8"/>
+              <path
+                d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z"
+                fill="url(#loginLogoGradient2)"
+                opacity="0.8"
+              />
               <!-- 3D effect - bottom -->
-              <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#loginLogoGradient3)" opacity="0.7"/>
+              <path
+                d="M25 80 L75 80 L80 85 L30 85 L25 80 Z"
+                fill="url(#loginLogoGradient3)"
+                opacity="0.7"
+              />
             </svg>
             <span>CollabSpace</span>
           </div>
-          <h1>Welcome to your workspace</h1>
-          <p>Connect, collaborate, and create amazing things together with your team.</p>
-          
-          <div class="feature-list">
-            <div class="feature-item">
+          <h1 class="animate-on-scroll fade-in animate-delay-1">
+            Welcome back
+          </h1>
+          <p class="animate-on-scroll fade-in animate-delay-2">
+            Sign in to access your workspace and collaborate with your team.
+          </p>
+
+          <div
+            class="feature-list animate-on-scroll slide-in-up animate-delay-3"
+          >
+            <div
+              class="feature-item animate-on-scroll slide-in-left animate-delay-4"
+            >
               <i class="fas fa-comments"></i>
               <span>Real-time messaging</span>
             </div>
-            <div class="feature-item">
+            <div
+              class="feature-item animate-on-scroll slide-in-left animate-delay-5"
+            >
               <i class="fas fa-tasks"></i>
               <span>Task management</span>
             </div>
-            <div class="feature-item">
+            <div
+              class="feature-item animate-on-scroll slide-in-left animate-delay-6"
+            >
               <i class="fas fa-users"></i>
               <span>Team collaboration</span>
-            </div>
-            <div class="feature-item">
-              <i class="fas fa-file-share"></i>
-              <span>File sharing</span>
             </div>
           </div>
         </div>
@@ -557,13 +654,16 @@
 
       <!-- Right Side - Login Form -->
       <div class="login-right">
-        <div class="login-form-container">
-          <div class="login-header">
+        <div class="login-form-container animate-on-scroll slide-in-right">
+          <div class="login-header animate-on-scroll fade-in animate-delay-1">
             <h2>Sign in to CollabSpace</h2>
             <p>Enter your credentials to access your workspace</p>
           </div>
 
-          <form id="loginForm" class="teams-login-form">
+          <form
+            id="loginForm"
+            class="teams-login-form animate-on-scroll slide-in-up animate-delay-2"
+          >
             <div id="errorAlert" class="alert alert-danger d-none" role="alert">
               <i class="fas fa-exclamation-triangle me-2"></i>
               <span id="errorMessage"></span>
@@ -578,7 +678,7 @@
                   class="form-control teams-input"
                   id="email"
                   name="email"
-                  placeholder="Enter your email"
+                  placeholder="Enter email"
                   required
                 />
               </div>
@@ -593,10 +693,14 @@
                   class="form-control teams-input"
                   id="password"
                   name="password"
-                  placeholder="Enter your password"
+                  placeholder="Enter password"
                   required
                 />
-                <button type="button" class="password-toggle" id="passwordToggle">
+                <button
+                  type="button"
+                  class="password-toggle"
+                  id="passwordToggle"
+                >
                   <i class="fas fa-eye"></i>
                 </button>
               </div>
@@ -614,7 +718,12 @@
                   Remember me
                 </label>
               </div>
-              <a href="#" class="forgot-password" onclick="handleForgotPassword()">Forgot password?</a>
+              <a
+                href="#"
+                class="forgot-password"
+                onclick="handleForgotPassword()"
+                >Forgot password?</a
+              >
             </div>
 
             <button
@@ -625,18 +734,7 @@
               <i class="fas fa-sign-in-alt me-2"></i>Sign In
             </button>
 
-            <div class="divider">
-              <span>or</span>
-            </div>
-
-            <div class="social-login">
-              <button type="button" class="btn btn-outline-secondary teams-btn-social" onclick="handleSocialLogin('microsoft')">
-                <i class="fab fa-microsoft me-2"></i>Sign in with Microsoft
-              </button>
-              <button type="button" class="btn btn-outline-secondary teams-btn-social" onclick="handleSocialLogin('google')">
-                <i class="fab fa-google me-2"></i>Sign in with Google
-              </button>
-            </div>
+            <div class="divider"></div>
 
             <div class="signup-link">
               <p>
@@ -665,10 +763,13 @@
         const passwordToggle = document.getElementById("passwordToggle");
 
         // Password toggle functionality
-        passwordToggle.addEventListener("click", function() {
-          const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+        passwordToggle.addEventListener("click", function () {
+          const type =
+            passwordInput.getAttribute("type") === "password"
+              ? "text"
+              : "password";
           passwordInput.setAttribute("type", type);
-          
+
           const icon = passwordToggle.querySelector("i");
           icon.classList.toggle("fa-eye");
           icon.classList.toggle("fa-eye-slash");
@@ -727,7 +828,7 @@
         function showError(message) {
           errorMessage.textContent = message;
           errorAlert.classList.remove("d-none");
-          
+
           // Add shake animation
           errorAlert.style.animation = "shake 0.5s ease-in-out";
           setTimeout(() => {
@@ -742,11 +843,13 @@
         function setLoading(loading) {
           if (loading) {
             loginButton.disabled = true;
-            loginButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Signing In...';
+            loginButton.innerHTML =
+              '<i class="fas fa-spinner fa-spin me-2"></i>Signing In...';
             loginButton.classList.add("loading");
           } else {
             loginButton.disabled = false;
-            loginButton.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Sign In';
+            loginButton.innerHTML =
+              '<i class="fas fa-sign-in-alt me-2"></i>Sign In';
             loginButton.classList.remove("loading");
           }
         }
@@ -757,27 +860,32 @@
           setLoading(true);
 
           // Check if we're in VS Code browser
-          const isVSCodeBrowser = window.location.search.includes('vscodeBrowser') || 
-                                 navigator.userAgent.includes('Code/');
+          const isVSCodeBrowser =
+            window.location.search.includes("vscodeBrowser") ||
+            navigator.userAgent.includes("Code/");
 
           if (isVSCodeBrowser) {
             // Use form-based submission for VS Code browser
             console.log("VS Code browser detected, using form submission");
             const form = document.getElementById("loginForm");
-            form.action = '/auth/web-login';
-            form.method = 'POST';
+            form.action = "/auth/web-login";
+            form.method = "POST";
             form.submit();
             return;
           }
 
+          const rememberCheckbox = document.getElementById("remember");
+
           const data = {
             email: emailInput.value.trim(),
             password: passwordInput.value,
+            rememberMe: rememberCheckbox.checked,
           };
 
           console.log("Login data:", {
             email: data.email,
             password: data.password ? "***" : null,
+            rememberMe: data.rememberMe,
           });
 
           if (!data.email || !data.password) {
@@ -811,7 +919,8 @@
               }
 
               // Show success message briefly then redirect
-              loginButton.innerHTML = '<i class="fas fa-check me-2"></i>Success!';
+              loginButton.innerHTML =
+                '<i class="fas fa-check me-2"></i>Success!';
               loginButton.classList.add("success");
               console.log("Login successful, redirecting...");
 
@@ -827,26 +936,36 @@
             }
           } catch (error) {
             setLoading(false);
-            showError("Network error. Please check your connection and try again.");
+            showError(
+              "Network error. Please check your connection and try again."
+            );
             console.error("Login error:", error);
           }
         }
 
         // Social login handlers
-        document.querySelectorAll('.teams-btn-social').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const provider = this.textContent.includes('Microsoft') ? 'Microsoft' : 'Google';
-            showNotification(`Signing in with ${provider}...`, 'info');
-            
+        document.querySelectorAll(".teams-btn-social").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const provider = this.textContent.includes("Microsoft")
+              ? "Microsoft"
+              : "Google";
+            showNotification(`Signing in with ${provider}...`, "info");
+
             // Add loading state
             this.disabled = true;
             this.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>Connecting...`;
-            
+
             // Simulate social login
             setTimeout(() => {
-              showNotification(`${provider} login not implemented yet`, 'warning');
+              showNotification(
+                `${provider} login not implemented yet`,
+                "warning"
+              );
               this.disabled = false;
-              this.innerHTML = this.innerHTML.replace('Connecting...', provider);
+              this.innerHTML = this.innerHTML.replace(
+                "Connecting...",
+                provider
+              );
             }, 2000);
           });
         });
@@ -856,22 +975,34 @@
         window.setLoading = setLoading;
       });
 
-      function showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
+      function showNotification(message, type = "info") {
+        const notification = document.createElement("div");
         notification.className = `notification notification-${type}`;
         notification.innerHTML = `
           <div class="notification-content">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <i class="fas fa-${
+              type === "success"
+                ? "check-circle"
+                : type === "error"
+                ? "exclamation-circle"
+                : "info-circle"
+            }"></i>
             <span>${message}</span>
           </div>
         `;
-        
+
         notification.style.cssText = `
           position: fixed;
           top: 20px;
           right: 20px;
           z-index: 9999;
-          background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+          background: ${
+            type === "success"
+              ? "#10b981"
+              : type === "error"
+              ? "#ef4444"
+              : "#3b82f6"
+          };
           color: white;
           padding: 12px 16px;
           border-radius: 8px;
@@ -879,17 +1010,17 @@
           transform: translateX(100%);
           transition: transform 0.3s ease;
         `;
-        
+
         document.body.appendChild(notification);
-        
+
         // Animate in
         requestAnimationFrame(() => {
-          notification.style.transform = 'translateX(0)';
+          notification.style.transform = "translateX(0)";
         });
-        
+
         // Remove after 3 seconds
         setTimeout(() => {
-          notification.style.transform = 'translateX(100%)';
+          notification.style.transform = "translateX(100%)";
           setTimeout(() => {
             notification.remove();
           }, 300);
@@ -897,17 +1028,24 @@
       }
 
       function handleSocialLogin(provider) {
-        alert(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login is not implemented yet. This would redirect to ${provider} OAuth.`);
+        alert(
+          `${
+            provider.charAt(0).toUpperCase() + provider.slice(1)
+          } login is not implemented yet. This would redirect to ${provider} OAuth.`
+        );
       }
 
       function handleForgotPassword() {
-        const email = prompt('Enter your email address to reset password:');
-        if (email && email.includes('@')) {
+        const email = prompt("Enter your email address to reset password:");
+        if (email && email.includes("@")) {
           alert(`Password reset link would be sent to: ${email}`);
         } else if (email) {
-          alert('Please enter a valid email address');
+          alert("Please enter a valid email address");
         }
       }
     </script>
+
+    <!-- Animation System -->
+    <script src="/public/js/animations.js"></script>
   </body>
 </html>

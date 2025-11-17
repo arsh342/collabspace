@@ -63,6 +63,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    plan: {
+      type: String,
+      enum: ["free", "pro"],
+      default: "free",
+    },
+    isPro: {
+      type: Boolean,
+      default: false,
+    },
     lastSeen: {
       type: Date,
       default: Date.now,

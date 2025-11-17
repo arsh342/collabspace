@@ -9,28 +9,28 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
-        darkMode: 'class',
+        darkMode: "class",
         theme: {
           extend: {
             colors: {
               teams: {
-                dark: '#1c1c1c',
-                darker: '#161616',
-                sidebar: '#2b2b2b',
-                purple: '#6264a7',
-                blue: '#5b9bd5',
-                accent: '#8b5fb8',
-                hover: '#404040',
-                border: '#404040',
-                text: '#ffffff',
-                muted: '#a8a8a8',
-              }
-            }
-          }
-        }
-      }
+                dark: "#1c1c1c",
+                darker: "#161616",
+                sidebar: "#2b2b2b",
+                purple: "#6264a7",
+                blue: "#5b9bd5",
+                accent: "#8b5fb8",
+                hover: "#404040",
+                border: "#404040",
+                text: "#ffffff",
+                muted: "#a8a8a8",
+              },
+            },
+          },
+        },
+      };
     </script>
-    
+
     <!-- Font Awesome -->
     <link
       rel="stylesheet"
@@ -43,174 +43,204 @@
   </head>
   <body class="bg-teams-dark text-teams-text font-teams overflow-hidden">
     <% if (locals.user) { %>
-      <!-- Teams-like Layout -->
-      <div class="flex h-screen">
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
-        
-        <!-- Left Sidebar Navigation -->
-        <div id="sidebar" class="fixed lg:relative w-16 h-full bg-teams-sidebar border-r border-teams-border flex flex-col items-center py-4 space-y-2 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
-          <!-- Logo -->
-          <div class="mb-4">
-            <div class="w-10 h-10 bg-teams-purple rounded-lg flex items-center justify-center">
-              <i class="fas fa-users text-white text-xl"></i>
-            </div>
-          </div>
-          
-          <!-- Navigation Items -->
-          <div class="teams-sidebar-item active" data-nav="dashboard">
-            <i class="fas fa-home text-xl mb-1"></i>
-            <span class="text-xs">Home</span>
-          </div>
-          
-          <div class="teams-sidebar-item" data-nav="chat">
-            <i class="fas fa-comments text-xl mb-1"></i>
-            <span class="text-xs">Chat</span>
-          </div>
-          
-          <div class="teams-sidebar-item" data-nav="teams">
-            <i class="fas fa-users text-xl mb-1"></i>
-            <span class="text-xs">Teams</span>
-          </div>
-          
-          <div class="teams-sidebar-item" data-nav="calendar">
-            <i class="fas fa-calendar text-xl mb-1"></i>
-            <span class="text-xs">Calendar</span>
-          </div>
-          
-          <div class="teams-sidebar-item" data-nav="tasks">
-            <i class="fas fa-tasks text-xl mb-1"></i>
-            <span class="text-xs">Tasks</span>
-          </div>
-          
-          <!-- Spacer -->
-          <div class="flex-1"></div>
-          
-          <!-- Settings -->
-          <div class="teams-sidebar-item" data-nav="settings">
-            <i class="fas fa-cog text-xl mb-1"></i>
-            <span class="text-xs">Settings</span>
+    <!-- Teams-like Layout -->
+    <div class="flex h-screen">
+      <!-- Mobile Menu Overlay -->
+      <div
+        id="mobile-menu-overlay"
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"
+      ></div>
+
+      <!-- Left Sidebar Navigation -->
+      <div
+        id="sidebar"
+        class="fixed lg:relative w-16 h-full bg-teams-sidebar border-r border-teams-border flex flex-col items-center py-4 space-y-2 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300"
+      >
+        <!-- Logo -->
+        <div class="mb-4">
+          <div
+            class="w-10 h-10 bg-teams-purple rounded-lg flex items-center justify-center"
+          >
+            <i class="fas fa-users text-white text-xl"></i>
           </div>
         </div>
 
-        <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col lg:ml-0">
-          <!-- Top Bar -->
-          <div class="h-16 bg-teams-dark border-b border-teams-border flex items-center justify-between px-4 lg:px-6">
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="lg:hidden p-2 hover:bg-teams-hover rounded-lg transition-colors">
-              <i class="fas fa-bars text-teams-text"></i>
+        <!-- Navigation Items -->
+        <div class="teams-sidebar-item active" data-nav="dashboard">
+          <i class="fas fa-home text-xl mb-1"></i>
+          <span class="text-xs">Home</span>
+        </div>
+
+        <div class="teams-sidebar-item" data-nav="chat">
+          <i class="fas fa-comments text-xl mb-1"></i>
+          <span class="text-xs">Chat</span>
+        </div>
+
+        <div class="teams-sidebar-item" data-nav="teams">
+          <i class="fas fa-users text-xl mb-1"></i>
+          <span class="text-xs">Teams</span>
+        </div>
+
+        <div class="teams-sidebar-item" data-nav="calendar">
+          <i class="fas fa-calendar text-xl mb-1"></i>
+          <span class="text-xs">Calendar</span>
+        </div>
+
+        <div class="teams-sidebar-item" data-nav="tasks">
+          <i class="fas fa-tasks text-xl mb-1"></i>
+          <span class="text-xs">Tasks</span>
+        </div>
+
+        <!-- Spacer -->
+        <div class="flex-1"></div>
+
+        <!-- Settings -->
+        <div class="teams-sidebar-item" data-nav="settings">
+          <i class="fas fa-cog text-xl mb-1"></i>
+          <span class="text-xs">Settings</span>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="flex-1 flex flex-col lg:ml-0">
+        <!-- Top Bar -->
+        <div
+          class="h-16 bg-teams-dark border-b border-teams-border flex items-center justify-between px-4 lg:px-6"
+        >
+          <!-- Mobile Menu Button -->
+          <button
+            id="mobile-menu-btn"
+            class="lg:hidden p-2 hover:bg-teams-hover rounded-lg transition-colors"
+          >
+            <i class="fas fa-bars text-teams-text"></i>
+          </button>
+
+          <!-- Left side - Title and breadcrumb -->
+          <div class="flex items-center space-x-4">
+            <h1 class="text-lg lg:text-xl font-semibold text-teams-text">
+              <%= title || 'Dashboard' %>
+            </h1>
+          </div>
+
+          <!-- Center - Search (Hidden on mobile) -->
+          <div class="hidden md:flex flex-1 max-w-2xl mx-8">
+            <div class="relative w-full">
+              <i
+                class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-teams-muted"
+              ></i>
+              <input
+                type="text"
+                placeholder="Search CollabSpace..."
+                class="w-full bg-teams-sidebar border border-teams-border text-teams-text placeholder-teams-muted rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-teams-purple transition-colors"
+              />
+            </div>
+          </div>
+
+          <!-- Right side - Profile and notifications -->
+          <div class="flex items-center space-x-2 lg:space-x-4">
+            <!-- Mobile Search Button -->
+            <button
+              class="md:hidden p-2 hover:bg-teams-hover rounded-lg transition-colors"
+            >
+              <i
+                class="fas fa-search text-teams-muted hover:text-teams-text"
+              ></i>
             </button>
-            
-            <!-- Left side - Title and breadcrumb -->
-            <div class="flex items-center space-x-4">
-              <h1 class="text-lg lg:text-xl font-semibold text-teams-text"><%= title || 'Dashboard' %></h1>
-            </div>
-            
-            <!-- Center - Search (Hidden on mobile) -->
-            <div class="hidden md:flex flex-1 max-w-2xl mx-8">
-              <div class="relative w-full">
-                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-teams-muted"></i>
-                <input 
-                  type="text" 
-                  placeholder="Search CollabSpace..." 
-                  class="w-full bg-teams-sidebar border border-teams-border text-teams-text placeholder-teams-muted rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-teams-purple transition-colors"
-                >
-              </div>
-            </div>
-            
-            <!-- Right side - Profile and notifications -->
-            <div class="flex items-center space-x-2 lg:space-x-4">
-              <!-- Mobile Search Button -->
-              <button class="md:hidden p-2 hover:bg-teams-hover rounded-lg transition-colors">
-                <i class="fas fa-search text-teams-muted hover:text-teams-text"></i>
-              </button>
-              
-              <!-- Notifications -->
-              <button class="p-2 hover:bg-teams-hover rounded-lg transition-colors">
-                <i class="fas fa-bell text-teams-muted hover:text-teams-text"></i>
-              </button>
-              
-              <!-- Profile Dropdown -->
-              <div class="relative">
-                <button class="flex items-center space-x-2 p-2 hover:bg-teams-hover rounded-lg transition-colors">
-                  <img 
-                    src="https://api.multiavatar.com/<%= user.username %>.svg" 
-                    alt="<%= user.username %>" 
-                    class="w-8 h-8 rounded-full"
-                  >
-                  <span class="hidden sm:block text-teams-text"><%= user.username %></span>
-                  <i class="fas fa-chevron-down text-teams-muted text-sm hidden sm:block"></i>
-                </button>
-              </div>
-            </div>
-          </div>
 
-          <!-- Page Content -->
-          <div class="flex-1 overflow-y-auto bg-teams-darker">
-            <div class="p-4 lg:p-6">
-              <%- body %>
+            <!-- Notifications -->
+            <button
+              class="p-2 hover:bg-teams-hover rounded-lg transition-colors"
+            >
+              <i class="fas fa-bell text-teams-muted hover:text-teams-text"></i>
+            </button>
+
+            <!-- Profile Dropdown -->
+            <div class="relative">
+              <button
+                class="flex items-center space-x-2 p-2 hover:bg-teams-hover rounded-lg transition-colors"
+              >
+                <img
+                  src="https://api.multiavatar.com/<%= user.username %>.svg"
+                  alt="<%= user.username %>"
+                  class="w-8 h-8 rounded-full"
+                />
+                <span class="hidden sm:block text-teams-text"
+                  ><%= user.username %></span
+                >
+                <i
+                  class="fas fa-chevron-down text-teams-muted text-sm hidden sm:block"
+                ></i>
+              </button>
             </div>
           </div>
         </div>
+
+        <!-- Page Content -->
+        <div class="flex-1 overflow-y-auto bg-teams-darker">
+          <div class="p-4 lg:p-6"><%- body %></div>
+        </div>
       </div>
+    </div>
     <% } else { %>
-      <!-- Guest Layout -->
-      <div class="min-h-screen bg-teams-dark">
-        <%- body %>
-      </div>
+    <!-- Guest Layout -->
+    <div class="min-h-screen bg-teams-dark"><%- body %></div>
     <% } %>
 
     <!-- Scripts -->
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/public/js/auth-persistence.js"></script>
     <script src="/public/js/main.js"></script>
     <%- include('../partials/scripts') %>
-    
+
     <!-- Teams Navigation Script -->
     <script>
       // Handle sidebar navigation
-      document.querySelectorAll('[data-nav]').forEach(item => {
-        item.addEventListener('click', function() {
+      document.querySelectorAll("[data-nav]").forEach((item) => {
+        item.addEventListener("click", function () {
           // Remove active class from all items
-          document.querySelectorAll('[data-nav]').forEach(nav => nav.classList.remove('active'));
+          document
+            .querySelectorAll("[data-nav]")
+            .forEach((nav) => nav.classList.remove("active"));
           // Add active class to clicked item
-          this.classList.add('active');
-          
+          this.classList.add("active");
+
           // Navigate based on data-nav value
           const nav = this.dataset.nav;
-          switch(nav) {
-            case 'dashboard':
-              window.location.href = '/dashboard';
+          switch (nav) {
+            case "dashboard":
+              window.location.href = "/dashboard";
               break;
-            case 'chat':
-              window.location.href = '/chat';
+            case "chat":
+              window.location.href = "/chat";
               break;
-            case 'teams':
-              window.location.href = '/teams';
+            case "teams":
+              window.location.href = "/teams";
               break;
-            case 'calendar':
-              window.location.href = '/calendar';
+            case "calendar":
+              window.location.href = "/calendar";
               break;
-            case 'tasks':
-              window.location.href = '/tasks';
+            case "tasks":
+              window.location.href = "/tasks";
               break;
-            case 'settings':
-              window.location.href = '/settings';
+            case "settings":
+              window.location.href = "/settings";
               break;
           }
         });
       });
-      
+
       // Set active nav based on current page
       const currentPath = window.location.pathname;
-      if (currentPath.includes('/dashboard')) {
-        document.querySelector('[data-nav="dashboard"]').classList.add('active');
-      } else if (currentPath.includes('/chat')) {
-        document.querySelector('[data-nav="chat"]').classList.add('active');
-      } else if (currentPath.includes('/teams')) {
-        document.querySelector('[data-nav="teams"]').classList.add('active');
-      } else if (currentPath.includes('/tasks')) {
-        document.querySelector('[data-nav="tasks"]').classList.add('active');
+      if (currentPath.includes("/dashboard")) {
+        document
+          .querySelector('[data-nav="dashboard"]')
+          .classList.add("active");
+      } else if (currentPath.includes("/chat")) {
+        document.querySelector('[data-nav="chat"]').classList.add("active");
+      } else if (currentPath.includes("/teams")) {
+        document.querySelector('[data-nav="teams"]').classList.add("active");
+      } else if (currentPath.includes("/tasks")) {
+        document.querySelector('[data-nav="tasks"]').classList.add("active");
       }
     </script>
   </body>

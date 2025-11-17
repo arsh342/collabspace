@@ -72,10 +72,10 @@
         --space-16: 4rem;
 
         /* Borders & Shadows */
-        --radius-sm: 0.25rem;
-        --radius-base: 0.375rem;
-        --radius-lg: 0.5rem;
-        --radius-xl: 0.75rem;
+        --radius-sm: 1rem;
+        --radius-base: 1rem;
+        --radius-lg: 1rem;
+        --radius-xl: 1rem;
         --radius-2xl: 1rem;
         --radius-full: 9999px;
         --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -190,6 +190,55 @@
         margin-bottom: var(--space-4);
         border: 3px solid var(--color-primary-light);
         color: var(--color-white);
+        position: relative;
+      }
+
+      .plan-indicator {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 24px;
+        height: 24px;
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: var(--font-weight-bold);
+        border: 2px solid var(--color-white);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .plan-indicator.pro {
+        background: linear-gradient(135deg, #ffd700 0%, #ff6b35 100%);
+        color: var(--color-white);
+      }
+
+      .plan-indicator.free {
+        background: var(--color-gray-500);
+        color: var(--color-white);
+        font-size: 8px;
+      }
+
+      .user-plan-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-1);
+        padding: var(--space-1) var(--space-2);
+        border-radius: var(--radius-base);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+        margin-top: var(--space-1);
+      }
+
+      .user-plan-badge.pro {
+        background: linear-gradient(135deg, #ffd700 0%, #ff6b35 100%);
+        color: var(--color-white);
+      }
+
+      .user-plan-badge.free {
+        background: var(--color-gray-200);
+        color: var(--color-gray-700);
       }
 
       .user-info {
@@ -294,7 +343,7 @@
       .main-content {
         flex: 1;
         margin-left: 280px;
-        padding: var(--space-8);
+        padding: 20px;
         background: var(--color-gray-50);
         min-height: 100vh;
         position: relative;
@@ -328,6 +377,50 @@
         font-size: var(--font-size-md);
         color: var(--color-gray-600);
         margin: 0;
+      }
+
+      .plan-banner {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+      }
+
+      .plan-status {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+      }
+
+      .plan-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        padding: var(--space-2) var(--space-4);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+        width: fit-content;
+      }
+
+      .plan-pill.pro {
+        background: rgba(16, 185, 129, 0.15);
+        color: var(--color-success);
+      }
+
+      .plan-cta {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+        border-left: 2px solid var(--color-primary-light);
+        padding-left: var(--space-4);
+      }
+
+      .plan-cta p {
+        margin: 0;
+        color: var(--color-gray-600);
+        font-size: var(--font-size-sm);
       }
 
       .header-actions {
@@ -365,8 +458,7 @@
         transform: translateY(-2px);
         box-shadow: var(--shadow-md);
       }
-
-      .stat-header {
+      .stat-card .my .stat-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -433,6 +525,7 @@
       .btn-primary {
         background: var(--color-primary);
         color: var(--color-white);
+        border-radius: 50px;
       }
 
       .btn-primary:hover {
@@ -855,6 +948,65 @@
         background: var(--color-white);
       }
 
+      /* Message input wrapper with inline buttons */
+      .message-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        background: var(--color-gray-50);
+        border: 2px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        margin-bottom: var(--space-6);
+        transition: all 0.3s ease;
+        padding: 8px;
+        gap: 8px;
+      }
+
+      .message-input-wrapper:focus-within {
+        border-color: var(--color-primary);
+        background: var(--color-white);
+        box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+        transform: translateY(-1px);
+      }
+
+      .message-input-wrapper .message-input {
+        border: none;
+        background: transparent;
+        margin: 0;
+        box-shadow: none;
+        padding: var(--space-3);
+        flex: 1;
+      }
+
+      .message-input-wrapper .message-input:focus {
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        transform: none;
+      }
+
+      .message-action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: transparent;
+        border: none;
+        color: var(--color-gray-500);
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-self: flex-start;
+        margin-top: 8px;
+      }
+
+      .message-action-btn:hover {
+        background: var(--color-gray-100);
+        color: var(--color-primary);
+      }
+
       /* Profile Section Styling */
       .profile-section {
         max-width: 800px;
@@ -1119,6 +1271,163 @@
 
         .setting-actions .btn {
           justify-content: center;
+        }
+      }
+
+      /* Billing & Plans Styles */
+      .current-plan-info {
+        margin-bottom: var(--space-4);
+      }
+
+      .plan-overview-card {
+        background: var(--color-white);
+        border-radius: var(--radius-xl);
+        padding: var(--space-5);
+        border: 1px solid var(--color-gray-200);
+        margin-bottom: var(--space-4);
+      }
+
+      .plan-overview-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+      }
+
+      .plan-overview-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-size-xl);
+        color: var(--color-white);
+        background: linear-gradient(
+          135deg,
+          var(--color-primary) 0%,
+          var(--color-primary-hover) 100%
+        );
+      }
+
+      .plan-overview-info {
+        flex: 1;
+      }
+
+      .plan-overview-title {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-bold);
+        margin-bottom: var(--space-2);
+        color: var(--color-gray-900);
+      }
+
+      .plan-overview-description {
+        color: var(--color-gray-600);
+        margin: 0;
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-relaxed);
+      }
+
+      .plan-overview-badge {
+        flex-shrink: 0;
+      }
+
+      .badge {
+        padding: var(--space-1) var(--space-3);
+        border-radius: var(--radius-base);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .badge-pro {
+        background: linear-gradient(135deg, #ffd700 0%, #ff6b35 100%);
+        color: var(--color-white);
+      }
+
+      .badge-free {
+        background: var(--color-gray-200);
+        color: var(--color-gray-700);
+      }
+
+      .upgrade-prompt {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(
+          135deg,
+          var(--color-primary-light) 0%,
+          var(--color-white) 100%
+        );
+        border: 1px solid var(--color-primary);
+        border-radius: var(--radius-lg);
+        padding: var(--space-4);
+      }
+
+      .upgrade-prompt-content h5 {
+        margin: 0 0 var(--space-1) 0;
+        color: var(--color-primary);
+        font-weight: var(--font-weight-bold);
+      }
+
+      .upgrade-prompt-content p {
+        margin: 0;
+        color: var(--color-gray-600);
+        font-size: var(--font-size-sm);
+      }
+
+      .billing-info {
+        background: var(--color-gray-50);
+        border-radius: var(--radius-lg);
+        padding: var(--space-4);
+        margin-bottom: var(--space-4);
+      }
+
+      .billing-detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--space-2) 0;
+        border-bottom: 1px solid var(--color-gray-200);
+      }
+
+      .billing-detail:last-child {
+        border-bottom: none;
+      }
+
+      .billing-detail-label {
+        font-weight: var(--font-weight-medium);
+        color: var(--color-gray-700);
+        font-size: var(--font-size-sm);
+      }
+
+      .billing-detail-value {
+        font-weight: var(--font-weight-bold);
+        color: var(--color-gray-900);
+        font-size: var(--font-size-sm);
+      }
+
+      .billing-actions {
+        display: flex;
+        gap: var(--space-3);
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 768px) {
+        .plan-overview-header {
+          flex-direction: column;
+          text-align: center;
+          gap: var(--space-3);
+        }
+
+        .upgrade-prompt {
+          flex-direction: column;
+          gap: var(--space-3);
+          text-align: center;
+        }
+
+        .billing-actions {
+          flex-direction: column;
         }
       }
 
@@ -1828,10 +2137,7 @@
         flex-direction: column;
         height: 500px;
         background: rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
         overflow: hidden;
-        box-shadow: var(--shadow-lg);
-        border: 1px solid rgba(255, 255, 255, 0.3);
       }
 
       .chat-messages {
@@ -2036,31 +2342,39 @@
 
       .chat-input-wrapper {
         display: flex;
-        gap: var(--space-3);
+        gap: 0;
         align-items: center;
         margin-bottom: var(--space-3);
-      }
-
-      .chat-input {
-        flex: 1;
-        padding: var(--space-3) var(--space-4);
-        border: 2px solid var(--color-gray-200);
-        border-radius: var(--radius-2xl);
-        font-size: var(--font-size-sm);
         background: var(--color-white);
+        border: 2px solid var(--color-gray-200);
+        border-radius: 50px;
         transition: all var(--transition-fast);
-        outline: none;
+        padding: 4px;
       }
 
-      .chat-input:focus {
+      .chat-input-wrapper:focus-within {
         border-color: var(--color-primary);
         box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
       }
 
+      .chat-input {
+        flex: 1;
+        padding: var(--space-3) var(--space-2);
+        border: none;
+        background: transparent;
+        font-size: var(--font-size-sm);
+        outline: none;
+      }
+
       .chat-input:disabled {
-        background: var(--color-gray-100);
+        background: transparent;
         color: var(--color-gray-400);
         cursor: not-allowed;
+      }
+
+      .chat-input-wrapper:has(.chat-input:disabled) {
+        background: var(--color-gray-100);
+        border-color: var(--color-gray-200);
       }
 
       .send-button {
@@ -2115,6 +2429,36 @@
       .chat-action-btn:hover {
         background: var(--color-gray-200);
         color: var(--color-primary);
+      }
+
+      /* Inline action buttons inside input */
+      .chat-action-btn.inline {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: transparent;
+        border: none;
+        color: var(--color-gray-500);
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 4px;
+      }
+
+      .chat-action-btn.inline:hover {
+        background: var(--color-gray-100);
+        color: var(--color-primary);
+      }
+
+      .chat-action-btn.inline:first-child {
+        margin-left: 8px;
+      }
+
+      .chat-action-btn.inline:last-of-type {
+        margin-right: 8px;
       }
 
       /* Typing Indicator */
@@ -2421,6 +2765,430 @@
           justify-content: center;
         }
       }
+
+      /* Enhanced Overview Section Styles */
+      .recent-activity-section,
+      .deadlines-section,
+      .progress-section,
+      .team-highlights-section,
+      .quick-stats-section,
+      .welcome-section {
+        background: var(--color-white);
+        border-radius: var(--radius-lg);
+        padding: var(--space-6);
+        margin-bottom: var(--space-6);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--color-gray-100);
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-4);
+        padding-bottom: var(--space-3);
+        border-bottom: 1px solid var(--color-gray-100);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-gray-800);
+        margin: 0;
+      }
+
+      .section-title i {
+        color: var(--color-primary);
+      }
+
+      .view-all-link {
+        color: var(--color-primary);
+        text-decoration: none;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        transition: var(--transition-fast);
+      }
+
+      .view-all-link:hover {
+        color: var(--color-primary-hover);
+        text-decoration: underline;
+      }
+
+      /* Activity Feed */
+      .activity-feed {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-3);
+        padding: var(--space-3);
+        border-radius: var(--radius-base);
+        margin-bottom: var(--space-2);
+        transition: var(--transition-fast);
+      }
+
+      .activity-item:hover {
+        background: var(--color-gray-50);
+      }
+
+      .activity-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-size-sm);
+        flex-shrink: 0;
+      }
+
+      .activity-icon.task {
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+      }
+
+      .activity-icon.message {
+        background: var(--color-success-light);
+        color: var(--color-success);
+      }
+
+      .activity-icon.team {
+        background: var(--color-warning-light);
+        color: var(--color-warning);
+      }
+
+      .activity-content {
+        flex: 1;
+      }
+
+      .activity-text {
+        font-size: var(--font-size-sm);
+        color: var(--color-gray-800);
+        margin: 0 0 var(--space-1) 0;
+      }
+
+      .activity-time {
+        font-size: var(--font-size-xs);
+        color: var(--color-gray-500);
+      }
+
+      /* Deadlines */
+      .deadlines-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+      }
+
+      .deadline-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-3);
+        background: var(--color-gray-50);
+        border-radius: var(--radius-base);
+        border-left: 4px solid var(--color-primary);
+      }
+
+      .deadline-item.urgent {
+        border-left-color: var(--color-danger);
+        background: var(--color-danger-light);
+      }
+
+      .deadline-item.warning {
+        border-left-color: var(--color-warning);
+        background: var(--color-warning-light);
+      }
+
+      .deadline-info {
+        flex: 1;
+      }
+
+      .deadline-title {
+        font-weight: var(--font-weight-medium);
+        color: var(--color-gray-800);
+        margin: 0 0 var(--space-1) 0;
+        font-size: var(--font-size-sm);
+      }
+
+      .deadline-team {
+        font-size: var(--font-size-xs);
+        color: var(--color-gray-600);
+      }
+
+      .deadline-date {
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+        color: var(--color-gray-700);
+      }
+
+      /* Progress Cards */
+      .progress-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--space-4);
+      }
+
+      .progress-card {
+        background: var(--color-gray-50);
+        padding: var(--space-4);
+        border-radius: var(--radius-base);
+        border: 1px solid var(--color-gray-200);
+      }
+
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-3);
+      }
+
+      .progress-label {
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        color: var(--color-gray-700);
+      }
+
+      .progress-value {
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-gray-800);
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: var(--color-gray-200);
+        border-radius: var(--radius-full);
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--color-primary);
+        border-radius: var(--radius-full);
+        transition: width 0.3s ease;
+      }
+
+      .progress-fill.participation {
+        background: var(--color-success);
+      }
+
+      /* Team Highlights */
+      .highlights-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--space-4);
+      }
+
+      .highlight-card {
+        background: linear-gradient(
+          135deg,
+          var(--color-primary-light) 0%,
+          var(--color-white) 100%
+        );
+        padding: var(--space-4);
+        border-radius: var(--radius-base);
+        border: 1px solid var(--color-primary-light);
+      }
+
+      .highlight-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        margin-bottom: var(--space-2);
+      }
+
+      .highlight-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: var(--radius-full);
+        background: var(--color-primary);
+        color: var(--color-white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-size-xs);
+      }
+
+      .highlight-title {
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-gray-800);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
+      .highlight-description {
+        font-size: var(--font-size-sm);
+        color: var(--color-gray-600);
+        margin: 0;
+      }
+
+      /* Quick Actions Grid */
+      .quick-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: var(--space-4);
+      }
+
+      .action-card {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-4);
+        background: var(--color-white);
+        border: 2px solid var(--color-gray-200);
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: var(--transition-fast);
+        text-align: left;
+        font-family: inherit;
+        width: 100%;
+      }
+
+      .action-card:hover {
+        border-color: var(--color-primary);
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .action-card:active {
+        transform: translateY(0);
+      }
+
+      .action-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-lg);
+        background: var(--color-primary-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: var(--transition-fast);
+      }
+
+      .action-card:hover .action-icon {
+        background: var(--color-primary);
+        color: var(--color-white);
+      }
+
+      .action-icon i {
+        font-size: var(--font-size-xl);
+        color: var(--color-primary);
+        transition: var(--transition-fast);
+      }
+
+      .action-card:hover .action-icon i {
+        color: var(--color-white);
+      }
+
+      .action-info {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+      }
+
+      .action-title {
+        font-size: var(--font-size-base);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-gray-800);
+        line-height: 1.2;
+      }
+
+      .action-subtitle {
+        font-size: var(--font-size-sm);
+        color: var(--color-gray-600);
+        line-height: 1.2;
+      }
+
+      /* Welcome Section */
+      .welcome-card {
+        background: linear-gradient(
+          135deg,
+          var(--color-info-light) 0%,
+          var(--color-white) 100%
+        );
+        padding: var(--space-5);
+        border-radius: var(--radius-base);
+        border: 1px solid var(--color-info-light);
+        text-align: center;
+      }
+
+      .welcome-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        margin-bottom: var(--space-3);
+      }
+
+      .welcome-header i {
+        color: var(--color-info);
+        font-size: var(--font-size-xl);
+      }
+
+      .welcome-header h3 {
+        color: var(--color-gray-800);
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        margin: 0;
+      }
+
+      .welcome-content p {
+        color: var(--color-gray-700);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-relaxed);
+        margin: 0;
+      }
+
+      /* Loading Placeholder */
+      .loading-placeholder {
+        text-align: center;
+        padding: var(--space-6);
+        color: var(--color-gray-500);
+        font-size: var(--font-size-sm);
+      }
+
+      .loading-placeholder i {
+        margin-right: var(--space-2);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .recent-activity-section,
+        .deadlines-section,
+        .progress-section,
+        .team-highlights-section,
+        .quick-stats-section,
+        .welcome-section {
+          padding: var(--space-4);
+          margin-bottom: var(--space-4);
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: var(--space-2);
+        }
+
+        .progress-cards {
+          grid-template-columns: 1fr;
+        }
+
+        .highlights-container {
+          grid-template-columns: 1fr;
+        }
+
+        .quick-actions-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
     </style>
   </head>
   <body>
@@ -2505,10 +3273,25 @@
           <div class="user-section">
             <div class="user-avatar" id="userAvatar">
               <%= user && user.name ? user.name.charAt(0).toUpperCase() : 'M' %>
+              <% const isProUser = user && (user.isPro || (user.plan &&
+              user.plan.toLowerCase() === "pro")); %> <% if (isProUser) { %>
+              <div class="plan-indicator pro">
+                <i class="fas fa-crown"></i>
+              </div>
+              <% } else { %>
+              <div class="plan-indicator free">FREE</div>
+              <% } %>
             </div>
             <div class="user-info">
               <h3 id="userName"><%= user ? user.name : 'Member' %></h3>
               <span class="user-role">Team Member</span>
+              <% const currentPlanLabel = isProUser ? "Pro" : (user && user.plan
+              ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) :
+              "Free"); %>
+              <span class="user-plan-badge <%= isProUser ? 'pro' : 'free' %>">
+                <i class="fas <%= isProUser ? 'fa-crown' : 'fa-star' %>"></i>
+                <%= currentPlanLabel %> Plan
+              </span>
             </div>
           </div>
         </div>
@@ -2559,16 +3342,6 @@
               <a
                 href="javascript:void(0)"
                 class="nav-link"
-                data-section="profile"
-              >
-                <i class="fas fa-user"></i>
-                Profile
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href="javascript:void(0)"
-                class="nav-link"
                 data-section="settings"
               >
                 <i class="fas fa-cog"></i>
@@ -2587,28 +3360,19 @@
 
       <!-- Main Content -->
       <main class="main-content">
-        <!-- Dashboard Header -->
-        <div class="dashboard-header">
-          <div class="header-top">
-            <div>
-              <h1 class="dashboard-title" id="sectionTitle">
-                Dashboard Overview
-              </h1>
-              <p class="dashboard-subtitle" id="sectionSubtitle">
-                Track your tasks and team activities
-              </p>
-            </div>
-            <div class="header-actions">
-              <button class="btn btn-secondary" onclick="refreshData()">
-                <i class="fas fa-sync-alt"></i>
-                Refresh
-              </button>
-            </div>
-          </div>
-        </div>
-
         <!-- Content Sections -->
         <div id="overview-section" class="content-section active">
+          <!-- Overview Header -->
+          <div class="section-content">
+            <div class="section-header" style="margin-bottom: var(--space-6)">
+              <h2 class="section-title">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard Overview
+              </h2>
+
+            </div>
+          </div>
+
           <!-- Stats Grid -->
           <div class="stats-grid">
             <div class="stat-card tasks">
@@ -2771,12 +3535,6 @@
                   <h3>Available Teams</h3>
                   <p>Teams you can request to join</p>
                 </div>
-                <button
-                  class="btn btn-outline btn-sm"
-                  onclick="loadAvailableTeams()"
-                >
-                  <i class="fas fa-sync"></i> Refresh
-                </button>
               </div>
               <div id="available-teams-grid" class="teams-grid">
                 <div class="empty-state">
@@ -2793,11 +3551,7 @@
         <div id="chat-section" class="content-section" style="display: block">
           <div
             class="section-content"
-            style="
-              height: calc(100vh - 120px);
-              display: flex;
-              flex-direction: column;
-            "
+            style="height: 98vh; display: flex; flex-direction: column"
           >
             <div class="section-header">
               <h2 class="section-title">
@@ -2851,6 +3605,13 @@
 
               <div class="chat-input-container" style="padding-bottom: 8px">
                 <div class="chat-input-wrapper">
+                  <button
+                    id="attachFileBtn"
+                    class="chat-action-btn inline"
+                    title="Attach file"
+                  >
+                    <i class="fas fa-paperclip"></i>
+                  </button>
                   <input
                     type="text"
                     id="messageInput"
@@ -2858,45 +3619,23 @@
                     placeholder="Type your message..."
                     disabled
                   />
+                  <button
+                    id="emojiBtn"
+                    class="chat-action-btn inline"
+                    title="Emoji"
+                  >
+                    <i class="fas fa-smile"></i>
+                  </button>
                   <button id="sendButton" class="send-button" disabled>
                     <i class="fas fa-paper-plane"></i>
                   </button>
                 </div>
-                <div class="chat-actions">
-                  <button
-                    id="attachFileBtn"
-                    class="chat-action-btn"
-                    title="Attach file"
-                  >
-                    <i class="fas fa-paperclip"></i>
-                  </button>
-                  <button id="emojiBtn" class="chat-action-btn" title="Emoji">
-                    <i class="fas fa-smile"></i>
-                  </button>
-                  <input
-                    type="file"
-                    id="fileInput"
-                    style="display: none"
-                    accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Profile Section -->
-        <div id="profile-section" class="content-section">
-          <div class="section-content">
-            <h2 class="section-title">
-              <i class="fas fa-user"></i>
-              My Profile
-            </h2>
-            <div id="profileContent">
-              <div class="empty-state">
-                <i class="fas fa-user"></i>
-                <h3>Loading Profile...</h3>
-                <p>Please wait while we fetch your profile</p>
+                <input
+                  type="file"
+                  id="fileInput"
+                  style="display: none"
+                  accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
+                />
               </div>
             </div>
           </div>
@@ -2923,6 +3662,8 @@
 
     <!-- Include Socket.IO -->
     <script src="/socket.io/socket.io.js"></script>
+    <!-- Load authentication persistence -->
+    <script src="/public/js/auth-persistence.js"></script>
 
     <script>
       // Test if JavaScript is working
@@ -3017,7 +3758,8 @@
         // Restore last open section
         try {
           const savedSection =
-            localStorage.getItem("memberCurrentSection") || "teams";
+            localStorage.getItem("memberCurrentSection") || "overview";
+          console.log("Attempting to show section:", savedSection);
           showSection(savedSection);
           if (savedSection === "teams") {
             // Ensure chat is shown while Teams remains highlighted
@@ -3035,11 +3777,17 @@
             switchChatTeam(savedTeam);
           }
         } catch (e) {
-          showSection("teams");
-          showSection("chat");
-          const teamsLink = document.querySelector('[data-section="teams"]');
-          if (teamsLink) teamsLink.classList.add("active");
+          console.error("Error in section initialization:", e);
+          // Fallback to overview
+          showSection("overview");
+          const overviewLink = document.querySelector(
+            '[data-section="overview"]'
+          );
+          if (overviewLink) overviewLink.classList.add("active");
         }
+
+        // Start auto-refresh for overview data
+        // startAutoRefresh(); // Disabled since overview sections were removed
       });
 
       // Socket.IO initialization
@@ -3181,47 +3929,68 @@
 
       // Show specific section
       function showSection(sectionName) {
-        console.log("Switching to section:", sectionName);
-        currentSection = sectionName; // Track current section
-
-        // Persist current section
         try {
-          localStorage.setItem("memberCurrentSection", sectionName);
-        } catch (e) {}
+          console.log("Switching to section:", sectionName);
+          currentSection = sectionName; // Track current section
 
-        // Update navigation active state
-        document.querySelectorAll(".nav-link").forEach((link) => {
-          link.classList.remove("active");
-          if (link.dataset.section === sectionName) {
-            link.classList.add("active");
-            console.log("Set active nav:", sectionName);
+          // Persist current section
+          try {
+            localStorage.setItem("memberCurrentSection", sectionName);
+          } catch (e) {
+            console.warn("Could not save section to localStorage:", e);
           }
-        });
 
-        // Update content sections using direct style (more reliable)
-        document.querySelectorAll(".content-section").forEach((section) => {
-          section.style.display = "none";
-        });
+          // Update navigation active state
+          document.querySelectorAll(".nav-link").forEach((link) => {
+            link.classList.remove("active");
+            if (link.dataset.section === sectionName) {
+              link.classList.add("active");
+              console.log("Set active nav:", sectionName);
+            }
+          });
 
-        const activeSection = document.getElementById(sectionName + "-section");
-        if (activeSection) {
-          activeSection.style.display = "block";
-          console.log("Set active content:", sectionName);
-        } else {
-          console.error("Content section not found:", sectionName);
+          // Update content sections using direct style (more reliable)
+          document.querySelectorAll(".content-section").forEach((section) => {
+            section.style.display = "none";
+          });
+
+          const activeSection = document.getElementById(
+            sectionName + "-section"
+          );
+          if (activeSection) {
+            activeSection.style.display = "block";
+            console.log("Set active content:", sectionName);
+          } else {
+            console.error("Content section not found:", sectionName);
+            return;
+          }
+
+          // Update header titles (safe)
+          updateSectionHeader(sectionName);
+
+          // Load section-specific data (safe)
+          loadSectionData(sectionName).catch((error) => {
+            console.error(
+              "Error loading section data for",
+              sectionName,
+              ":",
+              error
+            );
+          });
+        } catch (error) {
+          console.error("Error in showSection:", error);
         }
-
-        // Update header titles
-        updateSectionHeader(sectionName);
-
-        // Load section-specific data
-        loadSectionData(sectionName);
       }
 
       // Update section header based on current section
       function updateSectionHeader(sectionName) {
         const titleElement = document.getElementById("sectionTitle");
         const subtitleElement = document.getElementById("sectionSubtitle");
+
+        // If header elements don't exist (removed), skip updating
+        if (!titleElement || !subtitleElement) {
+          return;
+        }
 
         const sectionTitles = {
           overview: {
@@ -3244,13 +4013,9 @@
             title: "Team Chat",
             subtitle: "Communicate with your team members",
           },
-          profile: {
-            title: "My Profile",
-            subtitle: "Manage your personal information",
-          },
           settings: {
             title: "Settings",
-            subtitle: "Customize your preferences",
+            subtitle: "Manage your profile and preferences",
           },
         };
 
@@ -3285,9 +4050,6 @@
               }
               loadChat();
               break;
-            case "profile":
-              await loadProfileData();
-              break;
             case "settings":
               await loadSettingsData();
               break;
@@ -3302,13 +4064,23 @@
       // Load overview data
       async function loadOverviewData() {
         try {
+          // Show loading indicator
+          showOverviewLoading(true);
+
           // Load member stats
           await loadMemberStats();
 
+          // Load new overview components in parallel for better performance
+          await Promise.allSettled([]);
+
           // Load invitations
           await loadInvitations();
+
+          // Hide loading indicator
+          showOverviewLoading(false);
         } catch (error) {
           console.error("Error loading overview data:", error);
+          showOverviewError();
         }
       }
 
@@ -3317,28 +4089,104 @@
           const response = await fetch("/api/member/stats");
           if (response.ok) {
             const stats = await response.json();
-            document.getElementById("myTasks").textContent = stats.myTasks || 0;
-            document.getElementById("completedTasks").textContent =
-              stats.completedTasks || 0;
-            document.getElementById("myTeams").textContent = stats.myTeams || 0;
-            document.getElementById("unreadMessages").textContent =
-              stats.unreadMessages || 0;
+
+            // Safely update elements with null checks
+            const myTasksEl = document.getElementById("myTasks");
+            const completedTasksEl = document.getElementById("completedTasks");
+            const myTeamsEl = document.getElementById("myTeams");
+            const unreadMessagesEl = document.getElementById("unreadMessages");
+
+            if (myTasksEl) myTasksEl.textContent = stats.myTasks || 0;
+            if (completedTasksEl)
+              completedTasksEl.textContent = stats.completedTasks || 0;
+            if (myTeamsEl) myTeamsEl.textContent = stats.myTeams || 0;
+            if (unreadMessagesEl)
+              unreadMessagesEl.textContent = stats.unreadMessages || 0;
           } else {
             console.error("Failed to load overview stats");
-            // Show default values
-            document.getElementById("myTasks").textContent = "0";
-            document.getElementById("completedTasks").textContent = "0";
-            document.getElementById("myTeams").textContent = "0";
-            document.getElementById("unreadMessages").textContent = "0";
+            // Show default values safely
+            const myTasksEl = document.getElementById("myTasks");
+            const completedTasksEl = document.getElementById("completedTasks");
+            const myTeamsEl = document.getElementById("myTeams");
+            const unreadMessagesEl = document.getElementById("unreadMessages");
+
+            if (myTasksEl) myTasksEl.textContent = "0";
+            if (completedTasksEl) completedTasksEl.textContent = "0";
+            if (myTeamsEl) myTeamsEl.textContent = "0";
+            if (unreadMessagesEl) unreadMessagesEl.textContent = "0";
           }
         } catch (error) {
           console.error("Error loading member stats:", error);
-          // Show default values
-          document.getElementById("myTasks").textContent = "0";
-          document.getElementById("completedTasks").textContent = "0";
-          document.getElementById("myTeams").textContent = "0";
-          document.getElementById("unreadMessages").textContent = "0";
+          // Show default values safely
+          const myTasksEl = document.getElementById("myTasks");
+          const completedTasksEl = document.getElementById("completedTasks");
+          const myTeamsEl = document.getElementById("myTeams");
+          const unreadMessagesEl = document.getElementById("unreadMessages");
+
+          if (myTasksEl) myTasksEl.textContent = "0";
+          if (completedTasksEl) completedTasksEl.textContent = "0";
+          if (myTeamsEl) myTeamsEl.textContent = "0";
+          if (unreadMessagesEl) unreadMessagesEl.textContent = "0";
         }
+      }
+
+      // Show/hide overview loading state
+      function showOverviewLoading(show) {
+        // No sections to show loading for since they were removed
+      }
+
+      // Show overview error state
+      function showOverviewError() {
+        // No sections to show error for since they were removed
+      }
+
+      // Auto-refresh overview data every 5 minutes
+      function startAutoRefresh() {
+        // Auto-refresh disabled since overview sections were removed
+      }
+
+      // Show subtle refresh notification
+      function showRefreshNotification() {
+        const notification = document.createElement("div");
+        notification.className = "refresh-notification";
+        notification.innerHTML =
+          '<i class="fas fa-sync-alt fa-spin"></i> Refreshing dashboard data...';
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: var(--color-info);
+          color: white;
+          padding: 8px 16px;
+          border-radius: 20px;
+          font-size: 12px;
+          z-index: 9999;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          transform: translateX(300px);
+          transition: transform 0.3s ease;
+        `;
+
+        document.body.appendChild(notification);
+
+        // Slide in
+        setTimeout(() => {
+          notification.style.transform = "translateX(0)";
+        }, 100);
+
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+          notification.style.transform = "translateX(300px)";
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.parentNode.removeChild(notification);
+            }
+          }, 300);
+        }, 3000);
+      }
+
+      // Manual refresh all overview data
+      function refreshAllOverviewData() {
+        // Refresh disabled since overview sections were removed
       }
 
       // Load tasks data
@@ -3360,11 +4208,7 @@
                     <div class="empty-state">
                         <i class="fas fa-exclamation-triangle"></i>
                         <h3>Error Loading Tasks</h3>
-                        <p>Unable to load your tasks. Please try again.</p>
-                        <button class="btn btn-primary" onclick="loadTasksData()">
-                            <i class="fas fa-retry"></i>
-                            Retry
-                        </button>
+                        <p>Unable to load your tasks. Please try again later.</p>
                     </div>
                 `;
         }
@@ -3461,7 +4305,7 @@
                         backdrop-filter: blur(20px);
                         border-radius: 16px;
                         padding: 24px;
-                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        border: 1px solid var(--color-gray-200);
                         transition: all 0.3s ease;
                         position: relative;
                         overflow: hidden;
@@ -3504,16 +4348,19 @@
                     .status-progress {
                         background: var(--primary-gradient);
                         color: var(--white);
+                        border-radius: 20px;
                     }
                     
                     .status-review {
                         background: var(--accent-gradient);
                         color: var(--white);
+                        border-radius: 20px;
                     }
                     
                     .status-completed {
                         background: var(--success-gradient);
                         color: var(--white);
+                        border-radius: 20px;
                     }
                     
                     .task-description {
@@ -3538,7 +4385,7 @@
                         color: rgba(255, 255, 255, 0.7);
                         padding: 4px 8px;
                         background: rgba(255, 255, 255, 0.1);
-                        border-radius: 8px;
+                        border-radius: 20px;
                     }
                     
                     .priority-high {
@@ -3601,11 +4448,7 @@
                     <div class="empty-state">
                         <i class="fas fa-exclamation-triangle"></i>
                         <h3>Error Loading Teams</h3>
-                        <p>Unable to load your teams. Please try again.</p>
-                        <button class="btn btn-primary" onclick="loadTeamsData()">
-                            <i class="fas fa-retry"></i>
-                            Retry
-                        </button>
+                        <p>Unable to load your teams. Please try again later.</p>
                     </div>
                 `;
         }
@@ -3682,7 +4525,7 @@
                         backdrop-filter: blur(20px);
                         border-radius: 16px;
                         padding: 24px;
-                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        border: 1px solid var(--color-gray-200);
                         transition: all 0.3s ease;
                     }
                     
@@ -3714,14 +4557,14 @@
                     }
                     
                     .team-description {
-                        color: rgba(255, 255, 255, 0.8);
+                        color: black;
                         font-size: 14px;
                         line-height: 1.5;
                         margin-bottom: 16px;
                     }
                     
                     .team-admin {
-                        color: rgba(255, 255, 255, 0.7);
+                        color: black;
                         font-size: 14px;
                         margin-bottom: 16px;
                     }
@@ -3762,11 +4605,7 @@
                 <div class="empty-state">
                         <i class="fas fa-exclamation-triangle"></i>
                         <h3>Error Loading Teams</h3>
-                        <p>Unable to load your teams. Please try again.</p>
-                        <button class="btn btn-primary" onclick="loadMessagesData()">
-                            <i class="fas fa-retry"></i>
-                            Retry
-                        </button>
+                        <p>Unable to load your teams. Please try again later.</p>
                     </div>
                 `;
         }
@@ -3997,106 +4836,167 @@
             `;
       }
 
-      // Load profile data
-      async function loadProfileData() {
-        const profileContent = document.getElementById("profileContent");
-        showLoadingState("profileContent");
-
-        try {
-          const response = await fetch("/api/member/profile");
-          if (response.ok) {
-            const profile = await response.json();
-            displayProfile(profile);
-          } else {
-            throw new Error("Failed to fetch profile");
-          }
-        } catch (error) {
-          console.error("Error loading profile:", error);
-          profileContent.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h3>Error Loading Profile</h3>
-                        <p>Unable to load your profile. Please try again.</p>
-                        <button class="btn btn-primary" onclick="loadProfileData()">
-                            <i class="fas fa-retry"></i>
-                            Retry
-                        </button>
-                    </div>
-                `;
-        }
-      }
-
-      // Display profile
-      function displayProfile(profile) {
-        const profileContent = document.getElementById("profileContent");
-
-        profileContent.innerHTML = `
-                <div class="profile-section">
-                    <div class="profile-header">
-                        <div class="profile-avatar" onclick="showModal({title: 'Avatar Update', message: 'Avatar upload functionality coming soon!', type: 'info', hideCancel: true})">
-                            ${
-                              profile.firstName
-                                ? profile.firstName.charAt(0).toUpperCase()
-                                : "M"
-                            }
-                        </div>
-                        <div class="profile-info">
-                            <h3>${profile.firstName || "Member"} ${
-          profile.lastName || ""
-        }</h3>
-                            <p class="profile-email">${profile.email}</p>
-                            <p class="profile-username">@${profile.username}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="profile-form">
-                        <form id="profileForm" onsubmit="updateProfile(event)">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" id="firstName" name="firstName" value="${
-                                      profile.firstName || ""
-                                    }" placeholder="Enter your first name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" id="lastName" name="lastName" value="${
-                                      profile.lastName || ""
-                                    }" placeholder="Enter your last name" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" value="${
-                                  profile.phone || ""
-                                }" placeholder="Enter your phone number">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="bio">Bio</label>
-                                <textarea id="bio" name="bio" placeholder="Tell us about yourself, your skills, interests, and experience...">${
-                                  profile.bio || ""
-                                }</textarea>
-                            </div>
-                            
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save"></i>
-                                    Update Profile
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            `;
-      }
-
       // Load settings data
       async function loadSettingsData() {
         const settingsContent = document.getElementById("settingsContent");
-        settingsContent.innerHTML = `
+        showLoadingState("settingsContent");
+
+        try {
+          // Load profile data first
+          const profileResponse = await fetch("/api/member/profile");
+          let profile = {};
+          if (profileResponse.ok) {
+            profile = await profileResponse.json();
+          }
+
+          // Get current user plan information
+          const isProUser =
+            currentUser?.data &&
+            (currentUser.data.isPro ||
+              (currentUser.data.plan &&
+                currentUser.data.plan.toLowerCase() === "pro"));
+          const currentPlanLabel = isProUser
+            ? "Pro"
+            : currentUser?.data?.plan
+            ? currentUser.data.plan.charAt(0).toUpperCase() +
+              currentUser.data.plan.slice(1)
+            : "Free";
+
+          settingsContent.innerHTML = `
                 <div class="settings-section">
+                    <!-- Profile Section -->
+                    <div class="settings-group">
+                        <h4><i class="fas fa-user"></i> Profile Information</h4>
+                        <div class="profile-section">
+                            <div class="profile-header">
+                                <div class="profile-avatar" onclick="showModal({title: 'Avatar Update', message: 'Avatar upload functionality coming soon!', type: 'info', hideCancel: true})">
+                                    ${
+                                      profile.firstName
+                                        ? profile.firstName
+                                            .charAt(0)
+                                            .toUpperCase()
+                                        : "M"
+                                    }
+                                </div>
+                                <div class="profile-info">
+                                    <h3>${profile.firstName || "Member"} ${
+            profile.lastName || ""
+          }</h3>
+                                    <p class="profile-email">${
+                                      profile.email || ""
+                                    }</p>
+                                    <p class="profile-username">@${
+                                      profile.username || ""
+                                    }</p>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-form">
+                                <form id="profileForm" onsubmit="updateProfile(event)">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="firstName">First Name</label>
+                                            <input type="text" id="firstName" name="firstName" value="${
+                                              profile.firstName || ""
+                                            }" placeholder="Enter your first name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="lastName">Last Name</label>
+                                            <input type="text" id="lastName" name="lastName" value="${
+                                              profile.lastName || ""
+                                            }" placeholder="Enter your last name" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number</label>
+                                        <input type="tel" id="phone" name="phone" value="${
+                                          profile.phone || ""
+                                        }" placeholder="Enter your phone number">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="bio">Bio</label>
+                                        <textarea id="bio" name="bio" placeholder="Tell us about yourself, your skills, interests, and experience...">${
+                                          profile.bio || ""
+                                        }</textarea>
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i>
+                                            Update Profile
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plan & Billing Section -->
+                    <div class="settings-group">
+                        <h4><i class="fas fa-crown"></i> Plan & Billing</h4>
+                        <div class="current-plan-info">
+                            <div class="plan-overview-card">
+                                <div class="plan-overview-header">
+                                    <div class="plan-overview-icon">
+                                        <i class="fas ${
+                                          isProUser ? "fa-crown" : "fa-star"
+                                        }"></i>
+                                    </div>
+                                    <div class="plan-overview-info">
+                                        <h4 class="plan-overview-title">${currentPlanLabel} Plan</h4>
+                                        <p class="plan-overview-description">
+                                            ${
+                                              isProUser
+                                                ? "You have full access to all CollabSpace features with unlimited teams and advanced tools."
+                                                : "You're currently using the free plan with basic features and up to 3 active teams."
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="plan-overview-badge">
+                                        <span class="badge ${
+                                          isProUser ? "badge-pro" : "badge-free"
+                                        }">
+                                            ${isProUser ? "PRO" : "FREE"}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            ${
+                              !isProUser
+                                ? `
+                            <div class="upgrade-prompt">
+                                <div class="upgrade-prompt-content">
+                                    <h5>Upgrade to Pro</h5>
+                                    <p>Unlock unlimited teams, advanced analytics, and priority support</p>
+                                </div>
+                                <a href="/payment" class="btn btn-primary">
+                                    <i class="fas fa-arrow-up"></i>
+                                    Upgrade Now
+                                </a>
+                            </div>
+                            `
+                                : `
+                            <div class="billing-info">
+                                <div class="billing-detail">
+                                    <div class="billing-detail-label">Next billing date:</div>
+                                    <div class="billing-detail-value">December 15, 2024</div>
+                                </div>
+                                <div class="billing-detail">
+                                    <div class="billing-detail-label">Amount:</div>
+                                    <div class="billing-detail-value">$59.00 USD</div>
+                                </div>
+                            </div>
+                            <div class="billing-actions">
+                                <a href="/payment" class="btn btn-secondary">Manage Subscription</a>
+                                <a href="/payment" class="btn btn-secondary">View Billing History</a>
+                            </div>
+                            `
+                            }
+                        </div>
+                    </div>
+                
                     <div class="settings-group">
                         <h4><i class="fas fa-bell"></i> Notifications</h4>
                         <div class="setting-item">
@@ -4184,6 +5084,16 @@
                     </div>
                 </div>
             `;
+        } catch (error) {
+          console.error("Error loading settings:", error);
+          settingsContent.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Loading Settings</h3>
+                        <p>Unable to load your settings. Please try again later.</p>
+                    </div>
+                `;
+        }
       }
 
       // Settings modal functions
@@ -4417,8 +5327,40 @@
           type: "warning",
           confirmText: "Logout",
           confirmClass: "btn-danger",
-          onConfirm: () => {
-            window.location.href = "/logout";
+          onConfirm: async () => {
+            try {
+              // Use the auth persistence system for logout if available
+              if (window.authPersistence) {
+                await window.authPersistence.logout();
+                return;
+              }
+
+              // Fallback logout
+              const response = await fetch("/api/auth/logout", {
+                method: "POST",
+                credentials: "include",
+              });
+
+              if (response.ok) {
+                // Clear all stored data
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+
+                window.location.href = "/login";
+              } else {
+                console.error("Logout failed");
+                // Force logout regardless
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+              }
+            } catch (error) {
+              console.error("Logout error:", error);
+              // Force logout regardless
+              localStorage.removeItem("user");
+              localStorage.removeItem("token");
+              window.location.href = "/login";
+            }
           },
         });
       }
@@ -4487,10 +5429,209 @@
         }
       }
 
-      function viewTaskDetails(taskId) {
-        // For now, just show an alert. In a full implementation, this would open a modal
-        showNotification("Task details view coming soon!", "info");
+      async function viewTaskDetails(taskId) {
+        try {
+          showLoadingState("loadingOverlay");
+
+          const response = await fetch(`/api/tasks/${taskId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch task details");
+          }
+
+          const result = await response.json();
+          console.log("Task API Response:", result); // Debug log
+
+          // Handle different API response structures
+          const task = result.data?.task || result.task || result;
+          console.log("Extracted task:", task); // Debug log
+
+          if (!task) {
+            throw new Error("No task data received");
+          }
+
+          // Create task details modal
+          const statusBadgeClass = {
+            todo: "badge-secondary",
+            "in-progress": "badge-warning",
+            done: "badge-success",
+          };
+
+          const priorityBadgeClass = {
+            low: "badge-success",
+            medium: "badge-warning",
+            high: "badge-danger",
+          };
+
+          // Safe date formatting with fallbacks
+          let formattedDate = "No due date";
+          if (task.dueDate) {
+            try {
+              const date = new Date(task.dueDate);
+              if (!isNaN(date.getTime())) {
+                formattedDate = date.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                });
+              }
+            } catch (e) {
+              console.error("Error formatting due date:", e);
+            }
+          }
+
+          let createdDate = "Unknown date";
+          if (task.createdAt) {
+            try {
+              const date = new Date(task.createdAt);
+              if (!isNaN(date.getTime())) {
+                createdDate = date.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+              }
+            } catch (e) {
+              console.error("Error formatting created date:", e);
+            }
+          }
+
+          // Safe data extraction with fallbacks
+          const taskTitle = task.title || "Untitled Task";
+          const taskStatus = task.status || "todo";
+          const taskPriority = task.priority || "medium";
+          const taskDescription =
+            task.description || "No description provided.";
+          const teamName = task.team?.name || "No team assigned";
+
+          // Safe creator name handling
+          let creatorName = "Unknown";
+          if (task.createdBy) {
+            const firstName = task.createdBy.firstName || "";
+            const lastName = task.createdBy.lastName || "";
+            if (firstName || lastName) {
+              creatorName = `${firstName} ${lastName}`.trim();
+            } else if (task.createdBy.username) {
+              creatorName = task.createdBy.username;
+            }
+          }
+
+          const modalHtml = `
+            <div class="modal-content" style="max-width: 600px;">
+              <div class="modal-header">
+                <h3><i class="fas fa-tasks"></i> Task Details</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+              </div>
+              <div class="modal-body">
+                <div class="task-details-content">
+                  <div class="task-header" style="margin-bottom: 1.5rem;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: var(--color-gray-800);">${taskTitle}</h4>
+                    <div class="task-badges" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                      <span class="badge ${
+                        statusBadgeClass[taskStatus] || "badge-secondary"
+                      }">${taskStatus.replace("-", " ").toUpperCase()}</span>
+                      <span class="badge ${
+                        priorityBadgeClass[taskPriority] || "badge-secondary"
+                      }">${taskPriority.toUpperCase()} PRIORITY</span>
+                    </div>
+                  </div>
+
+                  <div class="task-info" style="margin-bottom: 1.5rem;">
+                    <div class="info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                      <div class="info-item">
+                        <label style="font-weight: 600; color: var(--color-gray-600); font-size: 0.875rem;">Team</label>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--color-gray-800);">${teamName}</p>
+                      </div>
+                      <div class="info-item">
+                        <label style="font-weight: 600; color: var(--color-gray-600); font-size: 0.875rem;">Created By</label>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--color-gray-800);">${creatorName}</p>
+                      </div>
+                      <div class="info-item">
+                        <label style="font-weight: 600; color: var(--color-gray-600); font-size: 0.875rem;">Due Date</label>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--color-gray-800);">${formattedDate}</p>
+                      </div>
+                      <div class="info-item">
+                        <label style="font-weight: 600; color: var(--color-gray-600); font-size: 0.875rem;">Created</label>
+                        <p style="margin: 0.25rem 0 0 0; color: var(--color-gray-800);">${createdDate}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="task-description">
+                    <label style="font-weight: 600; color: var(--color-gray-600); font-size: 0.875rem; display: block; margin-bottom: 0.5rem;">Description</label>
+                    <div style="background: var(--color-gray-50); padding: 1rem; border-radius: var(--radius-base); border: 1px solid var(--color-gray-200); min-height: 100px;">
+                      <p style="margin: 0; color: var(--color-gray-800); line-height: 1.6; white-space: pre-wrap;">${taskDescription}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 0.75rem; padding: 1rem; border-top: 1px solid var(--color-gray-200); margin-top: 1.5rem;">
+                <button type="button" class="btn btn-outline" onclick="closeModal()">Close</button>
+              </div>
+            </div>
+          `;
+
+          showCustomModal(modalHtml);
+          hideLoadingState("loadingOverlay");
+        } catch (error) {
+          console.error("Error fetching task details:", error);
+          hideLoadingState("loadingOverlay");
+          showNotification("Failed to load task details", "error");
+        }
       }
+
+      // Custom modal system for HTML content
+      function showCustomModal(htmlContent) {
+        // Create modal overlay if it doesn't exist
+        let modalOverlay = document.getElementById("customModalOverlay");
+        if (!modalOverlay) {
+          modalOverlay = document.createElement("div");
+          modalOverlay.id = "customModalOverlay";
+          modalOverlay.className = "modal";
+          modalOverlay.innerHTML = '<div class="modal-container"></div>';
+          document.body.appendChild(modalOverlay);
+        }
+
+        // Set the modal content
+        const modalContainer = modalOverlay.querySelector(".modal-container");
+        modalContainer.innerHTML = htmlContent;
+
+        // Show the modal
+        modalOverlay.classList.add("show");
+
+        // Close modal when clicking outside
+        modalOverlay.addEventListener("click", (e) => {
+          if (e.target === modalOverlay) {
+            closeCustomModal();
+          }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener("keydown", handleCustomModalKeydown);
+      }
+
+      function closeCustomModal() {
+        const modalOverlay = document.getElementById("customModalOverlay");
+        if (modalOverlay) {
+          modalOverlay.classList.remove("show");
+          document.removeEventListener("keydown", handleCustomModalKeydown);
+        }
+      }
+
+      function handleCustomModalKeydown(e) {
+        if (e.key === "Escape") {
+          closeCustomModal();
+        }
+      }
+
+      // Make closeModal globally available for backwards compatibility
+      window.closeModal = closeCustomModal;
 
       function viewTeamChat(teamId) {
         console.log("viewTeamChat called with teamId:", teamId);
@@ -4524,11 +5665,7 @@
                     <div class="empty-state">
                         <i class="fas fa-exclamation-triangle"></i>
                         <h3>Error Loading Messages</h3>
-                        <p>Unable to load team messages. Please try again.</p>
-                        <button class="btn btn-primary" onclick="loadTeamMessages('${teamId}')">
-                            <i class="fas fa-retry"></i>
-                            Retry
-                        </button>
+                        <p>Unable to load team messages. Please try again later.</p>
                     </div>
                 `;
         }
@@ -6322,7 +7459,9 @@
         if (!currentTeamId) return;
 
         try {
-          const messageInput = document.getElementById("messageInput");
+          const messageInput = document.getElementById(
+            "joinRequestMessageInput"
+          );
           const message = messageInput.value.trim();
 
           const res = await fetch("/api/invitations/send-request", {
@@ -6384,11 +7523,19 @@
             Send an optional message to the team admin with your join request.
           </p>
         </div>
-        <textarea
-          id="messageInput"
-          class="message-input"
-          placeholder="Hi! I'd like to join your team. I have experience in..."
-        ></textarea>
+        <div class="message-input-wrapper">
+          <button class="message-action-btn" title="Attach file">
+            <i class="fas fa-paperclip"></i>
+          </button>
+          <textarea
+            id="joinRequestMessageInput"
+            class="message-input"
+            placeholder="Hi! I'd like to join your team. I have experience in..."
+          ></textarea>
+          <button class="message-action-btn" title="Emoji">
+            <i class="fas fa-smile"></i>
+          </button>
+        </div>
         <div class="message-modal-actions">
           <button
             type="button"

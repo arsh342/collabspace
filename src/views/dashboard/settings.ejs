@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Settings - CollabSpace</title>
 
+    <!-- Design System -->
+    <link rel="stylesheet" href="/public/css/design-system.css" />
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -16,9 +18,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/public/css/style.css" />
   </head>
-  <body class="bg-light">
+  <body style="background-color: var(--color-bg-primary);">
     <!-- Navigation -->
     <%- include('partials/nav') %>
 
@@ -39,8 +41,8 @@
           <div class="row">
             <div class="col-lg-8">
               <!-- Account Settings Card -->
-              <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
+              <div class="card mb-4">
+                <div class="card-header" style="background: var(--gradient-primary); color: var(--color-white);">
                   <h5 class="mb-0">
                     <i class="fas fa-user-cog me-2"></i>Account Settings
                   </h5>
@@ -135,8 +137,8 @@
               </div>
 
               <!-- Notification Settings Card -->
-              <div class="card shadow-sm mb-4">
-                <div class="card-header bg-success text-white">
+              <div class="card mb-4">
+                <div class="card-header" style="background-color: var(--color-success); color: var(--color-white);">
                   <h5 class="mb-0">
                     <i class="fas fa-bell me-2"></i>Notification Settings
                   </h5>
@@ -258,8 +260,8 @@
               </div>
 
               <!-- Privacy Settings Card -->
-              <div class="card shadow-sm mb-4">
-                <div class="card-header bg-warning text-dark">
+              <div class="card mb-4">
+                <div class="card-header" style="background-color: var(--color-warning-light); color: var(--color-warning-dark); border-bottom: 1px solid var(--color-warning);">
                   <h5 class="mb-0">
                     <i class="fas fa-shield-alt me-2"></i>Privacy Settings
                   </h5>
@@ -372,8 +374,8 @@
               </div>
 
               <!-- Advanced Settings Card -->
-              <div class="card shadow-sm mb-4">
-                <div class="card-header bg-danger text-white">
+              <div class="card mb-4">
+                <div class="card-header" style="background-color: var(--color-danger-light); color: var(--color-danger-dark); border-bottom: 1px solid var(--color-danger);">
                   <h5 class="mb-0">
                     <i class="fas fa-exclamation-triangle me-2"></i>Advanced
                     Settings
@@ -424,8 +426,8 @@
 
             <!-- Settings Navigation Sidebar -->
             <div class="col-lg-4">
-              <div class="card shadow-sm mb-4">
-                <div class="card-header bg-info text-white">
+              <div class="card mb-4">
+                <div class="card-header" style="background-color: var(--color-info-light); color: var(--color-info-dark); border-bottom: 1px solid var(--color-info);">
                   <h5 class="mb-0">
                     <i class="fas fa-list me-2"></i>Quick Navigation
                   </h5>
@@ -461,8 +463,8 @@
               </div>
 
               <!-- Settings Help -->
-              <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white">
+              <div class="card">
+                <div class="card-header" style="background-color: var(--color-gray-200); color: var(--color-gray-800);">
                   <h5 class="mb-0">
                     <i class="fas fa-question-circle me-2"></i>Need Help?
                   </h5>

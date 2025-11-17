@@ -24,15 +24,27 @@ const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
 
-  // Log error
-  logger.logger.error("Error occurred:", {
+  const isNotFound = error.statusCode === 404;
+  const logPayload = {
     message: err.message,
-    stack: err.stack,
     url: req.originalUrl,
     method: req.method,
     ip: req.ip,
-    userAgent: req.get("User-Agent"),
-  });
+  };
+
+  if (!isNotFound && process.env.LOG_INCLUDE_UA === "true") {
+    logPayload.userAgent = req.get("User-Agent");
+  }
+
+  if (!isNotFound) {
+    logPayload.stack = err.stack;
+  }
+
+  if (isNotFound || error.statusCode < 500) {
+    logger.logger.warn("Handled error:", logPayload);
+  } else {
+    logger.logger.error("Unhandled error:", logPayload);
+  }
 
   // Mongoose bad ObjectId
   if (err.name === "CastError") {

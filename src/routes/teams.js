@@ -3,8 +3,19 @@ const { body, validationResult } = require("express-validator");
 const Team = require("../models/Team");
 const User = require("../models/User");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
-const { requireAuth, requireOrganiser, requireTeamMembership, requireTeamOrganiser } = require("../middleware/auth");
+const {
+  requireAuth,
+  requireOrganiser,
+  requireTeamMembership,
+  requireTeamOrganiser,
+} = require("../middleware/auth");
 const { logger } = require("../middleware/logger");
+const {
+  cacheMiddleware,
+  invalidateCacheMiddleware,
+  invalidateUserCache,
+  invalidateTeamCache,
+} = require("../middleware/cache");
 
 const router = express.Router();
 
@@ -76,9 +87,9 @@ router.get(
     try {
       // Disable caching for teams data to ensure fresh data
       res.set({
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
       });
 
       const { page = 1, limit = 20, search, isActive, admin } = req.query;
@@ -94,7 +105,7 @@ router.get(
       }
 
       // Filter by admin role if requested
-      if (admin === 'true') {
+      if (admin === "true") {
         query.admin = req.user._id;
       } else {
         // Default: get teams where user is a member
@@ -188,8 +199,33 @@ router.post(
   "/",
   requireAuth,
   validateTeamCreation,
+  invalidateCacheMiddleware([`user-*`, `teams-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     try {
+      // Freemium: limit free users to 3 active teams as admin
+      const isPro =
+        req.user?.isPro === true ||
+        (req.user?.plan && req.user.plan.toLowerCase() === "pro");
+      if (!isPro) {
+        const adminTeamsCount = await Team.countDocuments({
+          admin: req.user._id,
+          isActive: true,
+        });
+        if (adminTeamsCount >= 3) {
+          return res.status(402).json({
+            success: false,
+            message:
+              "Free plan limit reached. Upgrade to Pro to create more than 3 teams.",
+            action: {
+              type: "upgrade_required",
+              url: "/payment",
+              currentTeams: adminTeamsCount,
+              limit: 3,
+            },
+          });
+        }
+      }
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -234,10 +270,10 @@ router.post(
 
       // Emit updated organiser summary (lazy require to avoid circular)
       try {
-        const { emitOrganiserSummary } = require('../app');
+        const { emitOrganiserSummary } = require("../app");
         emitOrganiserSummary && emitOrganiserSummary(req.user._id.toString());
       } catch (e) {
-        logger.warn('Failed to emit organiser summary after team create');
+        logger.warn("Failed to emit organiser summary after team create");
       }
 
       res.status(201).json({
@@ -294,6 +330,7 @@ router.put(
   "/:id",
   requireTeamOrganiser,
   validateTeamUpdate,
+  invalidateCacheMiddleware([`team-*`, `teams-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -357,6 +394,7 @@ router.put(
 router.delete(
   "/:id",
   requireTeamOrganiser,
+  invalidateCacheMiddleware([`team-*`, `teams-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     try {
       const teamName = req.team.name;
@@ -366,26 +404,32 @@ router.delete(
       const Task = require("../models/Task");
       const deletedTasks = await Task.find({ team: teamId });
       const taskCount = deletedTasks.length;
-      
+
       if (taskCount > 0) {
         await Task.deleteMany({ team: teamId });
-        logger.info(`Deleted ${taskCount} tasks associated with team: ${teamName}`);
+        logger.info(
+          `Deleted ${taskCount} tasks associated with team: ${teamName}`
+        );
       }
 
       // Delete all messages associated with this team
       const Message = require("../models/Message");
       const deletedMessages = await Message.find({ team: teamId });
       const messageCount = deletedMessages.length;
-      
+
       if (messageCount > 0) {
         await Message.deleteMany({ team: teamId });
-        logger.info(`Deleted ${messageCount} messages associated with team: ${teamName}`);
+        logger.info(
+          `Deleted ${messageCount} messages associated with team: ${teamName}`
+        );
       }
 
       // Finally delete the team
       await Team.findByIdAndDelete(teamId);
 
-      logger.info(`User ${req.user.username} deleted team: ${teamName} (and ${taskCount} tasks, ${messageCount} messages)`);
+      logger.info(
+        `User ${req.user.username} deleted team: ${teamName} (and ${taskCount} tasks, ${messageCount} messages)`
+      );
 
       res.json({
         success: true,
@@ -799,7 +843,9 @@ router.post(
 
       // Check if user already has a pending join request
       const existingRequest = team.joinRequests.find(
-        (request) => request.user.toString() === req.user._id.toString() && request.status === "pending"
+        (request) =>
+          request.user.toString() === req.user._id.toString() &&
+          request.status === "pending"
       );
 
       if (existingRequest) {
@@ -811,13 +857,16 @@ router.post(
 
       // Check if user has a pending invitation
       const pendingInvitation = team.invitedUsers.find(
-        (invite) => invite.user.toString() === req.user._id.toString() && invite.status === "pending"
+        (invite) =>
+          invite.user.toString() === req.user._id.toString() &&
+          invite.status === "pending"
       );
 
       if (pendingInvitation) {
         return res.status(400).json({
           success: false,
-          message: "You have a pending invitation to this team. Please respond to the invitation instead.",
+          message:
+            "You have a pending invitation to this team. Please respond to the invitation instead.",
         });
       }
 
@@ -831,7 +880,9 @@ router.post(
 
       await team.save();
 
-      logger.info(`User ${req.user.username} requested to join team: ${team.name}`);
+      logger.info(
+        `User ${req.user.username} requested to join team: ${team.name}`
+      );
 
       res.status(200).json({
         success: true,
@@ -857,7 +908,10 @@ router.get(
   catchAsync(async (req, res) => {
     try {
       const team = await Team.findById(req.params.id)
-        .populate("joinRequests.user", "username firstName lastName email avatar")
+        .populate(
+          "joinRequests.user",
+          "username firstName lastName email avatar"
+        )
         .select("joinRequests");
 
       if (!team) {
@@ -868,7 +922,9 @@ router.get(
       }
 
       // Filter pending requests
-      const pendingRequests = team.joinRequests.filter(request => request.status === "pending");
+      const pendingRequests = team.joinRequests.filter(
+        (request) => request.status === "pending"
+      );
 
       res.json({
         success: true,
@@ -918,7 +974,8 @@ router.post(
 
       // Find the join request
       const joinRequest = team.joinRequests.find(
-        (request) => request.user.toString() === userId && request.status === "pending"
+        (request) =>
+          request.user.toString() === userId && request.status === "pending"
       );
 
       if (!joinRequest) {
@@ -943,9 +1000,13 @@ router.post(
       await team.save();
 
       // Get user details for response
-      const user = await User.findById(userId).select("username firstName lastName");
+      const user = await User.findById(userId).select(
+        "username firstName lastName"
+      );
 
-      logger.info(`Join request approved for user ${user.username} to team: ${team.name}`);
+      logger.info(
+        `Join request approved for user ${user.username} to team: ${team.name}`
+      );
 
       res.status(200).json({
         success: true,
@@ -1002,7 +1063,8 @@ router.post(
 
       // Find the join request
       const joinRequest = team.joinRequests.find(
-        (request) => request.user.toString() === userId && request.status === "pending"
+        (request) =>
+          request.user.toString() === userId && request.status === "pending"
       );
 
       if (!joinRequest) {
@@ -1021,9 +1083,13 @@ router.post(
       await team.save();
 
       // Get user details for response
-      const user = await User.findById(userId).select("username firstName lastName");
+      const user = await User.findById(userId).select(
+        "username firstName lastName"
+      );
 
-      logger.info(`Join request denied for user ${user.username} to team: ${team.name}`);
+      logger.info(
+        `Join request denied for user ${user.username} to team: ${team.name}`
+      );
 
       res.status(200).json({
         success: true,
@@ -1077,7 +1143,9 @@ router.get(
 
       const teams = await Team.find(query)
         .populate("admin", "username firstName lastName avatar")
-        .select("name description admin memberCount isPublic tags type createdAt")
+        .select(
+          "name description admin memberCount isPublic tags type createdAt"
+        )
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(parseInt(limit));
@@ -1085,22 +1153,27 @@ router.get(
       const total = await Team.countDocuments(query);
 
       // Add join status for each team
-      const teamsWithStatus = teams.map(team => {
+      const teamsWithStatus = teams.map((team) => {
         const teamObj = team.toObject();
-        
+
         // Check if user has pending join request
         const hasPendingRequest = team.joinRequests?.some(
-          request => request.user.toString() === req.user._id.toString() && request.status === "pending"
+          (request) =>
+            request.user.toString() === req.user._id.toString() &&
+            request.status === "pending"
         );
-        
+
         // Check if user has pending invitation
         const hasPendingInvitation = team.invitedUsers?.some(
-          invite => invite.user.toString() === req.user._id.toString() && invite.status === "pending"
+          (invite) =>
+            invite.user.toString() === req.user._id.toString() &&
+            invite.status === "pending"
         );
 
         teamObj.userStatus = {
           canJoin: team.isPublic,
-          canRequestJoin: !team.isPublic && !hasPendingRequest && !hasPendingInvitation,
+          canRequestJoin:
+            !team.isPublic && !hasPendingRequest && !hasPendingInvitation,
           hasPendingRequest,
           hasPendingInvitation,
         };
@@ -1136,12 +1209,9 @@ router.get(
   catchAsync(async (req, res) => {
     try {
       const teams = await Team.find({
-        $or: [
-          { admin: req.user._id },
-          { members: req.user._id }
-        ],
-        isActive: true
-      }).populate('members', '_id');
+        $or: [{ admin: req.user._id }, { members: req.user._id }],
+        isActive: true,
+      }).populate("members", "_id");
 
       const totalMembers = teams.reduce((total, team) => {
         return total + (team.members?.length || 0);
@@ -1151,8 +1221,8 @@ router.get(
         success: true,
         data: {
           totalMembers,
-          totalTeams: teams.length
-        }
+          totalTeams: teams.length,
+        },
       });
     } catch (error) {
       logger.error("Get members count error:", error);

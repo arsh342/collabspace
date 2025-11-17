@@ -3,49 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>API Documentation - CollabSpace</title>
+  <title>Contact Us - CollabSpace</title>
+  <!-- Design System -->
+  <link rel="stylesheet" href="/public/css/design-system.css" />
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root {
-      --color-primary: #1e40af;
-      --color-primary-dark: #1e3a8a;
-      --color-secondary: #312e81;
-      --color-success: #10b981;
-      --color-warning: #f59e0b;
-      --color-error: #ef4444;
-      --color-gray-50: #f9fafb;
-      --color-gray-100: #f3f4f6;
-      --color-gray-200: #e5e7eb;
-      --color-gray-300: #d1d5db;
-      --color-gray-400: #9ca3af;
-      --color-gray-500: #6b7280;
-      --color-gray-600: #4b5563;
-      --color-gray-700: #374151;
-      --color-gray-800: #1f2937;
-      --color-gray-900: #111827;
-      --color-text-primary: #1f2937;
-      --color-text-secondary: #6b7280;
-      --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-weight-normal: 400;
-      --font-weight-medium: 500;
-      --font-weight-semibold: 600;
-      --font-weight-bold: 700;
-      --font-size-sm: 0.875rem;
-      --font-size-base: 1rem;
-      --font-size-lg: 1.125rem;
-      --font-size-xl: 1.25rem;
-      --font-size-2xl: 1.5rem;
-      --font-size-3xl: 1.875rem;
-      --font-size-4xl: 2.25rem;
-      --font-size-5xl: 3rem;
-      --radius-sm: 0.375rem;
-      --radius-md: 0.5rem;
-      --radius-lg: 0.75rem;
-      --radius-xl: 1rem;
-      --transition-fast: 0.15s ease-in-out;
-      --transition-normal: 0.3s ease-in-out;
-    }
+    /* Contact page styles using Design System */
 
     * {
       margin: 0;
@@ -54,23 +20,23 @@
     }
 
     body {
-      font-family: var(--font-family-sans);
-      line-height: 1.6;
+      font-family: var(--font-family-primary);
+      line-height: var(--line-height-normal);
       color: var(--color-text-primary);
-      background: white;
+      background: var(--color-bg-primary);
     }
 
-    .api-page {
+    .contact-page {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
     .navbar {
-      background: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--color-gray-200);
+      background: var(--color-white);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .navbar-brand {
@@ -98,142 +64,167 @@
       font-size: 1.5rem;
       font-weight: var(--font-weight-bold);
       letter-spacing: -0.025em;
-      color: var(--color-primary);
     }
 
     .navbar-brand:hover {
       color: var(--color-primary-dark);
-      transform: translateY(-1px);
       text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .navbar-brand:hover .brand-logo svg {
+      transform: scale(1.05);
     }
 
     .hero {
-      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-      color: white;
-      padding: 5rem 0;
+      background: var(--gradient-primary);
+      color: var(--color-white);
+      padding: var(--space-16) 0 var(--space-12);
       text-align: center;
     }
 
     .hero h1 {
-      font-size: var(--font-size-5xl);
+      font-size: var(--font-size-4xl);
       font-weight: var(--font-weight-bold);
-      margin-bottom: 1.5rem;
-      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
     }
 
     .hero p {
       font-size: var(--font-size-xl);
-      opacity: 0.95;
+      margin-bottom: 2rem;
       max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .content-wrapper {
+    .content {
       flex: 1;
       padding: 4rem 0;
     }
 
-    .api-section {
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      border: 1px solid var(--color-gray-200);
+    .contact-card {
+      background: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-8);
+      margin-bottom: var(--space-8);
+      border: 1px solid var(--color-border);
+      transition: var(--transition-all);
+      height: 100%;
     }
-
-    .api-section h2 {
-      color: var(--color-primary);
-      font-size: var(--font-size-2xl);
-      font-weight: var(--font-weight-bold);
-      margin-bottom: 1rem;
-    }
-
-    .endpoint {
-      background: var(--color-gray-50);
-      border-left: 4px solid var(--color-primary);
-      padding: 1.5rem;
-      margin: 1rem 0;
-      border-radius: var(--radius-md);
-      transition: all var(--transition-fast);
-    }
-
-    .endpoint:hover {
-      background: var(--color-gray-100);
-      transform: translateX(4px);
-    }
-
-    .method {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: var(--radius-sm);
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      margin-right: 1rem;
-    }
-
-    .method-get {
-      background: var(--color-success);
-      color: white;
-    }
-
-    .method-post {
-      background: var(--color-primary);
-      color: white;
-    }
-
-    .method-put {
-      background: var(--color-warning);
-      color: white;
-    }
-
-    .method-delete {
-      background: var(--color-error);
-      color: white;
-    }
-
-    .endpoint code {
-      background: var(--color-gray-200);
-      color: var(--color-text-primary);
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius-sm);
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-      font-size: var(--font-size-sm);
-    }
-
-    .cta-section {
-      background: var(--color-gray-50);
-      padding: 4rem 0;
-      text-align: center;
-    }
-
-    .cta-section h2 {
-      color: var(--color-primary);
-      font-size: var(--font-size-3xl);
-      font-weight: var(--font-weight-bold);
-      margin-bottom: 1rem;
-    }
-
-    .cta-btn {
-      background: var(--color-primary);
-      color: white;
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: var(--radius-md);
-      font-size: var(--font-size-lg);
-      font-weight: var(--font-weight-semibold);
-      text-decoration: none;
-      display: inline-block;
-      transition: all var(--transition-fast);
-    }
-
-    .cta-btn:hover {
-      background: var(--color-primary-dark);
+    
+    .contact-card:hover {
+      box-shadow: var(--shadow-md);
       transform: translateY(-2px);
-      color: white;
-      text-decoration: none;
+      border-color: var(--color-primary-light);
+    }
+
+    .contact-icon {
+      width: 3rem;
+      height: 3rem;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-white);
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--space-4);
+      box-shadow: var(--shadow-md);
+    }
+
+    .contact-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-description {
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .contact-info {
+      font-weight: var(--font-weight-medium);
+      color: var(--color-primary);
+    }
+
+    .form-card {
+      background: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-8);
+      border: 1px solid var(--color-border);
+      transition: var(--transition-all);
+    }
+    
+    .form-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      font-weight: var(--font-weight-medium);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+      font-family: var(--font-family-primary);
+      color: var(--color-text-primary);
+      background-color: var(--color-white);
+      box-shadow: var(--shadow-xs);
+      transition: var(--transition-all);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-light);
+    }
+    
+    .form-control::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    .form-control.textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: var(--color-white);
+      border: 1px solid var(--color-primary);
+      padding: var(--space-3) var(--space-8);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      font-family: var(--font-family-primary);
+      cursor: pointer;
+      transition: var(--transition-all);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+      color: var(--color-white);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
 
     .site-footer {
@@ -264,7 +255,7 @@
       align-items: center;
       gap: 0.75rem;
       text-decoration: none;
-      color: white;
+      color: var(--color-white);
       font-weight: var(--font-weight-bold);
       font-size: var(--font-size-xl);
       transition: color 0.3s ease;
@@ -272,26 +263,32 @@
 
     .footer-logo:hover {
       color: var(--color-primary);
-      text-decoration: none;
+    }
+
+    .footer-logo svg {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      display: block;
     }
 
     .footer-brand p {
       color: var(--color-gray-400);
-      line-height: 1.6;
+      line-height: var(--line-height-relaxed);
       max-width: 300px;
     }
 
     .footer-links {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 2rem;
     }
 
     .footer-section h3 {
-      color: white;
+      color: var(--color-white);
+      font-size: var(--font-size-base);
       font-weight: var(--font-weight-semibold);
       margin-bottom: 1rem;
-      font-size: var(--font-size-base);
     }
 
     .footer-section ul {
@@ -353,33 +350,43 @@
 
     .social-links a:hover {
       background: var(--color-primary);
-      color: white;
+      color: #ffffff;
       transform: translateY(-2px);
     }
 
     @media (max-width: 768px) {
       .hero h1 {
-        font-size: var(--font-size-4xl);
+        font-size: var(--font-size-3xl);
       }
-
-      .hero p {
-        font-size: var(--font-size-lg);
-      }
-
       .footer-content {
         grid-template-columns: 1fr;
         gap: 2rem;
       }
-
+      .footer-links {
+        grid-template-columns: repeat(2, 1fr);
+      }
       .footer-bottom {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
       }
     }
+
+      .hero p {
+        font-size: var(--font-size-lg);
+      }
+
+      .content {
+        padding: 2rem 0;
+      }
+
+      .contact-card,
+      .form-card {
+        padding: 1.5rem;
+      }
   </style>
 </head>
-<body class="api-page">
+<body class="contact-page">
   <nav class="navbar">
     <div class="container">
       <a class="navbar-brand" href="/">
@@ -419,90 +426,113 @@
 
   <section class="hero">
     <div class="container">
-      <h1>API Documentation</h1>
-      <p>Integrate CollabSpace with your applications using our powerful and flexible RESTful API</p>
+      <h1>Get in Touch</h1>
+      <p>Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
     </div>
   </section>
 
-  <div class="content-wrapper">
+  <main class="content">
     <div class="container">
-      <div class="api-section">
-        <h2>Authentication</h2>
-        <p>All API requests require authentication using an API key. Include your API key in the Authorization header:</p>
-        <div class="endpoint">
-          <code>Authorization: Bearer YOUR_API_KEY</code>
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3 class="contact-title">Email Us</h3>
+            <p class="contact-description">Send us an email and we'll get back to you within 24 hours.</p>
+            <div class="contact-info">support@collabspace.com</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-phone"></i>
+            </div>
+            <h3 class="contact-title">Call Us</h3>
+            <p class="contact-description">Speak directly with our support team during business hours.</p>
+            <div class="contact-info">+1 (555) 123-4567</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3 class="contact-title">Live Chat</h3>
+            <p class="contact-description">Chat with our team for immediate assistance and quick answers.</p>
+            <div class="contact-info">Available 9 AM - 6 PM EST</div>
+          </div>
         </div>
       </div>
 
-      <div class="api-section">
-        <h2>Teams</h2>
-        <p>Manage team information and members</p>
-        <div class="endpoint">
-          <span class="method method-get">GET</span>
-          <code>/api/v1/teams</code>
-          <p class="mt-2 mb-0">Retrieve all teams for the authenticated user</p>
-        </div>
-        <div class="endpoint">
-          <span class="method method-post">POST</span>
-          <code>/api/v1/teams</code>
-          <p class="mt-2 mb-0">Create a new team</p>
-        </div>
-        <div class="endpoint">
-          <span class="method method-get">GET</span>
-          <code>/api/v1/teams/{id}/members</code>
-          <p class="mt-2 mb-0">Get team members</p>
+      <div class="row mt-5">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="form-card">
+            <h2 class="mb-4">Send us a Message</h2>
+            <form id="contactForm">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label" for="firstName">First Name *</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label" for="lastName">Last Name *</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="email">Email Address *</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="company">Company</label>
+                <input type="text" class="form-control" id="company" name="company">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="subject">Subject *</label>
+                <select class="form-control" id="subject" name="subject" required>
+                  <option value="">Select a subject</option>
+                  <option value="sales">Sales Inquiry</option>
+                  <option value="support">Technical Support</option>
+                  <option value="billing">Billing Question</option>
+                  <option value="partnership">Partnership</option>
+                  <option value="feedback">Feedback</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="message">Message *</label>
+                <textarea class="form-control textarea" id="message" name="message" placeholder="Tell us how we can help you..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-paper-plane me-2"></i>
+                Send Message
+              </button>
+            </form>
+          </div>
         </div>
       </div>
 
-      <div class="api-section">
-        <h2>Tasks</h2>
-        <p>Create and manage tasks within your teams</p>
-        <div class="endpoint">
-          <span class="method method-get">GET</span>
-          <code>/api/v1/tasks</code>
-          <p class="mt-2 mb-0">Retrieve all tasks</p>
-        </div>
-        <div class="endpoint">
-          <span class="method method-post">POST</span>
-          <code>/api/v1/tasks</code>
-          <p class="mt-2 mb-0">Create a new task</p>
-        </div>
-        <div class="endpoint">
-          <span class="method method-put">PUT</span>
-          <code>/api/v1/tasks/{id}</code>
-          <p class="mt-2 mb-0">Update task status or details</p>
-        </div>
-        <div class="endpoint">
-          <span class="method method-delete">DELETE</span>
-          <code>/api/v1/tasks/{id}</code>
-          <p class="mt-2 mb-0">Delete a task</p>
-        </div>
-      </div>
-
-      <div class="api-section">
-        <h2>Messages</h2>
-        <p>Send and retrieve team messages</p>
-        <div class="endpoint">
-          <span class="method method-get">GET</span>
-          <code>/api/v1/messages</code>
-          <p class="mt-2 mb-0">Get team messages</p>
-        </div>
-        <div class="endpoint">
-          <span class="method method-post">POST</span>
-          <code>/api/v1/messages</code>
-          <p class="mt-2 mb-0">Send a message to team</p>
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+          <h3>Frequently Asked Questions</h3>
+          <p class="mb-4">Before reaching out, you might find your answer in our <a href="/help" class="text-decoration-none">Help Center</a> or <a href="/docs" class="text-decoration-none">Documentation</a>.</p>
         </div>
       </div>
     </div>
-  </div>
-
-  <section class="cta-section">
-    <div class="container">
-      <h2>Ready to integrate CollabSpace?</h2>
-      <p class="mb-4">Get your API key and start building amazing integrations today.</p>
-      <a href="/register" class="cta-btn">Get Started Today</a>
-    </div>
-  </section>
+  </main>
 
   <footer class="site-footer">
     <div class="footer-content">
@@ -584,4 +614,25 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Show success message
+      const form = e.target;
+      const button = form.querySelector('button[type="submit"]');
+      const originalText = button.innerHTML;
+      
+      button.innerHTML = '<i class="fas fa-check me-2"></i>Message Sent!';
+      button.disabled = true;
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        form.reset();
+        button.innerHTML = originalText;
+        button.disabled = false;
+      }, 3000);
+    });
+  </script>
 </body>
+</html>
