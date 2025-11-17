@@ -59,16 +59,7 @@ const authenticateSession = async (req, res, next) => {
 // Session-based authentication middleware for web routes (redirects to login)
 const authenticateWeb = async (req, res, next) => {
   try {
-    console.log("🔍 Web session debug:", {
-      sessionId: req.sessionID,
-      userId: req.session.userId,
-      sessionExists: !!req.session,
-      persistent: req.session.persistent,
-      cookies: req.headers.cookie,
-    });
-
     if (!req.session.userId) {
-      console.log("❌ No userId in session, redirecting to login");
       return res.redirect("/login");
     }
 
@@ -104,7 +95,6 @@ const authenticateWeb = async (req, res, next) => {
       }
     }
 
-    console.log("✅ Web authentication successful for user:", user.email);
     req.user = user;
     next();
   } catch (error) {

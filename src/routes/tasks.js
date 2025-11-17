@@ -164,7 +164,7 @@ const validateTaskUpdate = [
     .optional()
     .isIn(["todo", "in_progress", "review", "completed", "cancelled"])
     .withMessage(
-      "Status must be one of: todo, in_progress, review, completed, cancelled",
+      "Status must be one of: todo, in_progress, review, completed, cancelled"
     ),
   body("priority")
     .optional()
@@ -246,7 +246,7 @@ router.get(
 
       // Remove undefined options
       Object.keys(options).forEach(
-        (key) => options[key] === undefined && delete options[key],
+        (key) => options[key] === undefined && delete options[key]
       );
 
       const skip = (page - 1) * limit;
@@ -258,15 +258,9 @@ router.get(
       if (organiser === "true") {
         // Get tasks for teams where user is admin/organiser
         const userTeams = await Team.find({ admin: req.user._id }).select(
-          "_id",
+          "_id"
         );
         const teamIds = userTeams.map((team) => team._id);
-
-        console.log("Organiser task query debug:", {
-          userId: req.user._id,
-          userTeams: userTeams.length,
-          teamIds: teamIds.length,
-        });
 
         const query = {
           $or: [
@@ -280,21 +274,12 @@ router.get(
         if (team) query.team = team;
         if (assignedTo) query.assignedTo = assignedTo;
 
-        console.log("Task query:", query);
-
         tasks = await Task.find(query)
           .populate("team", "name")
           .populate("createdBy", "username firstName lastName")
           .sort(sort)
           .skip(skip)
           .limit(parseInt(limit));
-
-        console.log("Tasks found:", tasks.length);
-        tasks.forEach((task) => {
-          console.log(
-            `- Task: ${task.title}, Team: ${task.team?.name}, Status: ${task.status}`,
-          );
-        });
 
         total = await Task.countDocuments(query);
       } else {
@@ -333,7 +318,7 @@ router.get(
       logger.error("Get tasks error:", error);
       throw new AppError("Failed to get tasks", 500);
     }
-  }),
+  })
 );
 
 // @route   GET /api/tasks/team/:teamId
@@ -359,7 +344,7 @@ router.get(
 
       // Remove undefined options
       Object.keys(options).forEach(
-        (key) => options[key] === undefined && delete options[key],
+        (key) => options[key] === undefined && delete options[key]
       );
 
       const skip = (page - 1) * limit;
@@ -392,7 +377,7 @@ router.get(
       logger.error("Get team tasks error:", error);
       throw new AppError("Failed to get team tasks", 500);
     }
-  }),
+  })
 );
 
 // @route   GET /api/tasks/overdue
@@ -415,7 +400,7 @@ router.get(
       logger.error("Get overdue tasks error:", error);
       throw new AppError("Failed to get overdue tasks", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/tasks
@@ -425,7 +410,7 @@ router.post(
   "/",
   requireAuth,
   validateTaskCreation,
-  invalidateCacheMiddleware(["team-*", "user-*", "stats-*"]),
+  invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -484,14 +469,14 @@ router.post(
           req.user._id,
           task._id,
           "created",
-          title,
+          title
         );
       } catch (error) {
         logger.warn("Failed to create task update message:", error.message);
       }
 
       logger.info(
-        `User ${req.user.username} created task: ${title} in team: ${teamDoc.name}`,
+        `User ${req.user.username} created task: ${title} in team: ${teamDoc.name}`
       );
 
       // Send successful response first
@@ -514,7 +499,7 @@ router.post(
       logger.error("Create task error:", error);
       throw new AppError("Failed to create task", 500);
     }
-  }),
+  })
 );
 
 // @route   GET /api/tasks/:id
@@ -569,7 +554,7 @@ router.get(
       logger.error("Get task details error:", error);
       throw new AppError("Failed to get task details", 500);
     }
-  }),
+  })
 );
 
 // @route   PUT /api/tasks/:id
@@ -579,7 +564,7 @@ router.put(
   "/:id",
   requireAuth,
   validateTaskUpdate,
-  invalidateCacheMiddleware(["team-*", "user-*", "stats-*"]),
+  invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -613,7 +598,7 @@ router.put(
       // Check if user has access to this task
       const userId = req.user._id.toString();
       const teamMemberIds = task.team.members.map((member) =>
-        member.toString(),
+        member.toString()
       );
       const teamAdminId = task.team.admin ? task.team.admin.toString() : null;
 
@@ -628,7 +613,7 @@ router.put(
         console.log("Team admin:", teamAdminId);
         console.log(
           "Task creator:",
-          task.createdBy ? task.createdBy.toString() : "none",
+          task.createdBy ? task.createdBy.toString() : "none"
         );
         return res.status(403).json({
           success: false,
@@ -640,7 +625,7 @@ router.put(
 
       // Remove undefined fields
       Object.keys(updateData).forEach(
-        (key) => updateData[key] === undefined && delete updateData[key],
+        (key) => updateData[key] === undefined && delete updateData[key]
       );
 
       // Update task
@@ -679,7 +664,7 @@ router.put(
           req.user._id,
           task._id,
           "updated",
-          task.title,
+          task.title
         );
       } catch (error) {
         logger.warn("Failed to create task update message:", error.message);
@@ -732,7 +717,7 @@ router.put(
       logger.error("Update task error:", error);
       throw new AppError("Failed to update task", 500);
     }
-  }),
+  })
 );
 
 // @route   DELETE /api/tasks/:id
@@ -741,12 +726,12 @@ router.put(
 router.delete(
   "/:id",
   requireAuth,
-  invalidateCacheMiddleware(["team-*", "user-*", "stats-*"]),
+  invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     try {
       const task = await Task.findById(req.params.id).populate(
         "team",
-        "name members admin",
+        "name members admin"
       );
 
       if (!task) {
@@ -763,7 +748,7 @@ router.delete(
 
         await Task.findByIdAndDelete(req.params.id);
 
-        logger.info("Orphaned task deleted successfully");
+        logger.info(`Orphaned task deleted successfully`);
 
         return res.json({
           success: true,
@@ -773,7 +758,7 @@ router.delete(
 
       // Check if user has access to this task (either team member or team admin)
       const isTeamMember = task.team.members.some(
-        (member) => member.toString() === req.user._id.toString(),
+        (member) => member.toString() === req.user._id.toString()
       );
       const isTeamAdmin =
         task.team.admin &&
@@ -801,7 +786,7 @@ router.delete(
       const teamId = task.team._id || task.team;
 
       logger.info(
-        `Attempting to delete task: ${taskTitle}, Team ID: ${teamId}`,
+        `Attempting to delete task: ${taskTitle}, Team ID: ${teamId}`
       );
 
       const teamDoc = await Team.findById(teamId);
@@ -810,13 +795,13 @@ router.delete(
 
       await Task.findByIdAndDelete(req.params.id);
 
-      logger.info("Task deleted from database successfully");
+      logger.info(`Task deleted from database successfully`);
 
       // Update team stats
       if (teamDoc) {
-        logger.info("Updating team stats...");
+        logger.info(`Updating team stats...`);
         await teamDoc.updateTaskStats();
-        logger.info("Team stats updated successfully");
+        logger.info(`Team stats updated successfully`);
       }
 
       logger.info(`User ${req.user.username} deleted task: ${taskTitle}`);
@@ -845,7 +830,7 @@ router.delete(
       });
       throw new AppError("Failed to delete task", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/tasks/:id/assign
@@ -869,7 +854,7 @@ router.post(
 
       const task = await Task.findById(req.params.id).populate(
         "team",
-        "name members",
+        "name members"
       );
 
       if (!task) {
@@ -905,14 +890,14 @@ router.post(
           req.user._id,
           task._id,
           "assigned",
-          task.title,
+          task.title
         );
       } catch (error) {
         logger.warn("Failed to create task update message:", error.message);
       }
 
       logger.info(
-        `User ${req.user.username} assigned task: ${task.title} to user: ${userId}`,
+        `User ${req.user.username} assigned task: ${task.title} to user: ${userId}`
       );
 
       res.json({
@@ -924,7 +909,7 @@ router.post(
       logger.error("Assign task error:", error);
       throw new AppError("Failed to assign task", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/tasks/:id/status
@@ -937,7 +922,7 @@ router.post(
     body("status")
       .isIn(["todo", "in_progress", "review", "completed", "cancelled"])
       .withMessage(
-        "Status must be one of: todo, in_progress, review, completed, cancelled",
+        "Status must be one of: todo, in_progress, review, completed, cancelled"
       ),
   ],
   catchAsync(async (req, res) => {
@@ -953,7 +938,7 @@ router.post(
 
       const { status } = req.body;
       logger.info(
-        `Attempting to update task ${req.params.id} to status: ${status}`,
+        `Attempting to update task ${req.params.id} to status: ${status}`
       );
 
       const task = await Task.findById(req.params.id).populate("team", "name");
@@ -979,7 +964,7 @@ router.post(
       }
 
       logger.info(
-        `Team found: ${team.name}, admin: ${team.admin}, members: ${team.members}, user: ${req.user._id}`,
+        `Team found: ${team.name}, admin: ${team.admin}, members: ${team.members}, user: ${req.user._id}`
       );
 
       if (
@@ -987,7 +972,7 @@ router.post(
         !team.admin.equals(req.user._id)
       ) {
         logger.error(
-          `User ${req.user._id} does not have access to task ${req.params.id} in team ${team._id}`,
+          `User ${req.user._id} does not have access to task ${req.params.id} in team ${team._id}`
         );
         return res.status(403).json({
           success: false,
@@ -995,12 +980,12 @@ router.post(
         });
       }
 
-      logger.info("User has access, updating status...");
+      logger.info(`User has access, updating status...`);
 
       // Update status
       await task.updateStatus(status, req.user._id);
 
-      logger.info("Status updated successfully");
+      logger.info(`Status updated successfully`);
 
       // Create system message for status change
       try {
@@ -1010,14 +995,14 @@ router.post(
           req.user._id,
           task._id,
           action,
-          task.title,
+          task.title
         );
       } catch (error) {
         logger.warn("Failed to create task update message:", error.message);
       }
 
       logger.info(
-        `User ${req.user.username} updated task status: ${task.title} to ${status}`,
+        `User ${req.user.username} updated task status: ${task.title} to ${status}`
       );
 
       res.json({
@@ -1036,7 +1021,7 @@ router.post(
       });
       throw new AppError("Failed to update task status", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/tasks/:id/comments
@@ -1060,7 +1045,7 @@ router.post(
 
       const task = await Task.findById(req.params.id).populate(
         "team",
-        "name members",
+        "name members"
       );
 
       if (!task) {
@@ -1085,7 +1070,7 @@ router.post(
       await comment.populate("author", "username firstName lastName avatar");
 
       logger.info(
-        `User ${req.user.username} added comment to task: ${task.title}`,
+        `User ${req.user.username} added comment to task: ${task.title}`
       );
 
       res.json({
@@ -1097,7 +1082,7 @@ router.post(
       logger.error("Add comment error:", error);
       throw new AppError("Failed to add comment", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/tasks/:id/time-log
@@ -1121,7 +1106,7 @@ router.post(
 
       const task = await Task.findById(req.params.id).populate(
         "team",
-        "name members",
+        "name members"
       );
 
       if (!task) {
@@ -1146,7 +1131,7 @@ router.post(
       await timeLog.populate("user", "username firstName lastName avatar");
 
       logger.info(
-        `User ${req.user.username} logged ${hours} hours to task: ${task.title}`,
+        `User ${req.user.username} logged ${hours} hours to task: ${task.title}`
       );
 
       res.json({
@@ -1158,7 +1143,7 @@ router.post(
       logger.error("Log time error:", error);
       throw new AppError("Failed to log time", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/tasks/:id/archive
@@ -1170,7 +1155,7 @@ router.post(
     try {
       const task = await Task.findById(req.params.id).populate(
         "team",
-        "name members",
+        "name members"
       );
 
       if (!task) {
@@ -1202,7 +1187,7 @@ router.post(
       logger.error("Archive task error:", error);
       throw new AppError("Failed to archive task", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/tasks/:id/restore
@@ -1214,7 +1199,7 @@ router.post(
     try {
       const task = await Task.findById(req.params.id).populate(
         "team",
-        "name members",
+        "name members"
       );
 
       if (!task) {
@@ -1246,7 +1231,7 @@ router.post(
       logger.error("Restore task error:", error);
       throw new AppError("Failed to restore task", 500);
     }
-  }),
+  })
 );
 
 module.exports = router;

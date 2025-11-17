@@ -7,6 +7,7 @@ const connectDB = async () => {
       process.env.MONGODB_URI || "mongodb://localhost:27017/collabspace",
     );
 
+    console.log(`✓ MongoDB Connected: ${conn.connection.host}`);
     logger.logger.info(`MongoDB Connected: ${conn.connection.host}`);
 
     // Handle connection events
