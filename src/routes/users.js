@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(
       null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname),
     );
   },
 });
@@ -78,7 +78,7 @@ const validatePasswordChange = [
     .withMessage("New password must be at least 8 characters long")
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
     .withMessage(
-      "New password must contain at least one lowercase letter, one uppercase letter, and one number"
+      "New password must contain at least one lowercase letter, one uppercase letter, and one number",
     ),
 ];
 
@@ -132,7 +132,7 @@ router.get(
       logger.error("Get users error:", error);
       throw new AppError("Failed to get users", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/users/search
@@ -163,7 +163,7 @@ router.get(
       logger.error("Search users error:", error);
       throw new AppError("Failed to search users", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/users/:id
@@ -191,7 +191,7 @@ router.get(
       logger.error("Get user error:", error);
       throw new AppError("Failed to get user", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/users/profile/me
@@ -212,7 +212,7 @@ router.get(
       logger.error("Get profile error:", error);
       throw new AppError("Failed to get profile", 500);
     }
-  })
+  }),
 );
 
 // @route   PUT /api/users/profile/me
@@ -252,7 +252,7 @@ router.put(
       const user = await User.findByIdAndUpdate(
         req.user._id,
         { firstName, lastName, bio, email },
-        { new: true, runValidators: true }
+        { new: true, runValidators: true },
       ).select("-password");
 
       logger.info(`User ${req.user.username} updated their profile`);
@@ -266,7 +266,7 @@ router.put(
       logger.error("Update profile error:", error);
       throw new AppError("Failed to update profile", 500);
     }
-  })
+  }),
 );
 
 // @route   PUT /api/users/profile/avatar
@@ -310,7 +310,7 @@ router.put(
       logger.error("Update avatar error:", error);
       throw new AppError("Failed to update avatar", 500);
     }
-  })
+  }),
 );
 
 // @route   PUT /api/users/profile/password
@@ -337,7 +337,7 @@ router.put(
 
       // Verify current password
       const isCurrentPasswordValid = await user.comparePassword(
-        currentPassword
+        currentPassword,
       );
       if (!isCurrentPasswordValid) {
         return res.status(400).json({
@@ -360,7 +360,7 @@ router.put(
       logger.error("Change password error:", error);
       throw new AppError("Failed to change password", 500);
     }
-  })
+  }),
 );
 
 // @route   PUT /api/users/:id
@@ -401,7 +401,7 @@ router.put(
 
       // Remove undefined fields
       Object.keys(updateData).forEach(
-        (key) => updateData[key] === undefined && delete updateData[key]
+        (key) => updateData[key] === undefined && delete updateData[key],
       );
 
       const user = await User.findByIdAndUpdate(req.params.id, updateData, {
@@ -427,7 +427,7 @@ router.put(
       logger.error("Update user error:", error);
       throw new AppError("Failed to update user", 500);
     }
-  })
+  }),
 );
 
 // @route   DELETE /api/users/me
@@ -454,15 +454,15 @@ router.delete(
       // Remove user from any teams they are a member of
       await require("../models/Team").updateMany(
         { members: userId },
-        { $pull: { members: userId } }
+        { $pull: { members: userId } },
       );
 
       // Delete all tasks assigned to or created by this user
       await require("../models/Task").deleteMany({
         $or: [
           { assignedTo: userId },
-          { createdBy: userId }
-        ]
+          { createdBy: userId },
+        ],
       });
 
       // Delete all messages sent by this user
@@ -481,7 +481,7 @@ router.delete(
       logger.error("Delete own account error:", error);
       throw new AppError("Failed to delete account", 500);
     }
-  })
+  }),
 );
 
 // @route   DELETE /api/users/:id
@@ -529,7 +529,7 @@ router.delete(
       logger.error("Delete user error:", error);
       throw new AppError("Failed to delete user", 500);
     }
-  })
+  }),
 );
 
 // @route   PUT /api/users/:id/deactivate
@@ -553,7 +553,7 @@ router.post(
       const user = await User.findByIdAndUpdate(
         req.params.id,
         { isActive: false },
-        { new: true }
+        { new: true },
       ).select("-password");
 
       if (!user) {
@@ -564,7 +564,7 @@ router.post(
       }
 
       logger.info(
-        `Admin ${req.user.username} deactivated user ${user.username}`
+        `Admin ${req.user.username} deactivated user ${user.username}`,
       );
 
       res.json({
@@ -576,7 +576,7 @@ router.post(
       logger.error("Deactivate user error:", error);
       throw new AppError("Failed to deactivate user", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /api/users/:id/activate
@@ -590,7 +590,7 @@ router.post(
       const user = await User.findByIdAndUpdate(
         req.params.id,
         { isActive: true },
-        { new: true }
+        { new: true },
       ).select("-password");
 
       if (!user) {
@@ -611,7 +611,7 @@ router.post(
       logger.error("Activate user error:", error);
       throw new AppError("Failed to activate user", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/users/stats/overview
@@ -661,7 +661,7 @@ router.get(
       logger.error("Get user stats error:", error);
       throw new AppError("Failed to get user statistics", 500);
     }
-  })
+  }),
 );
 
 module.exports = router;
