@@ -66,7 +66,7 @@ if (process.env.NODE_ENV !== "test") {
   connectRedis()
     .then((client) => {
       redisClient = client;
-      console.log("Redis integration initialized");
+      // Redis integration initialized
     })
     .catch((error) => {
       console.warn(
@@ -109,7 +109,7 @@ if (redisClient && redisClient.isReady) {
     prefix: "collabspace:sess:",
     ttl: parseInt(process.env.REDIS_SESSION_TTL) || 86400, // 1 day in seconds
   });
-  console.log("Using Redis for session storage");
+  // Using Redis for session storage
 } else {
   sessionConfig.store = MongoStore.create({
     mongoUrl:
@@ -117,7 +117,7 @@ if (redisClient && redisClient.isReady) {
     touchAfter: 24 * 3600, // Lazy session update (only update if changed)
     ttl: 30 * 24 * 60 * 60, // Session TTL of 30 days in seconds
   });
-  console.log("Using MongoDB for session storage");
+  // Using MongoDB for session storage
 }
 
 app.use(session(sessionConfig));
@@ -225,18 +225,12 @@ app.get(
 );
 
 app.get("/member-dashboard", authenticateWeb, (req, res) => {
-  console.log("Member dashboard route accessed");
-  console.log("User:", req.user);
-  console.log("User role:", req.user?.role);
-
   // Check if user has the right role
   if (!req.user) {
-    console.log("No user found, redirecting to login");
     return res.redirect("/login");
   }
 
   if (req.user.role !== "Team Member") {
-    console.log("User role is not Team Member, role is:", req.user.role);
     return res
       .status(403)
       .send(
@@ -244,7 +238,6 @@ app.get("/member-dashboard", authenticateWeb, (req, res) => {
       );
   }
 
-  console.log("Rendering member dashboard for user:", req.user.username);
   res.render("dashboard/member", {
     title: "Team Member Dashboard",
     user: req.user,
@@ -436,7 +429,7 @@ const teamUsers = new Map(); // Map of teamId -> Set of userIds
 
 // Socket.IO connection handling
 io.on("connection", (socket) => {
-  logger.logger.info(`User connected: ${socket.id}`);
+  // logger.logger.info(`User connected: ${socket.id}`); // Reduced logging
 
   // Register organiser dashboard listener
   socket.on("registerOrganiser", async (organiserId) => {
@@ -456,9 +449,9 @@ io.on("connection", (socket) => {
       socket.join(`user_${organiserId}`);
       socket.currentUserId = organiserId;
 
-      logger.logger.info(
-        `Socket ${socket.id} registered for organiser ${organiserId}`
-      );
+      // logger.logger.info(
+      //   `Socket ${socket.id} registered for organiser ${organiserId}`
+      // ); // Reduced logging
 
       // Send initial summary
       const summary = await computeOrganiserSummary(organiserId);
@@ -480,9 +473,9 @@ io.on("connection", (socket) => {
       socket.join(`user_${memberId}`);
       socket.currentUserId = memberId;
 
-      logger.logger.info(
-        `Socket ${socket.id} registered for member ${memberId}`
-      );
+      // logger.logger.info(
+      //   `Socket ${socket.id} registered for member ${memberId}`
+      // ); // Reduced logging
     } catch (e) {
       logger.logger.error("Error registering member socket", e);
     }
@@ -703,6 +696,7 @@ const PORT = process.env.PORT || 3000;
 
 if (process.env.NODE_ENV !== "test") {
   server.listen(PORT, () => {
+    console.log(`✓ Server running on port ${PORT}`);
     logger.logger.info(`Server running on port ${PORT}`);
     logger.logger.info(`Environment: ${process.env.NODE_ENV || "development"}`);
   });

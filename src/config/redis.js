@@ -33,11 +33,11 @@ async function connectRedis() {
 
     // Handle Redis connection events
     client.on("connect", () => {
-      console.log("Connected to Redis server");
+      // Redis connected
     });
 
     client.on("ready", () => {
-      console.log("Redis client ready to use");
+      console.log("✓ Redis Connected");
     });
 
     client.on("error", (err) => {
@@ -45,7 +45,7 @@ async function connectRedis() {
     });
 
     client.on("end", () => {
-      console.log("Redis connection closed");
+      // Redis connection closed
     });
 
     // Connect to Redis

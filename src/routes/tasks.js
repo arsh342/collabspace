@@ -262,12 +262,6 @@ router.get(
         );
         const teamIds = userTeams.map((team) => team._id);
 
-        console.log("Organiser task query debug:", {
-          userId: req.user._id,
-          userTeams: userTeams.length,
-          teamIds: teamIds.length,
-        });
-
         const query = {
           $or: [
             { createdBy: req.user._id }, // Tasks created by the organiser
@@ -280,21 +274,12 @@ router.get(
         if (team) query.team = team;
         if (assignedTo) query.assignedTo = assignedTo;
 
-        console.log("Task query:", query);
-
         tasks = await Task.find(query)
           .populate("team", "name")
           .populate("createdBy", "username firstName lastName")
           .sort(sort)
           .skip(skip)
           .limit(parseInt(limit));
-
-        console.log("Tasks found:", tasks.length);
-        tasks.forEach((task) => {
-          console.log(
-            `- Task: ${task.title}, Team: ${task.team?.name}, Status: ${task.status}`
-          );
-        });
 
         total = await Task.countDocuments(query);
       } else {

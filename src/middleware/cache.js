@@ -36,7 +36,6 @@ function cacheMiddleware(ttl = 3600, keyGenerator = null) {
       // Try to get cached response
       const cachedResponse = await getCache(cacheKey);
       if (cachedResponse) {
-        console.log(`Cache hit for key: ${cacheKey}`);
         return res.json(cachedResponse);
       }
 
@@ -49,7 +48,7 @@ function cacheMiddleware(ttl = 3600, keyGenerator = null) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           setCache(cacheKey, data, ttl)
             .then(() => {
-              console.log(`Response cached with key: ${cacheKey}`);
+              // Response cached
             })
             .catch((err) => {
               console.error("Failed to cache response:", err);
@@ -103,7 +102,7 @@ function invalidateCacheMiddleware(patterns) {
             }
 
             await invalidatePattern(actualPattern);
-            console.log(`Cache invalidated for pattern: ${actualPattern}`);
+            // Cache invalidated
           }
         } catch (error) {
           console.error("Cache invalidation error:", error);
