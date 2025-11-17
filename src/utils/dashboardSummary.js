@@ -18,7 +18,7 @@ async function computeOrganiserSummary(organiserId) {
   const totalTeams = teams.length;
   const totalMembers = teams.reduce(
     (sum, t) => sum + (Array.isArray(t.members) ? t.members.length : 0),
-    0
+    0,
   );
 
   // Aggregate tasks for these teams (only non-archived)

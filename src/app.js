@@ -71,7 +71,7 @@ if (process.env.NODE_ENV !== "test") {
     .catch((error) => {
       console.warn(
         "Redis connection failed, falling back to MongoDB for sessions:",
-        error.message
+        error.message,
       );
     });
 }
@@ -146,7 +146,7 @@ app.use(
     req.io = io;
     next();
   },
-  chatRoutes
+  chatRoutes,
 );
 app.use("/api/upload", uploadRoutes);
 app.use("/api", uploadRoutes); // This will handle /api/files/:filename
@@ -189,7 +189,7 @@ app.get("/logout", (req, res) => {
       res.clearCookie("connect.sid");
       res.clearCookie("user");
       res.clearCookie("token");
-      logger.logger.info(`User logged out via web route`);
+      logger.logger.info("User logged out via web route");
     });
   }
   res.redirect("/login");
@@ -221,7 +221,7 @@ app.get(
       user: req.user,
       path: "/organiser-dashboard",
     });
-  }
+  },
 );
 
 app.get("/member-dashboard", authenticateWeb, (req, res) => {
@@ -240,7 +240,7 @@ app.get("/member-dashboard", authenticateWeb, (req, res) => {
     return res
       .status(403)
       .send(
-        `Access denied. Your role is: ${req.user.role}. Team Member access required.`
+        `Access denied. Your role is: ${req.user.role}. Team Member access required.`,
       );
   }
 
@@ -349,12 +349,12 @@ app.get("/terms", (req, res) => {
 app.get("/payment", (req, res) => {
   const proUnitAmount = Number.parseInt(
     process.env.STRIPE_PRO_UNIT_AMOUNT || "5900",
-    10
+    10,
   );
   const planCurrency = (process.env.STRIPE_CURRENCY || "usd").toUpperCase();
   const maxSeats = Number.parseInt(
     process.env.STRIPE_PRO_MAX_SEATS || "500",
-    10
+    10,
   );
 
   res.render("pages/payment", {
@@ -457,7 +457,7 @@ io.on("connection", (socket) => {
       socket.currentUserId = organiserId;
 
       logger.logger.info(
-        `Socket ${socket.id} registered for organiser ${organiserId}`
+        `Socket ${socket.id} registered for organiser ${organiserId}`,
       );
 
       // Send initial summary
@@ -481,7 +481,7 @@ io.on("connection", (socket) => {
       socket.currentUserId = memberId;
 
       logger.logger.info(
-        `Socket ${socket.id} registered for member ${memberId}`
+        `Socket ${socket.id} registered for member ${memberId}`,
       );
     } catch (e) {
       logger.logger.error("Error registering member socket", e);
@@ -547,7 +547,7 @@ io.on("connection", (socket) => {
         await onlineUsers.leaveRoom(socket.currentUserId, teamId);
 
         logger.logger.info(
-          `User ${socket.currentUserId} (${socket.id}) left team ${teamId}`
+          `User ${socket.currentUserId} (${socket.id}) left team ${teamId}`,
         );
 
         // Clear current team info
@@ -582,10 +582,10 @@ io.on("connection", (socket) => {
       // Broadcast message to team
       socket.to(`team-${data.teamId}`).emit("new message", data);
       logger.logger.info(
-        `Message sent in team ${data.teamId}: ${data.content}`
+        `Message sent in team ${data.teamId}: ${data.content}`,
       );
     } catch (error) {
-      logger.logger.error(`Error updating user lastSeen for message:`, error);
+      logger.logger.error("Error updating user lastSeen for message:", error);
     }
   });
 
@@ -646,7 +646,7 @@ io.on("connection", (socket) => {
         }
       }
     } catch (error) {
-      logger.logger.error(`Error updating user lastSeen on disconnect:`, error);
+      logger.logger.error("Error updating user lastSeen on disconnect:", error);
     }
   });
 });
