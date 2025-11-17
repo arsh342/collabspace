@@ -1,13 +1,15 @@
-const fs = require("fs");
-const path = require("path");
+const STATIC_EXTENSIONS = [".png", ".jpg", ".jpeg", ".gif", ".svg", ".css", ".js", ".ico"];
 
-// Ensure logs directory exists
-const logsDir = path.join(process.cwd(), "logs");
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
+function shouldSkipPath(url) {
+  if (!url) return false;
+  if (process.env.LOG_SKIP_STATIC === "false") return false;
+
+  return (
+    url.startsWith("/public/") ||
+    url.startsWith("/uploads/") ||
+    STATIC_EXTENSIONS.some((ext) => url.toLowerCase().endsWith(ext))
+  );
 }
-
-const logFile = path.join(logsDir, "app.log");
 
 // Custom logger class
 class Logger {
@@ -27,17 +29,13 @@ class Logger {
 
   _formatMessage(level, message, meta = {}) {
     const timestamp = new Date().toISOString();
-    const metaStr =
-      Object.keys(meta).length > 0 ? ` | ${JSON.stringify(meta)}` : "";
-    return `[${timestamp}] ${level.toUpperCase()}: ${message}${metaStr}`;
-  }
-
-  _writeToFile(message) {
-    try {
-      fs.appendFileSync(logFile, message + "\n");
-    } catch (error) {
-      console.error("Error writing to log file:", error);
-    }
+    const metaStr = Object.entries(meta)
+      .filter(([, value]) => value !== undefined && value !== null && value !== "")
+      .map(([key, value]) => `${key}=${value}`)
+      .join(" ");
+    return metaStr
+      ? `[${timestamp}] ${level.toUpperCase()}: ${message} | ${metaStr}`
+      : `[${timestamp}] ${level.toUpperCase()}: ${message}`;
   }
 
   _log(level, message, meta = {}) {
@@ -62,9 +60,6 @@ class Logger {
       default:
         console.log(formattedMessage);
     }
-
-    // File output
-    this._writeToFile(formattedMessage);
   }
 
   error(message, meta = {}) {
@@ -93,23 +88,25 @@ const loggerMiddleware = (req, res, next) => {
     return next();
   }
 
+  if (shouldSkipPath(req.originalUrl)) {
+    return next();
+  }
+
   const start = Date.now();
 
-  // Log request
-  logger.info(`${req.method} ${req.originalUrl}`, {
-    ip: req.ip,
-    userAgent: req.get("User-Agent"),
-    timestamp: new Date().toISOString(),
-  });
-
-  // Log response
   res.on("finish", () => {
     const duration = Date.now() - start;
-    logger.info(`${req.method} ${req.originalUrl} - ${res.statusCode}`, {
+    const meta = {
       statusCode: res.statusCode,
       duration: `${duration}ms`,
       ip: req.ip,
-    });
+    };
+
+    if (process.env.LOG_INCLUDE_UA === "true") {
+      meta.userAgent = req.get("User-Agent");
+    }
+
+    logger.info(`${req.method} ${req.originalUrl}`, meta);
   });
 
   next();

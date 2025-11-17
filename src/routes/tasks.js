@@ -7,8 +7,16 @@ const Task = require("../models/Task");
 const Team = require("../models/Team");
 const Message = require("../models/Message");
 const { catchAsync, AppError } = require("../middleware/errorHandler");
-const { requireTeamMembership, requireTeamOrganiser, requireAuth } = require("../middleware/auth");
+const {
+  requireTeamMembership,
+  requireTeamOrganiser,
+  requireAuth,
+} = require("../middleware/auth");
 const { logger } = require("../middleware/logger");
+const {
+  cacheMiddleware,
+  invalidateCacheMiddleware,
+} = require("../middleware/cache");
 
 const router = express.Router();
 
@@ -18,7 +26,7 @@ const checkTaskAccess = (task, userId) => {
   if (!task.team) {
     return { hasAccess: true, isOrphaned: true };
   }
-  
+
   const hasAccess = task.team.members.includes(userId);
   return { hasAccess, isOrphaned: false };
 };
@@ -29,19 +37,19 @@ const handleOrphanedTask = (task, action = "view") => {
     return {
       success: true,
       message: "Orphaned task deleted successfully (team was deleted)",
-      data: { task: { ...task.toObject(), isOrphaned: true } }
+      data: { task: { ...task.toObject(), isOrphaned: true } },
     };
   }
-  
+
   return {
     success: true,
-    data: { 
+    data: {
       task: {
         ...task.toObject(),
         isOrphaned: true,
-        team: { name: "Deleted Team", members: [] }
-      }
-    }
+        team: { name: "Deleted Team", members: [] },
+      },
+    },
   };
 };
 
@@ -118,7 +126,7 @@ const validateTaskCreation = [
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Reset time to start of day
         dueDate.setHours(0, 0, 0, 0);
-        
+
         if (dueDate < today) {
           throw new Error("Due date cannot be in the past");
         }
@@ -172,7 +180,7 @@ const validateTaskUpdate = [
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Reset time to start of day
         dueDate.setHours(0, 0, 0, 0);
-        
+
         if (dueDate < today) {
           throw new Error("Due date cannot be in the past");
         }
@@ -247,21 +255,23 @@ router.get(
       let tasks;
       let total;
 
-      if (organiser === 'true') {
+      if (organiser === "true") {
         // Get tasks for teams where user is admin/organiser
-        const userTeams = await Team.find({ admin: req.user._id }).select('_id');
-        const teamIds = userTeams.map(team => team._id);
+        const userTeams = await Team.find({ admin: req.user._id }).select(
+          "_id"
+        );
+        const teamIds = userTeams.map((team) => team._id);
 
-        console.log('Organiser task query debug:', {
+        console.log("Organiser task query debug:", {
           userId: req.user._id,
           userTeams: userTeams.length,
-          teamIds: teamIds.length
+          teamIds: teamIds.length,
         });
 
         const query = {
           $or: [
-            { createdBy: req.user._id },      // Tasks created by the organiser
-            { team: { $in: teamIds } }        // Tasks in teams they admin
+            { createdBy: req.user._id }, // Tasks created by the organiser
+            { team: { $in: teamIds } }, // Tasks in teams they admin
           ],
           isArchived: false,
         };
@@ -270,19 +280,20 @@ router.get(
         if (team) query.team = team;
         if (assignedTo) query.assignedTo = assignedTo;
 
-        console.log('Task query:', query);
+        console.log("Task query:", query);
 
         tasks = await Task.find(query)
           .populate("team", "name")
-          .populate("assignedTo", "username firstName lastName avatar")
           .populate("createdBy", "username firstName lastName")
           .sort(sort)
           .skip(skip)
           .limit(parseInt(limit));
 
-        console.log('Tasks found:', tasks.length);
-        tasks.forEach(task => {
-          console.log(`- Task: ${task.title}, Team: ${task.team?.name}, Status: ${task.status}`);
+        console.log("Tasks found:", tasks.length);
+        tasks.forEach((task) => {
+          console.log(
+            `- Task: ${task.title}, Team: ${task.team?.name}, Status: ${task.status}`
+          );
         });
 
         total = await Task.countDocuments(query);
@@ -414,6 +425,7 @@ router.post(
   "/",
   requireAuth,
   validateTaskCreation,
+  invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -429,7 +441,6 @@ router.post(
         title,
         description,
         team,
-        assignedTo,
         priority,
         dueDate,
         estimatedHours,
@@ -445,22 +456,11 @@ router.post(
         });
       }
 
-      // Verify assigned user is member of the team (if assigned)
-      if (assignedTo) {
-        if (!teamDoc.members.includes(assignedTo)) {
-          return res.status(400).json({
-            success: false,
-            message: "Assigned user must be a member of the team",
-          });
-        }
-      }
-
       // Create new task
       const task = new Task({
         title,
         description,
         team,
-        assignedTo,
         createdBy: req.user._id,
         priority,
         dueDate,
@@ -475,7 +475,6 @@ router.post(
 
       // Populate task data for response
       await task.populate("team", "name");
-      await task.populate("assignedTo", "username firstName lastName avatar");
       await task.populate("createdBy", "username firstName lastName avatar");
 
       // Create system message for task creation
@@ -511,7 +510,6 @@ router.post(
       // } catch (e) {
       //   logger.warn('Failed to emit organiser summary after task create:', e.message);
       // }
-
     } catch (error) {
       logger.error("Create task error:", error);
       throw new AppError("Failed to create task", 500);
@@ -529,7 +527,6 @@ router.get(
     try {
       const task = await Task.findById(req.params.id)
         .populate("team", "name members")
-        .populate("assignedTo", "username firstName lastName avatar")
         .populate("createdBy", "username firstName lastName avatar")
         .populate("comments.author", "username firstName lastName avatar")
         .populate("timeLogs.user", "username firstName lastName avatar");
@@ -546,12 +543,12 @@ router.get(
         // Orphaned task - return task details but mark as orphaned
         return res.json({
           success: true,
-          data: { 
+          data: {
             task: {
               ...task.toObject(),
               isOrphaned: true,
-              team: { name: "Deleted Team", members: [] }
-            }
+              team: { name: "Deleted Team", members: [] },
+            },
           },
         });
       }
@@ -582,6 +579,7 @@ router.put(
   "/:id",
   requireAuth,
   validateTaskUpdate,
+  invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -593,17 +591,16 @@ router.put(
         });
       }
 
-      const task = await Task.findById(req.params.id).populate(
-        "team",
-        "name members admin"
-      ).populate("createdBy", "_id");
+      const task = await Task.findById(req.params.id)
+        .populate("team", "name members admin")
+        .populate("createdBy", "_id");
 
-      console.log('Task found for update:', {
+      console.log("Task found for update:", {
         id: task?._id,
         title: task?.title,
         teamMembers: task?.team?.members?.length,
         teamAdmin: task?.team?.admin,
-        createdBy: task?.createdBy
+        createdBy: task?.createdBy,
       });
 
       if (!task) {
@@ -615,18 +612,24 @@ router.put(
 
       // Check if user has access to this task
       const userId = req.user._id.toString();
-      const teamMemberIds = task.team.members.map(member => member.toString());
+      const teamMemberIds = task.team.members.map((member) =>
+        member.toString()
+      );
       const teamAdminId = task.team.admin ? task.team.admin.toString() : null;
-      
-      const hasAccess = teamMemberIds.includes(userId) || 
-                       (teamAdminId && teamAdminId === userId) ||
-                       (task.createdBy && task.createdBy.toString() === userId);
-      
+
+      const hasAccess =
+        teamMemberIds.includes(userId) ||
+        (teamAdminId && teamAdminId === userId) ||
+        (task.createdBy && task.createdBy.toString() === userId);
+
       if (!hasAccess) {
-        console.log('Access denied for task update. User:', userId);
-        console.log('Team members:', teamMemberIds);
-        console.log('Team admin:', teamAdminId);
-        console.log('Task creator:', task.createdBy ? task.createdBy.toString() : 'none');
+        console.log("Access denied for task update. User:", userId);
+        console.log("Team members:", teamMemberIds);
+        console.log("Team admin:", teamAdminId);
+        console.log(
+          "Task creator:",
+          task.createdBy ? task.createdBy.toString() : "none"
+        );
         return res.status(403).json({
           success: false,
           message: "You do not have access to this task",
@@ -640,45 +643,33 @@ router.put(
         (key) => updateData[key] === undefined && delete updateData[key]
       );
 
-      // Verify assigned user is member of the team (if being changed)
-      if (
-        updateData.assignedTo &&
-        !teamMemberIds.includes(updateData.assignedTo.toString())
-      ) {
-        return res.status(400).json({
-          success: false,
-          message: "Assigned user must be a member of the team",
-        });
-      }
-
       // Update task
-      console.log('Attempting to update task with data:', updateData);
+      console.log("Attempting to update task with data:", updateData);
       Object.assign(task, updateData);
       await task.save();
-      console.log('Task updated successfully');
+      console.log("Task updated successfully");
 
       // Re-populate the team if it was changed
       if (updateData.team) {
         await task.populate("team", "name members admin");
-        console.log('Team re-populated after update');
+        console.log("Team re-populated after update");
       }
 
       // Update team stats
       try {
-        if (task.team && typeof task.team.updateTaskStats === 'function') {
+        if (task.team && typeof task.team.updateTaskStats === "function") {
           await task.team.updateTaskStats();
-          console.log('Team stats updated');
+          console.log("Team stats updated");
         } else {
-          console.log('Team stats update skipped - method not available');
+          console.log("Team stats update skipped - method not available");
         }
       } catch (statsError) {
-        console.error('Error updating team stats:', statsError);
-        logger.warn('Failed to update team stats:', statsError.message);
+        console.error("Error updating team stats:", statsError);
+        logger.warn("Failed to update team stats:", statsError.message);
       }
 
       // Populate updated task data
       await task.populate("team", "name");
-      await task.populate("assignedTo", "username firstName lastName avatar");
       await task.populate("createdBy", "username firstName lastName avatar");
 
       // Create system message for task update
@@ -698,38 +689,38 @@ router.put(
 
       // Emit real-time updates
       try {
-        const { emitOrganiserSummary, io } = require('../app');
-        
+        const { emitOrganiserSummary, io } = require("../app");
+
         // Emit to organiser dashboard (team admin)
         if (task.team && task.team.admin) {
-          emitOrganiserSummary && emitOrganiserSummary(task.team.admin.toString());
+          emitOrganiserSummary &&
+            emitOrganiserSummary(task.team.admin.toString());
         }
-        
+
         // Emit task update to team members
         if (io && task.team) {
           io.to(`team-${task.team._id}`).emit("task updated", {
             taskId: task._id,
             task: task,
             updatedBy: req.user._id,
-            timestamp: new Date()
+            timestamp: new Date(),
           });
-          console.log('Emitted task updated event to team');
+          console.log("Emitted task updated event to team");
         }
 
         // Emit dashboard refresh to all connected organiser sockets
         if (io && task.team && task.team.admin) {
-          io.emit('dashboard refresh', {
-            type: 'task_updated',
+          io.emit("dashboard refresh", {
+            type: "task_updated",
             taskId: task._id,
             teamId: task.team._id,
-            organiserId: task.team.admin
+            organiserId: task.team.admin,
           });
-          console.log('Emitted dashboard refresh event');
+          console.log("Emitted dashboard refresh event");
         }
-        
       } catch (e) {
-        console.error('Failed to emit real-time updates:', e);
-        logger.warn('Failed to emit real-time updates after task update');
+        console.error("Failed to emit real-time updates:", e);
+        logger.warn("Failed to emit real-time updates after task update");
       }
 
       res.json({
@@ -750,6 +741,7 @@ router.put(
 router.delete(
   "/:id",
   requireAuth,
+  invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     try {
       const task = await Task.findById(req.params.id).populate(
@@ -768,11 +760,11 @@ router.delete(
       if (!task.team) {
         // Orphaned task - team was deleted, allow deletion for cleanup
         logger.info(`Deleting orphaned task: ${task.title} (team was deleted)`);
-        
+
         await Task.findByIdAndDelete(req.params.id);
-        
+
         logger.info(`Orphaned task deleted successfully`);
-        
+
         return res.json({
           success: true,
           message: "Orphaned task deleted successfully",
@@ -780,10 +772,12 @@ router.delete(
       }
 
       // Check if user has access to this task (either team member or team admin)
-      const isTeamMember = task.team.members.some(member => 
-        member.toString() === req.user._id.toString()
+      const isTeamMember = task.team.members.some(
+        (member) => member.toString() === req.user._id.toString()
       );
-      const isTeamAdmin = task.team.admin && task.team.admin.toString() === req.user._id.toString();
+      const isTeamAdmin =
+        task.team.admin &&
+        task.team.admin.toString() === req.user._id.toString();
 
       if (!isTeamMember && !isTeamAdmin) {
         return res.status(403).json({
@@ -805,15 +799,17 @@ router.delete(
 
       const taskTitle = task.title;
       const teamId = task.team._id || task.team;
-      
-      logger.info(`Attempting to delete task: ${taskTitle}, Team ID: ${teamId}`);
-      
+
+      logger.info(
+        `Attempting to delete task: ${taskTitle}, Team ID: ${teamId}`
+      );
+
       const teamDoc = await Team.findById(teamId);
-      
-      logger.info(`Team document found: ${teamDoc ? 'Yes' : 'No'}`);
-      
+
+      logger.info(`Team document found: ${teamDoc ? "Yes" : "No"}`);
+
       await Task.findByIdAndDelete(req.params.id);
-      
+
       logger.info(`Task deleted from database successfully`);
 
       // Update team stats
@@ -827,12 +823,13 @@ router.delete(
 
       // Emit organiser summary (team admin)
       try {
-        const { emitOrganiserSummary } = require('../app');
+        const { emitOrganiserSummary } = require("../app");
         if (task.team && task.team.admin) {
-          emitOrganiserSummary && emitOrganiserSummary(task.team.admin.toString());
+          emitOrganiserSummary &&
+            emitOrganiserSummary(task.team.admin.toString());
         }
       } catch (e) {
-        logger.warn('Failed to emit organiser summary after task delete');
+        logger.warn("Failed to emit organiser summary after task delete");
       }
 
       res.json({
@@ -844,7 +841,7 @@ router.delete(
         error: error.message,
         stack: error.stack,
         taskId: req.params.id,
-        userId: req.user._id
+        userId: req.user._id,
       });
       throw new AppError("Failed to delete task", 500);
     }
@@ -901,9 +898,6 @@ router.post(
       // Assign task
       await task.assignTo(userId);
 
-      // Populate updated task data
-      await task.populate("assignedTo", "username firstName lastName avatar");
-
       // Create system message for task assignment
       try {
         await Message.createTaskUpdateMessage(
@@ -958,7 +952,9 @@ router.post(
       }
 
       const { status } = req.body;
-      logger.info(`Attempting to update task ${req.params.id} to status: ${status}`);
+      logger.info(
+        `Attempting to update task ${req.params.id} to status: ${status}`
+      );
 
       const task = await Task.findById(req.params.id).populate("team", "name");
 
@@ -982,10 +978,17 @@ router.post(
         });
       }
 
-      logger.info(`Team found: ${team.name}, admin: ${team.admin}, members: ${team.members}, user: ${req.user._id}`);
+      logger.info(
+        `Team found: ${team.name}, admin: ${team.admin}, members: ${team.members}, user: ${req.user._id}`
+      );
 
-      if (!team.members.includes(req.user._id) && !team.admin.equals(req.user._id)) {
-        logger.error(`User ${req.user._id} does not have access to task ${req.params.id} in team ${team._id}`);
+      if (
+        !team.members.includes(req.user._id) &&
+        !team.admin.equals(req.user._id)
+      ) {
+        logger.error(
+          `User ${req.user._id} does not have access to task ${req.params.id} in team ${team._id}`
+        );
         return res.status(403).json({
           success: false,
           message: "You do not have access to this task",
@@ -998,9 +1001,6 @@ router.post(
       await task.updateStatus(status, req.user._id);
 
       logger.info(`Status updated successfully`);
-
-      // Populate updated task data
-      await task.populate("assignedTo", "username firstName lastName avatar");
 
       // Create system message for status change
       try {
@@ -1032,7 +1032,7 @@ router.post(
         stack: error.stack,
         taskId: req.params.id,
         status: req.body.status,
-        userId: req.user._id
+        userId: req.user._id,
       });
       throw new AppError("Failed to update task status", 500);
     }

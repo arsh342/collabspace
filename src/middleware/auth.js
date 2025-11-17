@@ -14,7 +14,10 @@ const authenticateSession = async (req, res, next) => {
     const user = await User.findById(req.session.userId).select("-password");
 
     if (!user) {
-      req.session.destroy();
+      // User not found - destroy session
+      req.session.destroy((err) => {
+        if (err) logger.error("Session destruction error:", err);
+      });
       return res.status(401).json({
         success: false,
         message: "Invalid session - user not found",
@@ -23,11 +26,23 @@ const authenticateSession = async (req, res, next) => {
 
     // Check if user is active
     if (!user.isActive) {
-      req.session.destroy();
+      // User deactivated - destroy session
+      req.session.destroy((err) => {
+        if (err) logger.error("Session destruction error:", err);
+      });
       return res.status(401).json({
         success: false,
         message: "Account is deactivated",
       });
+    }
+
+    // Update last seen timestamp for persistent sessions
+    if (req.session.persistent) {
+      try {
+        await user.updateLastSeen();
+      } catch (error) {
+        logger.error("Failed to update user last seen:", error);
+      }
     }
 
     req.user = user;
@@ -44,39 +59,57 @@ const authenticateSession = async (req, res, next) => {
 // Session-based authentication middleware for web routes (redirects to login)
 const authenticateWeb = async (req, res, next) => {
   try {
-    console.log('🔍 Session debug:', {
+    console.log("🔍 Web session debug:", {
       sessionId: req.sessionID,
       userId: req.session.userId,
       sessionExists: !!req.session,
-      cookies: req.headers.cookie
+      persistent: req.session.persistent,
+      cookies: req.headers.cookie,
     });
 
     if (!req.session.userId) {
-      console.log('❌ No userId in session, redirecting to login');
-      return res.redirect('/login');
+      console.log("❌ No userId in session, redirecting to login");
+      return res.redirect("/login");
     }
 
     const user = await User.findById(req.session.userId).select("-password");
 
     if (!user) {
-      console.log('❌ User not found, destroying session');
-      req.session.destroy();
-      return res.redirect('/login');
+      console.log("❌ User not found, destroying session");
+      req.session.destroy((err) => {
+        if (err) logger.error("Session destruction error:", err);
+      });
+      return res.redirect("/login");
     }
 
     // Check if user is active
     if (!user.isActive) {
-      console.log('❌ User inactive, destroying session');
-      req.session.destroy();
-      return res.redirect('/login');
+      console.log("❌ User inactive, destroying session");
+      req.session.destroy((err) => {
+        if (err) logger.error("Session destruction error:", err);
+      });
+      return res.redirect("/login");
     }
 
-    console.log('✅ Authentication successful for user:', user.email);
+    // Update last seen timestamp for persistent sessions
+    if (req.session.persistent) {
+      try {
+        await user.updateLastSeen();
+        console.log(
+          "✅ Updated last seen for persistent session user:",
+          user.email
+        );
+      } catch (error) {
+        logger.error("Failed to update user last seen:", error);
+      }
+    }
+
+    console.log("✅ Web authentication successful for user:", user.email);
     req.user = user;
     next();
   } catch (error) {
     logger.error("Authentication error:", error);
-    return res.redirect('/login');
+    return res.redirect("/login");
   }
 };
 
@@ -90,7 +123,7 @@ const requireOrganiser = async (req, res, next) => {
       });
     }
 
-    if (req.user.role !== 'Organiser') {
+    if (req.user.role !== "Organiser") {
       return res.status(403).json({
         success: false,
         message: "Organiser access required",
@@ -111,17 +144,17 @@ const requireOrganiser = async (req, res, next) => {
 const requireOrganiserWeb = async (req, res, next) => {
   try {
     if (!req.user) {
-      return res.redirect('/login');
+      return res.redirect("/login");
     }
 
-    if (req.user.role !== 'Organiser') {
-      return res.status(403).send('Organiser access required');
+    if (req.user.role !== "Organiser") {
+      return res.status(403).send("Organiser access required");
     }
 
     next();
   } catch (error) {
     logger.error("Authorization error:", error);
-    return res.redirect('/login');
+    return res.redirect("/login");
   }
 };
 
@@ -134,7 +167,7 @@ const requireTeamMember = async (req, res, next) => {
       });
     }
 
-    if (req.user.role !== 'Team Member') {
+    if (req.user.role !== "Team Member") {
       return res.status(403).json({
         success: false,
         message: "Team Member access required",
@@ -155,17 +188,17 @@ const requireTeamMember = async (req, res, next) => {
 const requireTeamMemberWeb = async (req, res, next) => {
   try {
     if (!req.user) {
-      return res.redirect('/login');
+      return res.redirect("/login");
     }
 
-    if (req.user.role !== 'Team Member') {
-      return res.status(403).send('Team Member access required');
+    if (req.user.role !== "Team Member") {
+      return res.status(403).send("Team Member access required");
     }
 
     next();
   } catch (error) {
     logger.error("Authorization error:", error);
-    return res.redirect('/login');
+    return res.redirect("/login");
   }
 };
 

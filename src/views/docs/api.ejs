@@ -3,50 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Security - CollabSpace</title>
+  <title>API Documentation - CollabSpace</title>
+  <!-- Design System -->
+  <link rel="stylesheet" href="/public/css/design-system.css" />
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root {
-      --color-primary: #1e40af;
-      --color-primary-dark: #1e3a8a;
-      --color-secondary: #312e81;
-      --color-success: #10b981;
-      --color-warning: #f59e0b;
-      --color-error: #ef4444;
-      --color-gray-50: #f9fafb;
-      --color-gray-100: #f3f4f6;
-      --color-gray-200: #e5e7eb;
-      --color-gray-300: #d1d5db;
-      --color-gray-400: #9ca3af;
-      --color-gray-500: #6b7280;
-      --color-gray-600: #4b5563;
-      --color-gray-700: #374151;
-      --color-gray-800: #1f2937;
-      --color-gray-900: #111827;
-      --color-text-primary: #1f2937;
-      --color-text-secondary: #6b7280;
-      --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-weight-normal: 400;
-      --font-weight-medium: 500;
-      --font-weight-semibold: 600;
-      --font-weight-bold: 700;
-      --font-size-sm: 0.875rem;
-      --font-size-base: 1rem;
-      --font-size-lg: 1.125rem;
-      --font-size-xl: 1.25rem;
-      --font-size-2xl: 1.5rem;
-      --font-size-3xl: 1.875rem;
-      --font-size-4xl: 2.25rem;
-      --font-size-5xl: 3rem;
-      --radius-sm: 0.375rem;
-      --radius-md: 0.5rem;
-      --radius-lg: 0.75rem;
-      --radius-xl: 1rem;
-      --transition-fast: 0.15s ease-in-out;
-      --transition-normal: 0.3s ease-in-out;
-    }
-
+    /* API page styles using Design System */
     * {
       margin: 0;
       padding: 0;
@@ -54,23 +19,23 @@
     }
 
     body {
-      font-family: var(--font-family-sans);
-      line-height: 1.6;
+      font-family: var(--font-family-primary);
+      line-height: var(--line-height-normal);
       color: var(--color-text-primary);
-      background: white;
+      background: var(--color-bg-primary);
     }
 
-    .security-page {
+    .api-page {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
     .navbar {
-      background: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--color-gray-200);
+      background: var(--color-white);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .navbar-brand {
@@ -98,22 +63,19 @@
       font-size: 1.5rem;
       font-weight: var(--font-weight-bold);
       letter-spacing: -0.025em;
+      color: var(--color-primary);
     }
 
     .navbar-brand:hover {
       color: var(--color-primary-dark);
-      text-decoration: none;
       transform: translateY(-1px);
-    }
-
-    .navbar-brand:hover .brand-logo svg {
-      transform: scale(1.05);
+      text-decoration: none;
     }
 
     .hero {
       background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
       color: white;
-      padding: 6rem 0 4rem;
+      padding: 5rem 0;
       text-align: center;
     }
 
@@ -121,74 +83,89 @@
       font-size: var(--font-size-5xl);
       font-weight: var(--font-weight-bold);
       margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
     }
 
     .hero p {
       font-size: var(--font-size-xl);
-      margin-bottom: 2rem;
+      opacity: 0.95;
       max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto;
+      line-height: 1.6;
     }
 
-    .content {
+    .content-wrapper {
       flex: 1;
       padding: 4rem 0;
     }
 
-    .security-feature {
-      padding: 3rem 0;
-      border-bottom: 1px solid var(--color-gray-200);
+    .api-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--color-gray-200);
     }
 
-    .security-feature:last-child {
-      border-bottom: none;
-    }
-
-    .feature-icon {
-      width: 4rem;
-      height: 4rem;
-      background: var(--color-primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .feature-title {
+    .api-section h2 {
+      color: var(--color-primary);
       font-size: var(--font-size-2xl);
       font-weight: var(--font-weight-bold);
       margin-bottom: 1rem;
     }
 
-    .feature-description {
-      font-size: var(--font-size-lg);
-      color: var(--color-text-secondary);
-      margin-bottom: 2rem;
+    .endpoint {
+      background: var(--color-gray-50);
+      border-left: 4px solid var(--color-primary);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
     }
 
-    .feature-list {
-      list-style: none;
-      padding: 0;
+    .endpoint:hover {
+      background: var(--color-gray-100);
+      transform: translateX(4px);
     }
 
-    .feature-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-      font-size: var(--font-size-base);
-      color: var(--color-text-secondary);
-    }
-
-    .feature-list .check {
-      color: var(--color-success);
+    .method {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-sm);
       font-weight: var(--font-weight-bold);
-      flex-shrink: 0;
-      margin-top: 0.125rem;
+      text-transform: uppercase;
+      margin-right: 1rem;
+    }
+
+    .method-get {
+      background: var(--color-success);
+      color: white;
+    }
+
+    .method-post {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .method-put {
+      background: var(--color-warning);
+      color: white;
+    }
+
+    .method-delete {
+      background: var(--color-error);
+      color: white;
+    }
+
+    .endpoint code {
+      background: var(--color-gray-200);
+      color: var(--color-text-primary);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: var(--font-size-sm);
     }
 
     .cta-section {
@@ -224,13 +201,6 @@
       text-decoration: none;
     }
 
-    .footer {
-      background: var(--color-gray-800);
-      color: white;
-      padding: 2rem 0;
-      text-align: center;
-    }
-
     .site-footer {
       background: var(--color-gray-900);
       color: var(--color-gray-300);
@@ -259,7 +229,7 @@
       align-items: center;
       gap: 0.75rem;
       text-decoration: none;
-      color: var(--color-white);
+      color: white;
       font-weight: var(--font-weight-bold);
       font-size: var(--font-size-xl);
       transition: color 0.3s ease;
@@ -267,32 +237,26 @@
 
     .footer-logo:hover {
       color: var(--color-primary);
-    }
-
-    .footer-logo svg {
-      width: 2rem;
-      height: 2rem;
-      border-radius: 0.5rem;
-      display: block;
+      text-decoration: none;
     }
 
     .footer-brand p {
       color: var(--color-gray-400);
-      line-height: var(--line-height-relaxed);
+      line-height: 1.6;
       max-width: 300px;
     }
 
     .footer-links {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 2rem;
     }
 
     .footer-section h3 {
-      color: var(--color-white);
-      font-size: var(--font-size-base);
+      color: white;
       font-weight: var(--font-weight-semibold);
       margin-bottom: 1rem;
+      font-size: var(--font-size-base);
     }
 
     .footer-section ul {
@@ -367,13 +331,20 @@
         font-size: var(--font-size-lg);
       }
 
-      .feature-title {
-        font-size: var(--font-size-xl);
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
       }
     }
   </style>
 </head>
-<body class="security-page">
+<body class="api-page">
   <nav class="navbar">
     <div class="container">
       <a class="navbar-brand" href="/">
@@ -413,111 +384,87 @@
 
   <section class="hero">
     <div class="container">
-      <h1>Enterprise-Grade Security</h1>
-      <p>Your data's security is our top priority. Learn about the comprehensive measures we take to protect your team's information.</p>
+      <h1>API Documentation</h1>
+      <p>Integrate CollabSpace with your applications using our powerful and flexible RESTful API</p>
     </div>
   </section>
 
-  <main class="content">
+  <div class="content-wrapper">
     <div class="container">
-      <div class="security-feature">
-        <div class="row align-items-center">
-          <div class="col-md-6">
-            <div class="feature-icon">
-              <i class="fas fa-shield-alt"></i>
-            </div>
-            <h2 class="feature-title">Data Encryption</h2>
-            <p class="feature-description">All data is encrypted both in transit and at rest using industry-standard AES-256 encryption.</p>
-            <ul class="feature-list">
-              <li><span class="check">✓</span> End-to-end encryption for all communications</li>
-              <li><span class="check">✓</span> SSL/TLS certificates for secure data transmission</li>
-              <li><span class="check">✓</span> Encrypted database storage</li>
-              <li><span class="check">✓</span> Zero-knowledge architecture</li>
-            </ul>
-          </div>
-          <div class="col-md-6">
-            <div class="text-center">
-              <i class="fas fa-lock" style="font-size: 8rem; color: var(--color-primary); opacity: 0.1;"></i>
-            </div>
-          </div>
+      <div class="api-section">
+        <h2>Authentication</h2>
+        <p>All API requests require authentication using an API key. Include your API key in the Authorization header:</p>
+        <div class="endpoint">
+          <code>Authorization: Bearer YOUR_API_KEY</code>
         </div>
       </div>
 
-      <div class="security-feature">
-        <div class="row align-items-center">
-          <div class="col-md-6 order-md-2">
-            <div class="feature-icon">
-              <i class="fas fa-user-shield"></i>
-            </div>
-            <h2 class="feature-title">Access Control</h2>
-            <p class="feature-description">Granular permissions and multi-factor authentication ensure only authorized users can access your data.</p>
-            <ul class="feature-list">
-              <li><span class="check">✓</span> Multi-factor authentication (MFA)</li>
-              <li><span class="check">✓</span> Single Sign-On (SSO) integration</li>
-              <li><span class="check">✓</span> Role-based access control</li>
-              <li><span class="check">✓</span> Session management and timeout</li>
-            </ul>
-          </div>
-          <div class="col-md-6 order-md-1">
-            <div class="text-center">
-              <i class="fas fa-key" style="font-size: 8rem; color: var(--color-primary); opacity: 0.1;"></i>
-            </div>
-          </div>
+      <div class="api-section">
+        <h2>Teams</h2>
+        <p>Manage team information and members</p>
+        <div class="endpoint">
+          <span class="method method-get">GET</span>
+          <code>/api/v1/teams</code>
+          <p class="mt-2 mb-0">Retrieve all teams for the authenticated user</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-post">POST</span>
+          <code>/api/v1/teams</code>
+          <p class="mt-2 mb-0">Create a new team</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-get">GET</span>
+          <code>/api/v1/teams/{id}/members</code>
+          <p class="mt-2 mb-0">Get team members</p>
         </div>
       </div>
 
-      <div class="security-feature">
-        <div class="row align-items-center">
-          <div class="col-md-6">
-            <div class="feature-icon">
-              <i class="fas fa-server"></i>
-            </div>
-            <h2 class="feature-title">Infrastructure Security</h2>
-            <p class="feature-description">Our infrastructure is hosted on secure, compliant cloud platforms with regular security audits.</p>
-            <ul class="feature-list">
-              <li><span class="check">✓</span> SOC 2 Type II certified infrastructure</li>
-              <li><span class="check">✓</span> Regular penetration testing</li>
-              <li><span class="check">✓</span> 24/7 security monitoring</li>
-              <li><span class="check">✓</span> Automated backup and disaster recovery</li>
-            </ul>
-          </div>
-          <div class="col-md-6">
-            <div class="text-center">
-              <i class="fas fa-cloud-upload-alt" style="font-size: 8rem; color: var(--color-primary); opacity: 0.1;"></i>
-            </div>
-          </div>
+      <div class="api-section">
+        <h2>Tasks</h2>
+        <p>Create and manage tasks within your teams</p>
+        <div class="endpoint">
+          <span class="method method-get">GET</span>
+          <code>/api/v1/tasks</code>
+          <p class="mt-2 mb-0">Retrieve all tasks</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-post">POST</span>
+          <code>/api/v1/tasks</code>
+          <p class="mt-2 mb-0">Create a new task</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-put">PUT</span>
+          <code>/api/v1/tasks/{id}</code>
+          <p class="mt-2 mb-0">Update task status or details</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-delete">DELETE</span>
+          <code>/api/v1/tasks/{id}</code>
+          <p class="mt-2 mb-0">Delete a task</p>
         </div>
       </div>
 
-      <div class="security-feature">
-        <div class="row align-items-center">
-          <div class="col-md-6 order-md-2">
-            <div class="feature-icon">
-              <i class="fas fa-clipboard-check"></i>
-            </div>
-            <h2 class="feature-title">Compliance</h2>
-            <p class="feature-description">We maintain compliance with major security standards and regulations to protect your business.</p>
-            <ul class="feature-list">
-              <li><span class="check">✓</span> GDPR compliant</li>
-              <li><span class="check">✓</span> CCPA compliant</li>
-              <li><span class="check">✓</span> HIPAA available for healthcare</li>
-              <li><span class="check">✓</span> ISO 27001 certified processes</li>
-            </ul>
-          </div>
-          <div class="col-md-6 order-md-1">
-            <div class="text-center">
-              <i class="fas fa-certificate" style="font-size: 8rem; color: var(--color-primary); opacity: 0.1;"></i>
-            </div>
-          </div>
+      <div class="api-section">
+        <h2>Messages</h2>
+        <p>Send and retrieve team messages</p>
+        <div class="endpoint">
+          <span class="method method-get">GET</span>
+          <code>/api/v1/messages</code>
+          <p class="mt-2 mb-0">Get team messages</p>
+        </div>
+        <div class="endpoint">
+          <span class="method method-post">POST</span>
+          <code>/api/v1/messages</code>
+          <p class="mt-2 mb-0">Send a message to team</p>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
   <section class="cta-section">
     <div class="container">
-      <h2>Ready to secure your team's collaboration?</h2>
-      <p class="mb-4">Join thousands of teams who trust CollabSpace with their most important work.</p>
+      <h2>Ready to integrate CollabSpace?</h2>
+      <p class="mb-4">Get your API key and start building amazing integrations today.</p>
       <a href="/register" class="cta-btn">Get Started Today</a>
     </div>
   </section>
@@ -529,35 +476,29 @@
           <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="footerLogoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#43e97b"/>
-                <stop offset="50%" style="stop-color:#00f2fe"/>
-                <stop offset="100%" style="stop-color:#4facfe"/>
+                <stop offset="0%" style="stop-color:#43e97b" />
+                <stop offset="50%" style="stop-color:#00f2fe" />
+                <stop offset="100%" style="stop-color:#4facfe" />
               </linearGradient>
               <linearGradient id="footerLogoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#00f2fe"/>
-                <stop offset="100%" style="stop-color:#667eea"/>
+                <stop offset="0%" style="stop-color:#00f2fe" />
+                <stop offset="100%" style="stop-color:#667eea" />
               </linearGradient>
               <linearGradient id="footerLogoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#667eea"/>
-                <stop offset="100%" style="stop-color:#764ba2"/>
+                <stop offset="0%" style="stop-color:#667eea" />
+                <stop offset="100%" style="stop-color:#764ba2" />
               </linearGradient>
             </defs>
-            <!-- Outer hexagon -->
-            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#footerLogoGradient1)" opacity="0.9"/>
-            <!-- Inner C shape - top part -->
-            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white"/>
-            <!-- Inner C shape - bottom part -->
-            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white"/>
-            <!-- 3D effect - right side -->
-            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#footerLogoGradient2)" opacity="0.8"/>
-            <!-- 3D effect - bottom -->
-            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#footerLogoGradient3)" opacity="0.7"/>
+            <path d="M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#footerLogoGradient1)" opacity="0.9" />
+            <path d="M35 30 L65 30 L70 35 L70 45 L50 45 L45 40 L45 35 L35 35 Z" fill="white" />
+            <path d="M35 55 L45 55 L45 60 L50 65 L70 65 L70 55 L65 50 L35 50 Z" fill="white" />
+            <path d="M75 20 L80 15 L80 45 L90 50 L80 55 L80 85 L75 80 L90 50 Z" fill="url(#footerLogoGradient2)" opacity="0.8" />
+            <path d="M25 80 L75 80 L80 85 L30 85 L25 80 Z" fill="url(#footerLogoGradient3)" opacity="0.7" />
           </svg>
           <span>CollabSpace</span>
         </a>
         <p>Where teams come together to build great things.</p>
       </div>
-
       <div class="footer-links">
         <div class="footer-section">
           <h3>Product</h3>
@@ -568,7 +509,6 @@
             <li><a href="/enterprise">Enterprise</a></li>
           </ul>
         </div>
-
         <div class="footer-section">
           <h3>Company</h3>
           <ul>
@@ -578,7 +518,6 @@
             <li><a href="/contact">Contact</a></li>
           </ul>
         </div>
-
         <div class="footer-section">
           <h3>Resources</h3>
           <ul>
@@ -588,7 +527,6 @@
             <li><a href="/api">API</a></li>
           </ul>
         </div>
-
         <div class="footer-section">
           <h3>Legal</h3>
           <ul>
@@ -600,23 +538,15 @@
         </div>
       </div>
     </div>
-
     <div class="footer-bottom">
       <p>&copy; 2025 CollabSpace. All rights reserved.</p>
       <div class="social-links">
-        <a href="#twitter" aria-label="Twitter">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#github" aria-label="GitHub">
-          <i class="fab fa-github"></i>
-        </a>
-        <a href="#linkedin" aria-label="LinkedIn">
-          <i class="fab fa-linkedin"></i>
-        </a>
+        <a href="#twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#github" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="#linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
       </div>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>

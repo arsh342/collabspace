@@ -346,6 +346,13 @@ class CollabSpace {
   }
 
   logout() {
+    // Use the auth persistence system for logout if available
+    if (window.authPersistence) {
+      window.authPersistence.logout();
+      return;
+    }
+
+    // Fallback logout
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     this.isAuthenticated = false;
@@ -356,8 +363,16 @@ class CollabSpace {
       this.socket = null;
     }
 
+    // Call logout API
+    fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    }).catch((error) => {
+      console.error("Logout API error:", error);
+    });
+
     this.showNotification("Logged out successfully", "success");
-    window.location.href = "/";
+    window.location.href = "/login";
   }
 
   // API Helper Functions

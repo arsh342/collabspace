@@ -19,10 +19,7 @@ const taskSchema = new mongoose.Schema(
       ref: "Team",
       required: [true, "Team is required"],
     },
-    assignedTo: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -204,7 +201,7 @@ taskSchema.virtual("priorityColor").get(function () {
 
 // Indexes
 taskSchema.index({ team: 1 });
-taskSchema.index({ assignedTo: 1 });
+
 taskSchema.index({ createdBy: 1 });
 taskSchema.index({ status: 1 });
 taskSchema.index({ priority: 1 });
@@ -323,20 +320,6 @@ taskSchema.methods.logTime = async function (userId, hours, description = "") {
   }
 };
 
-// Instance method to assign task
-taskSchema.methods.assignTo = async function (userId) {
-  try {
-    this.assignedTo = userId;
-    await this.save();
-
-    logger.info(`Task ${this._id} assigned to user ${userId}`);
-    return true;
-  } catch (error) {
-    logger.error("Error assigning task:", error);
-    throw error;
-  }
-};
-
 // Instance method to update status
 taskSchema.methods.updateStatus = async function (newStatus, userId) {
   try {
@@ -351,7 +334,7 @@ taskSchema.methods.updateStatus = async function (newStatus, userId) {
     await this.save();
 
     // Update team stats when task status changes
-    const Team = require('./Team');
+    const Team = require("./Team");
     const team = await Team.findById(this.team);
     if (team) {
       await team.updateTaskStats();
@@ -400,10 +383,8 @@ taskSchema.statics.findByTeam = function (teamId, options = {}) {
 
   if (options.status) query.status = options.status;
   if (options.priority) query.priority = options.priority;
-  if (options.assignedTo) query.assignedTo = options.assignedTo;
 
   return this.find(query)
-    .populate("assignedTo", "username firstName lastName avatar")
     .populate("createdBy", "username firstName lastName avatar")
     .sort(options.sort || { createdAt: -1 });
 };
@@ -418,16 +399,13 @@ taskSchema.statics.findOverdue = function (teamId = null) {
 
   if (teamId) query.team = teamId;
 
-  return this.find(query)
-    .populate("assignedTo", "username firstName lastName avatar")
-    .populate("team", "name")
-    .sort({ dueDate: 1 });
+  return this.find(query).populate("team", "name").sort({ dueDate: 1 });
 };
 
 // Static method to find tasks by user
 taskSchema.statics.findByUser = function (userId, options = {}) {
   const query = {
-    $or: [{ assignedTo: userId }, { createdBy: userId }],
+    createdBy: userId,
     isArchived: false,
   };
 
@@ -436,7 +414,6 @@ taskSchema.statics.findByUser = function (userId, options = {}) {
 
   return this.find(query)
     .populate("team", "name")
-    .populate("assignedTo", "username firstName lastName avatar")
     .sort(options.sort || { dueDate: 1, createdAt: -1 });
 };
 
@@ -451,7 +428,9 @@ taskSchema.post("findOneAndDelete", async function (doc) {
           "stats.completedTasks": doc.status === "completed" ? -1 : 0,
         },
       });
-      logger.info(`Updated team stats after task deletion: team=${doc.team}, task=${doc._id}`);
+      logger.info(
+        `Updated team stats after task deletion: team=${doc.team}, task=${doc._id}`
+      );
     } catch (error) {
       logger.error("Error updating team stats after task deletion:", error);
     }
@@ -462,7 +441,7 @@ taskSchema.post("findOneAndDelete", async function (doc) {
 taskSchema.post("deleteOne", async function (result) {
   if (result && result.deletedCount > 0) {
     try {
-      // Since we don't have access to the document in deleteOne, 
+      // Since we don't have access to the document in deleteOne,
       // we'll need to update this in the route instead
       logger.info("Task deleted via deleteOne method");
     } catch (error) {

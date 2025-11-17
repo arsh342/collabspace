@@ -1412,10 +1412,10 @@
 
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
       margin-top: 3rem;
-      max-width: 1000px;
+      max-width: 800px;
       margin-left: auto;
       margin-right: auto;
       align-items: start;
@@ -2460,38 +2460,40 @@
     <section id="pricing" class="pricing">
       <div class="pricing-container">
         <div class="pricing-header animate-on-scroll fade-in">
-          <h2>Pricing plans</h2>
+          <h2>Simple Pricing</h2>
           <h3>for teams of all sizes</h3>
-          <p>We make money when teams actually get work done using our platform.<br>
-          A simple flexible pricing model. Support for all team sizes.</p>
+          <p>Start free and upgrade when you're ready to scale.<br>
+          Two simple plans designed to grow with your team.</p>
         </div>
 
         <div class="pricing-grid">
-          <div class="pricing-card animate-on-scroll slide-in-up animate-delay-1" data-plan="basic" data-price="19">
+          <div class="pricing-card animate-on-scroll slide-in-up animate-delay-1" data-plan="free" data-price="0">
             <div class="pricing-header-card">
-              <div class="pricing-title">Basic</div>
+              <div class="pricing-title">Free</div>
               <div class="pricing-price">
                 <span class="pricing-currency">$</span>
-                <span class="pricing-amount">19</span>
+                <span class="pricing-amount">0</span>
                 <span class="pricing-period">/month</span>
               </div>
             </div>
             <div class="pricing-features">
               <ul>
-                <li><span class="check">✓</span> Contained or archived</li>
-                <li><span class="check">✓</span> Does not do anything</li>
-                <li><span class="check">✓</span> Don't use as a guideline</li>
+                <li><span class="check">✓</span> Up to 3 team members</li>
+                <li><span class="check">✓</span> Basic task management</li>
+                <li><span class="check">✓</span> 5GB storage</li>
+                <li><span class="check">✓</span> Email support</li>
+                <li><span class="check">✓</span> Mobile apps</li>
               </ul>
             </div>
             <div class="pricing-footer">
-              <a href="/payment" class="pricing-btn">Get started</a>
+              <a href="/register" class="pricing-btn">Get started</a>
             </div>
           </div>
 
-          <div class="pricing-card featured animate-on-scroll slide-in-up animate-delay-2" data-plan="essential" data-price="59">
+          <div class="pricing-card featured animate-on-scroll slide-in-up animate-delay-2" data-plan="pro" data-price="59">
             <div class="pricing-badge">Most popular ✓</div>
             <div class="pricing-header-card">
-              <div class="pricing-title">Essential</div>
+              <div class="pricing-title">CollabSpace Pro</div>
               <div class="pricing-price">
                 <span class="pricing-currency">$</span>
                 <span class="pricing-amount">59</span>
@@ -2500,36 +2502,17 @@
             </div>
             <div class="pricing-features">
               <ul>
-                <li><span class="check">✓</span> Contained or archived</li>
-                <li><span class="check">✓</span> Team can do anything and access</li>
-                <li><span class="check">✓</span> Access to one workspace information</li>
-                <li><span class="check">✓</span> Extension lists showed grouped</li>
-                <li><span class="check">✓</span> Migrate non-profit campaigns via GUI</li>
+                <li><span class="check">✓</span> Unlimited teams</li>
+                <li><span class="check">✓</span> Automation workflows</li>
+                <li><span class="check">✓</span> Priority support</li>
+                <li><span class="check">✓</span> Advanced analytics</li>
+                <li><span class="check">✓</span> Custom integrations</li>
+                <li><span class="check">✓</span> Up to 500 team members</li>
+                <li><span class="check">✓</span> Unlimited storage</li>
               </ul>
             </div>
             <div class="pricing-footer">
               <a href="/payment" class="pricing-btn primary">Get started</a>
-            </div>
-          </div>
-
-          <div class="pricing-card animate-on-scroll slide-in-up animate-delay-3" data-plan="premium" data-price="119">
-            <div class="pricing-header-card">
-              <div class="pricing-title">Premium</div>
-              <div class="pricing-price">
-                <span class="pricing-currency">$</span>
-                <span class="pricing-amount">119</span>
-                <span class="pricing-period">/month</span>
-              </div>
-            </div>
-            <div class="pricing-features">
-              <ul>
-                <li><span class="check">✓</span> Contained or archived</li>
-                <li><span class="check">✓</span> Team can do anything</li>
-                <li><span class="check">✓</span> Access to one workspace</li>
-              </ul>
-            </div>
-            <div class="pricing-footer">
-              <a href="/payment" class="pricing-btn">Get started</a>
             </div>
           </div>
         </div>

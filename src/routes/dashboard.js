@@ -1,6 +1,10 @@
 const express = require("express");
 const { requireAuth } = require("../middleware/auth");
 const { catchAsync } = require("../middleware/errorHandler");
+const {
+  cacheMiddleware,
+  invalidateCacheMiddleware,
+} = require("../middleware/cache");
 const Team = require("../models/Team");
 const Task = require("../models/Task");
 const User = require("../models/User");
@@ -13,45 +17,54 @@ const router = express.Router();
 router.get(
   "/stats",
   requireAuth,
+  cacheMiddleware(300, (req) => `dashboard:stats:${req.user._id}`), // Cache for 5 minutes
   catchAsync(async (req, res) => {
     const userId = req.user._id;
 
     try {
       // Get teams where user is admin
       const teams = await Team.find({ admin: userId })
-        .populate('admin', 'firstName lastName email')
-        .populate('members', 'firstName lastName email')
+        .populate("admin", "firstName lastName email")
+        .populate("members", "firstName lastName email")
         .sort({ createdAt: 1 });
 
       // Get tasks for organiser's teams
-      const teamIds = teams.map(team => team._id);
+      const teamIds = teams.map((team) => team._id);
       const tasks = await Task.find({
-        $or: [
-          { createdBy: userId },
-          { team: { $in: teamIds } }
-        ]
+        $or: [{ createdBy: userId }, { team: { $in: teamIds } }],
       })
-      .populate('team', 'name')
-      .populate('assignedTo', 'firstName lastName')
-      .sort({ createdAt: -1 });
+        .populate("team", "name")
+        .sort({ createdAt: -1 });
 
       // Get user info
-      const user = await User.findById(userId).select('firstName lastName email role createdAt bio');
+      const user = await User.findById(userId).select(
+        "firstName lastName email role createdAt bio"
+      );
 
       // Calculate stats
       const totalTeams = teams.length;
-      
+
       // Calculate total members (including admins for total team size)
       const totalMembers = teams.reduce((sum, team) => {
         return sum + (team.members ? team.members.length : 0);
       }, 0);
 
       const totalTasks = tasks.length;
-      const completedTasks = tasks.filter(task => task.status === 'completed').length;
+      const completedTasks = tasks.filter(
+        (task) => task.status === "completed"
+      ).length;
       const activeTasks = totalTasks - completedTasks; // Active tasks = total - completed
-      const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+      const completionRate =
+        totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-      console.log('Calculated stats:', { totalTeams, totalMembers, totalTasks, activeTasks, completedTasks, completionRate });
+      console.log("Calculated stats:", {
+        totalTeams,
+        totalMembers,
+        totalTasks,
+        activeTasks,
+        completedTasks,
+        completionRate,
+      });
 
       res.json({
         success: true,
@@ -65,15 +78,15 @@ router.get(
             totalTasks,
             activeTasks,
             completedTasks,
-            completionRate
-          }
-        }
+            completionRate,
+          },
+        },
       });
     } catch (error) {
-      console.error('Dashboard stats error:', error);
+      console.error("Dashboard stats error:", error);
       res.status(500).json({
         success: false,
-        message: 'Failed to load dashboard stats'
+        message: "Failed to load dashboard stats",
       });
     }
   })
@@ -89,7 +102,7 @@ router.get(
     // Mock real-time updates - in a real app, this would check for actual updates
     const mockUpdates = {
       hasUpdates: false,
-      updates: []
+      updates: [],
     };
 
     // Randomly generate some mock updates for testing
@@ -97,18 +110,18 @@ router.get(
       mockUpdates.hasUpdates = true;
       mockUpdates.updates = [
         {
-          type: 'new_join_request',
+          type: "new_join_request",
           data: {
-            userName: 'John Doe'
+            userName: "John Doe",
           },
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       ];
     }
 
     res.json({
       success: true,
-      data: mockUpdates
+      data: mockUpdates,
     });
   })
 );
