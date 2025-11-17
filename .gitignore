@@ -149,11 +149,6 @@ build/
 *.swp
 *.swo
 
-# Test files and artifacts
-test-*.js
-*test*.js
-coverage/
-.nyc_output
 
 # Database
 *.db
