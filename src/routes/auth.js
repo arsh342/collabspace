@@ -16,7 +16,7 @@ const validateRegistration = [
     .withMessage("Username must be between 3 and 30 characters")
     .matches(/^[a-zA-Z0-9_-]+$/)
     .withMessage(
-      "Username can only contain letters, numbers, underscores, and hyphens"
+      "Username can only contain letters, numbers, underscores, and hyphens",
     ),
   body("email")
     .isEmail()
@@ -27,7 +27,7 @@ const validateRegistration = [
     .withMessage("Password must be at least 8 characters long")
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
     .withMessage(
-      "Password must contain at least one lowercase letter, one uppercase letter, and one number"
+      "Password must contain at least one lowercase letter, one uppercase letter, and one number",
     ),
   body("firstName")
     .trim()
@@ -110,7 +110,7 @@ router.post(
       } catch (error) {
         logger.logger.warn(
           "Failed to generate avatar for user:",
-          error.message
+          error.message,
         );
       }
 
@@ -137,7 +137,7 @@ router.post(
       logger.logger.error("User registration error:", error);
       throw new AppError("Failed to register user", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /api/auth/login
@@ -218,14 +218,14 @@ router.post(
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
         req.session.persistent = true;
         logger.logger.info(
-          `Extended session for user: ${user.email} (Remember Me: enabled)`
+          `Extended session for user: ${user.email} (Remember Me: enabled)`,
         );
       } else {
         // Standard session for 24 hours
         req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
         req.session.persistent = false;
         logger.logger.info(
-          `Standard session for user: ${user.email} (Remember Me: disabled)`
+          `Standard session for user: ${user.email} (Remember Me: disabled)`,
         );
       }
 
@@ -269,7 +269,7 @@ router.post(
       logger.logger.error("User login error:", error);
       throw new AppError("Failed to authenticate user", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /api/auth/firebase
@@ -353,7 +353,7 @@ router.post(
         }
         await user.save();
         logger.logger.info(
-          `Firebase auth created user: ${user.username} (${email})`
+          `Firebase auth created user: ${user.username} (${email})`,
         );
       } else {
         // Update verification and avatar if provided
@@ -396,7 +396,7 @@ router.post(
       logger.logger.error("Firebase auth error:", error);
       throw new AppError("Failed to authenticate via Firebase", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /auth/web-login
@@ -476,14 +476,14 @@ router.post(
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
         req.session.persistent = true;
         logger.logger.info(
-          `Extended web session for user: ${user.email} (Remember Me: enabled)`
+          `Extended web session for user: ${user.email} (Remember Me: enabled)`,
         );
       } else {
         // Standard session for 24 hours
         req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
         req.session.persistent = false;
         logger.logger.info(
-          `Standard web session for user: ${user.email} (Remember Me: disabled)`
+          `Standard web session for user: ${user.email} (Remember Me: disabled)`,
         );
       }
 
@@ -496,7 +496,7 @@ router.post(
           } else {
             console.log(
               "✅ Web login session saved successfully for user:",
-              user.email
+              user.email,
             );
             resolve();
           }
@@ -504,7 +504,7 @@ router.post(
       });
 
       logger.logger.info(
-        `User logged in via web form: ${user.username} (${email})`
+        `User logged in via web form: ${user.username} (${email})`,
       );
 
       // Redirect based on role
@@ -522,7 +522,7 @@ router.post(
         title: "Login - CollabSpace",
       });
     }
-  })
+  }),
 );
 
 // @route   POST /api/auth/logout
@@ -554,7 +554,7 @@ router.post(
           res.clearCookie("token");
 
           logger.logger.info(
-            `User logged out successfully: ${userEmail || userId || "Unknown"}`
+            `User logged out successfully: ${userEmail || userId || "Unknown"}`,
           );
 
           res.json({
@@ -572,7 +572,7 @@ router.post(
       logger.logger.error("User logout error:", error);
       throw new AppError("Failed to logout user", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /api/auth/refresh
@@ -635,7 +635,7 @@ router.post(
       // TODO: Send email with reset link
       // For now, just log the token
       logger.logger.info(
-        `Password reset token generated for ${email}: ${resetToken}`
+        `Password reset token generated for ${email}: ${resetToken}`,
       );
 
       res.json({
@@ -647,7 +647,7 @@ router.post(
       logger.logger.error("Forgot password error:", error);
       throw new AppError("Failed to process password reset request", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /api/auth/reset-password
@@ -662,7 +662,7 @@ router.post(
       .withMessage("Password must be at least 8 characters long")
       .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
       .withMessage(
-        "Password must contain at least one lowercase letter, one uppercase letter, and one number"
+        "Password must contain at least one lowercase letter, one uppercase letter, and one number",
       ),
   ],
   catchAsync(async (req, res) => {
@@ -698,7 +698,7 @@ router.post(
       await user.save();
 
       logger.logger.info(
-        `Password reset successful for user: ${user.username}`
+        `Password reset successful for user: ${user.username}`,
       );
 
       res.json({
@@ -709,7 +709,7 @@ router.post(
       logger.logger.error("Reset password error:", error);
       throw new AppError("Failed to reset password", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /api/auth/verify-email
@@ -760,7 +760,7 @@ router.post(
       logger.logger.error("Email verification error:", error);
       throw new AppError("Failed to verify email", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/auth/me
@@ -809,7 +809,7 @@ router.post("/extend-session", authenticateSession, async (req, res) => {
         success: true,
         message: "Session extended successfully",
         expiresAt: new Date(
-          Date.now() + req.session.cookie.maxAge
+          Date.now() + req.session.cookie.maxAge,
         ).toISOString(),
       });
     } else {

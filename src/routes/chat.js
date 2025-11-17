@@ -20,7 +20,7 @@ const validateMessage = [
           // Require file metadata for file messages
           if (!req.body.fileName || !req.body.fileUrl) {
             throw new Error(
-              "fileName and fileUrl are required for file messages"
+              "fileName and fileUrl are required for file messages",
             );
           }
         }
@@ -31,7 +31,7 @@ const validateMessage = [
       }
       if (value.length > 2000) {
         throw new Error(
-          "Message content must be between 1 and 2000 characters"
+          "Message content must be between 1 and 2000 characters",
         );
       }
       return true;
@@ -41,7 +41,7 @@ const validateMessage = [
     .optional()
     .isIn(["text", "file", "image", "voice", "system"])
     .withMessage(
-      "Message type must be one of: text, file, image, voice, system"
+      "Message type must be one of: text, file, image, voice, system",
     ),
 ];
 
@@ -62,7 +62,7 @@ router.get(
 
       const conversations = teams.map((team) => {
         const onlineMembers = team.members.filter(
-          (member) => member.isOnline || false // Assuming we track online status
+          (member) => member.isOnline || false, // Assuming we track online status
         ).length;
 
         return {
@@ -89,7 +89,7 @@ router.get(
         message: "Error fetching conversations",
       });
     }
-  })
+  }),
 );
 
 // @route   GET /api/chat/messages/:conversationId
@@ -176,7 +176,7 @@ router.get(
         }),
       },
     });
-  })
+  }),
 );
 
 // @route   POST /api/chat/messages
@@ -250,12 +250,12 @@ router.post(
       // Populate the message for response
       await message.populate(
         "sender",
-        "username firstName lastName avatar email"
+        "username firstName lastName avatar email",
       );
       if (replyTo) {
         await message.populate(
           "replyTo.sender",
-          "username firstName lastName avatar"
+          "username firstName lastName avatar",
         );
       }
 
@@ -304,7 +304,7 @@ router.post(
         message: "Error sending message",
       });
     }
-  })
+  }),
 );
 
 // @route   PUT /api/chat/messages/:messageId
@@ -377,7 +377,7 @@ router.put(
         message: "Error editing message",
       });
     }
-  })
+  }),
 );
 
 // @route   DELETE /api/chat/messages/:messageId
@@ -419,7 +419,7 @@ router.delete(
         message: "Error deleting message",
       });
     }
-  })
+  }),
 );
 
 // @route   POST /api/chat/messages/:messageId/reaction
@@ -452,7 +452,7 @@ router.post(
       const existingReactionIndex = message.reactions.findIndex(
         (reaction) =>
           reaction.user.toString() === req.user._id.toString() &&
-          reaction.emoji === emoji
+          reaction.emoji === emoji,
       );
 
       if (existingReactionIndex > -1) {
@@ -480,7 +480,7 @@ router.post(
         message: "Error managing reaction",
       });
     }
-  })
+  }),
 );
 
 // @route   GET /api/chat/team/:teamId/members
@@ -533,7 +533,7 @@ router.get(
         message: "Error fetching team members",
       });
     }
-  })
+  }),
 );
 
 module.exports = router;

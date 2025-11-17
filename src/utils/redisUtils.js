@@ -29,7 +29,7 @@ class OnlineUsersManager {
           socketId,
           timestamp: Date.now(),
           status: "online",
-        })
+        }),
       );
 
       // Add to online users set
@@ -194,7 +194,7 @@ class MessageCache {
         JSON.stringify({
           ...message,
           timestamp: Date.now(),
-        })
+        }),
       );
 
       // Trim to keep only recent messages

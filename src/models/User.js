@@ -94,7 +94,7 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Virtual for full name
@@ -222,7 +222,7 @@ userSchema.methods.generateAvatar = async function () {
   try {
     const axios = require("axios");
     const response = await axios.get(
-      `${process.env.AVATAR_API_URL}/${this.username}`
+      `${process.env.AVATAR_API_URL}/${this.username}`,
     );
 
     if (response.data && response.data.svg) {
@@ -234,7 +234,7 @@ userSchema.methods.generateAvatar = async function () {
     logger.error("Error generating avatar:", error);
     // Fallback to default avatar
     this.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-      this.fullName
+      this.fullName,
     )}&background=random`;
     await this.save();
     return this.avatar;

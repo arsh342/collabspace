@@ -17,7 +17,7 @@ const messageSchema = new mongoose.Schema(
       type: String,
       required: function() {
         // Content is required for text messages, but optional for file/image messages
-        return this.messageType === 'text' || this.messageType === 'system' || this.messageType === 'task_update';
+        return this.messageType === "text" || this.messageType === "system" || this.messageType === "task_update";
       },
       maxlength: [2000, "Message content cannot exceed 2000 characters"],
     },
@@ -102,7 +102,7 @@ const messageSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Virtual for formatted content
@@ -119,7 +119,7 @@ messageSchema.virtual("formattedContent").get(function () {
       const regex = new RegExp(`@${mention.username}`, "g");
       content = content.replace(
         regex,
-        `<span class="mention">@${mention.username}</span>`
+        `<span class="mention">@${mention.username}</span>`,
       );
     });
   }
@@ -128,7 +128,7 @@ messageSchema.virtual("formattedContent").get(function () {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   content = content.replace(
     urlRegex,
-    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+    "<a href=\"$1\" target=\"_blank\" rel=\"noopener noreferrer\">$1</a>",
   );
 
   return content;
@@ -207,7 +207,7 @@ messageSchema.methods.addReaction = async function (userId, emoji) {
     const existingReaction = this.reactions.find(
       (reaction) =>
         reaction.user.toString() === userId.toString() &&
-        reaction.emoji === emoji
+        reaction.emoji === emoji,
     );
 
     if (existingReaction) {
@@ -217,7 +217,7 @@ messageSchema.methods.addReaction = async function (userId, emoji) {
           !(
             reaction.user.toString() === userId.toString() &&
             reaction.emoji === emoji
-          )
+          ),
       );
     } else {
       // Add new reaction
@@ -233,7 +233,7 @@ messageSchema.methods.addReaction = async function (userId, emoji) {
     logger.info(
       `Reaction ${emoji} ${
         existingReaction ? "removed from" : "added to"
-      } message ${this._id} by user ${userId}`
+      } message ${this._id} by user ${userId}`,
     );
     return true;
   } catch (error) {
@@ -292,7 +292,7 @@ messageSchema.methods.deleteMessage = async function (userId, isAdmin = false) {
 messageSchema.statics.createSystemMessage = async function (
   teamId,
   content,
-  metadata = {}
+  metadata = {},
 ) {
   try {
     const message = new this({
@@ -319,7 +319,7 @@ messageSchema.statics.createTaskUpdateMessage = async function (
   senderId,
   taskId,
   action,
-  taskTitle
+  taskTitle,
 ) {
   try {
     const actionMessages = {
@@ -346,7 +346,7 @@ messageSchema.statics.createTaskUpdateMessage = async function (
     await message.save();
 
     logger.info(
-      `Task update message created in team ${teamId} for task ${taskId}`
+      `Task update message created in team ${teamId} for task ${taskId}`,
     );
     return message;
   } catch (error) {
@@ -377,7 +377,7 @@ messageSchema.statics.findByTeam = function (teamId, options = {}) {
 messageSchema.statics.searchMessages = function (
   teamId,
   searchQuery,
-  options = {}
+  options = {},
 ) {
   const query = {
     team: teamId,

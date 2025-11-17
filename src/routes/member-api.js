@@ -26,7 +26,7 @@ router.get("/stats", auth, async (req, res) => {
 
     // Get completed tasks
     const completedTasks = memberTasks.filter(
-      (task) => task.status === "completed"
+      (task) => task.status === "completed",
     );
 
     // Get unread messages count (simplified)
@@ -100,7 +100,7 @@ router.get("/profile", auth, async (req, res) => {
     const userId = req.session.userId;
 
     const user = await User.findById(userId).select(
-      "firstName lastName email username phone avatar bio createdAt"
+      "firstName lastName email username phone avatar bio createdAt",
     );
 
     if (!user) {
@@ -128,7 +128,7 @@ router.put("/profile", auth, async (req, res) => {
         phone,
         bio,
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select("firstName lastName email username phone avatar bio");
 
     if (!updatedUser) {
@@ -261,7 +261,7 @@ router.get("/progress", auth, async (req, res) => {
     });
 
     const completedTasks = allTasks.filter(
-      (task) => task.status === "completed"
+      (task) => task.status === "completed",
     ).length;
     const totalTasks = allTasks.length;
 
@@ -278,7 +278,7 @@ router.get("/progress", auth, async (req, res) => {
 
     const teamParticipation = Math.min(
       100,
-      Math.round((weeklyMessages / 10) * 100)
+      Math.round((weeklyMessages / 10) * 100),
     ); // Cap at 100%
 
     res.json({
@@ -365,7 +365,7 @@ router.get("/quick-stats", auth, async (req, res) => {
     let dayStreak = 0;
     if (lastActivity) {
       const daysSinceActivity = Math.floor(
-        (new Date() - lastActivity.createdAt) / (1000 * 60 * 60 * 24)
+        (new Date() - lastActivity.createdAt) / (1000 * 60 * 60 * 24),
       );
       dayStreak = Math.max(0, 7 - daysSinceActivity); // Simple streak calculation
     }

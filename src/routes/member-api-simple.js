@@ -38,7 +38,7 @@ router.get(
 
       // Get completed tasks
       const completedTasks = memberTasks.filter(
-        (task) => task.status === "completed"
+        (task) => task.status === "completed",
       );
 
       const stats = {
@@ -54,7 +54,7 @@ router.get(
       console.error("Error fetching member stats:", error);
       res.status(500).json({ error: "Failed to fetch dashboard stats" });
     }
-  }
+  },
 );
 
 // Get member tasks
@@ -110,7 +110,7 @@ router.get("/profile", authenticateSession, async (req, res) => {
     const userId = req.session.userId;
 
     const user = await User.findById(userId).select(
-      "firstName lastName email username phone avatar bio createdAt"
+      "firstName lastName email username phone avatar bio createdAt",
     );
 
     if (!user) {
@@ -138,7 +138,7 @@ router.put("/profile", authenticateSession, async (req, res) => {
         phone,
         bio,
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select("firstName lastName email username phone avatar bio");
 
     if (!updatedUser) {
@@ -252,7 +252,7 @@ router.get("/progress", authenticateSession, async (req, res) => {
     });
 
     const completedTasks = allTasks.filter(
-      (task) => task.status === "completed"
+      (task) => task.status === "completed",
     ).length;
     const totalTasks = allTasks.length;
 
@@ -270,7 +270,7 @@ router.get("/progress", authenticateSession, async (req, res) => {
 
     const teamParticipation = Math.min(
       100,
-      Math.round((weeklyTasksCompleted / 5) * 100)
+      Math.round((weeklyTasksCompleted / 5) * 100),
     ); // Cap at 100%
 
     res.json({
@@ -365,7 +365,7 @@ router.get("/quick-stats", authenticateSession, async (req, res) => {
     // Average response time (simplified - based on team size)
     const totalMembers = userTeams.reduce(
       (sum, team) => sum + (team.members?.length || 0),
-      0
+      0,
     );
     const averageResponseTime =
       totalMembers > 0 ? Math.max(1, Math.floor(12 / totalMembers)) : 2;

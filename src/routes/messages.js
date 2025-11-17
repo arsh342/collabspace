@@ -128,7 +128,7 @@ router.get(
 
       // Remove undefined options
       Object.keys(options).forEach(
-        (key) => options[key] === undefined && delete options[key]
+        (key) => options[key] === undefined && delete options[key],
       );
 
       let messages;
@@ -138,7 +138,7 @@ router.get(
         messages = await Message.searchMessages(
           req.params.teamId,
           search,
-          options
+          options,
         );
       } else {
         // Get messages by team
@@ -190,7 +190,7 @@ router.get(
       logger.error("Get team messages error:", error);
       throw new AppError("Failed to get team messages", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /api/messages
@@ -200,7 +200,7 @@ router.post(
   "/",
   authenticateSession,
   validateMessage,
-  invalidateCacheMiddleware([`team-*-messages`, `stats-*`]),
+  invalidateCacheMiddleware(["team-*-messages", "stats-*"]),
   catchAsync(async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -215,7 +215,7 @@ router.post(
 
       const { content, teamId, messageType = "text", replyTo } = req.body;
       logger.info(
-        `Attempting to send message: content="${content}", teamId="${teamId}", user="${req.user._id}"`
+        `Attempting to send message: content="${content}", teamId="${teamId}", user="${req.user._id}"`,
       );
 
       // Verify user is member of the team
@@ -266,12 +266,12 @@ router.post(
         await message.populate("replyTo.message");
         await message.populate(
           "replyTo.sender",
-          "username firstName lastName avatar"
+          "username firstName lastName avatar",
         );
       }
 
       logger.info(
-        `User ${req.user.username} sent message in team: ${team.name}`
+        `User ${req.user.username} sent message in team: ${team.name}`,
       );
 
       // Format response for dashboard compatibility
@@ -304,7 +304,7 @@ router.post(
       logger.error("Send message error:", error);
       throw new AppError("Failed to send message", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /api/messages/file
@@ -372,12 +372,12 @@ router.post(
         await message.populate("replyTo.message");
         await message.populate(
           "replyTo.sender",
-          "username firstName lastName avatar"
+          "username firstName lastName avatar",
         );
       }
 
       logger.info(
-        `User ${req.user.username} sent file message in team: ${team.name}`
+        `User ${req.user.username} sent file message in team: ${team.name}`,
       );
 
       res.status(201).json({
@@ -389,7 +389,7 @@ router.post(
       logger.error("Send file message error:", error);
       throw new AppError("Failed to send file message", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/messages/:id
@@ -429,7 +429,7 @@ router.get(
       logger.error("Get message details error:", error);
       throw new AppError("Failed to get message details", 500);
     }
-  })
+  }),
 );
 
 // @route   PUT /api/messages/:id
@@ -494,7 +494,7 @@ router.put(
       logger.error("Edit message error:", error);
       throw new AppError("Failed to edit message", 500);
     }
-  })
+  }),
 );
 
 // @route   DELETE /api/messages/:id
@@ -502,7 +502,7 @@ router.put(
 // @access  Private
 router.delete(
   "/:id",
-  invalidateCacheMiddleware([`team-*-messages`, `stats-*`]),
+  invalidateCacheMiddleware(["team-*-messages", "stats-*"]),
   catchAsync(async (req, res) => {
     try {
       const message = await Message.findById(req.params.id);
@@ -546,7 +546,7 @@ router.delete(
       logger.error("Delete message error:", error);
       throw new AppError("Failed to delete message", 500);
     }
-  })
+  }),
 );
 
 // @route   POST /api/messages/:id/reactions
@@ -592,7 +592,7 @@ router.post(
       // Populate message data for response
       await message.populate(
         "reactions.user",
-        "username firstName lastName avatar"
+        "username firstName lastName avatar",
       );
 
       logger.info(
@@ -600,11 +600,11 @@ router.post(
           message.reactions.find(
             (r) =>
               r.user._id.toString() === req.user._id.toString() &&
-              r.emoji === emoji
+              r.emoji === emoji,
           )
             ? "added"
             : "removed"
-        } reaction ${emoji} to message: ${message._id}`
+        } reaction ${emoji} to message: ${message._id}`,
       );
 
       res.json({
@@ -616,7 +616,7 @@ router.post(
       logger.error("Update reaction error:", error);
       throw new AppError("Failed to update reaction", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/messages/:id/reactions
@@ -655,7 +655,7 @@ router.get(
       logger.error("Get message reactions error:", error);
       throw new AppError("Failed to get message reactions", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/messages/search/:teamId
@@ -679,7 +679,7 @@ router.get(
 
       // Remove undefined options
       Object.keys(options).forEach(
-        (key) => options[key] === undefined && delete options[key]
+        (key) => options[key] === undefined && delete options[key],
       );
 
       const skip = (page - 1) * limit;
@@ -687,7 +687,7 @@ router.get(
       const messages = await Message.searchMessages(
         req.params.teamId,
         q,
-        options
+        options,
       );
 
       // Get total count for pagination
@@ -718,7 +718,7 @@ router.get(
       logger.error("Search messages error:", error);
       throw new AppError("Failed to search messages", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/messages/mentions/:teamId
@@ -766,7 +766,7 @@ router.get(
       logger.error("Get mentions error:", error);
       throw new AppError("Failed to get mentions", 500);
     }
-  })
+  }),
 );
 
 // @route   GET /api/messages/stats/:teamId
@@ -821,7 +821,7 @@ router.get(
       logger.error("Get message stats error:", error);
       throw new AppError("Failed to get message statistics", 500);
     }
-  })
+  }),
 );
 
 module.exports = router;

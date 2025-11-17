@@ -134,7 +134,7 @@ const teamSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Virtual for member count
@@ -190,7 +190,7 @@ teamSchema.methods.addMember = async function (userId, addedBy = null) {
 
       // Remove from invited users if exists
       this.invitedUsers = this.invitedUsers.filter(
-        (invite) => invite.user.toString() !== userId.toString()
+        (invite) => invite.user.toString() !== userId.toString(),
       );
 
       await this.save();
@@ -244,7 +244,7 @@ teamSchema.methods.inviteUser = async function (userId, invitedBy) {
 
     // Check if user is already invited
     const existingInvite = this.invitedUsers.find(
-      (invite) => invite.user.toString() === userId.toString()
+      (invite) => invite.user.toString() === userId.toString(),
     );
 
     if (existingInvite) {
@@ -275,7 +275,7 @@ teamSchema.methods.acceptInvitation = async function (userId) {
     const invite = this.invitedUsers.find(
       (invite) =>
         invite.user.toString() === userId.toString() &&
-        invite.status === "pending"
+        invite.status === "pending",
     );
 
     if (!invite) {
@@ -304,7 +304,7 @@ teamSchema.methods.declineInvitation = async function (userId) {
     const invite = this.invitedUsers.find(
       (invite) =>
         invite.user.toString() === userId.toString() &&
-        invite.status === "pending"
+        invite.status === "pending",
     );
 
     if (!invite) {

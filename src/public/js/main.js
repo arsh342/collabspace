@@ -82,13 +82,13 @@ class CollabSpace {
 
   setupAuthenticatedUI() {
     // Update UI elements for authenticated users
-    const authElements = document.querySelectorAll('[data-auth="required"]');
+    const authElements = document.querySelectorAll("[data-auth=\"required\"]");
     authElements.forEach((element) => {
       element.style.display = "block";
     });
 
     const unauthElements = document.querySelectorAll(
-      '[data-auth="unauthorized"]'
+      "[data-auth=\"unauthorized\"]",
     );
     unauthElements.forEach((element) => {
       element.style.display = "none";
@@ -97,13 +97,13 @@ class CollabSpace {
 
   setupUnauthenticatedUI() {
     // Update UI elements for unauthenticated users
-    const authElements = document.querySelectorAll('[data-auth="required"]');
+    const authElements = document.querySelectorAll("[data-auth=\"required\"]");
     authElements.forEach((element) => {
       element.style.display = "none";
     });
 
     const unauthElements = document.querySelectorAll(
-      '[data-auth="unauthorized"]'
+      "[data-auth=\"unauthorized\"]",
     );
     unauthElements.forEach((element) => {
       element.style.display = "block";
@@ -175,7 +175,7 @@ class CollabSpace {
     // Show notification
     this.showNotification(
       `New message from ${message.sender.username}`,
-      "info"
+      "info",
     );
   }
 
@@ -425,8 +425,8 @@ class CollabSpace {
             <div class="message-header">
                 <span class="message-sender">${message.sender.username}</span>
                 <span class="message-time">${this.formatTime(
-                  message.createdAt
-                )}</span>
+    message.createdAt,
+  )}</span>
             </div>
             <div class="message-content">${message.content}</div>
         `;
@@ -438,7 +438,7 @@ class CollabSpace {
   updateTaskInUI(data) {
     // Update task in the current view
     const taskElement = document.querySelector(
-      `[data-task-id="${data.taskId}"]`
+      `[data-task-id="${data.taskId}"]`,
     );
     if (taskElement) {
       // Update task display based on the updates

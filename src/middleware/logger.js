@@ -45,20 +45,20 @@ class Logger {
 
     // Console output
     switch (level) {
-      case "error":
-        console.error(formattedMessage);
-        break;
-      case "warn":
-        console.warn(formattedMessage);
-        break;
-      case "info":
-        console.info(formattedMessage);
-        break;
-      case "debug":
-        console.debug(formattedMessage);
-        break;
-      default:
-        console.log(formattedMessage);
+    case "error":
+      console.error(formattedMessage);
+      break;
+    case "warn":
+      console.warn(formattedMessage);
+      break;
+    case "info":
+      console.info(formattedMessage);
+      break;
+    case "debug":
+      console.debug(formattedMessage);
+      break;
+    default:
+      console.log(formattedMessage);
     }
   }
 
