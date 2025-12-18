@@ -64,6 +64,7 @@ function cacheMiddleware(ttl = 300, keyGenerator = null, forceCache = false) {
           setCache(cacheKey, data, ttl)
             .then(() => {
               console.log(`💾 Redis cached: ${cacheKey} (TTL: ${ttl}s)`);
+              // Response cached
             })
             .catch((err) => {
               console.error("Failed to cache response:", err);
@@ -165,6 +166,7 @@ function invalidateCacheMiddleware(patterns, realTimeOnly = true) {
             notifyClientsOfDataUpdate(req, res, patterns);
           } catch (notifyError) {
             console.error("Client notification error:", notifyError);
+            // Cache invalidated
           }
         } catch (error) {
           console.error("Cache invalidation error:", error);

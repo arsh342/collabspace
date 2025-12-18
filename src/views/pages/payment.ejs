@@ -324,6 +324,7 @@
       .form-control[type="text"]#cardNumber {
         font-family: "Courier New", monospace;
         letter-spacing: 2px;
+        padding: 0.75rem 3rem 0.75rem 0.75rem;
       }
 
       .form-control[type="text"]#cvv {
@@ -339,11 +340,12 @@
       /* Card type icons */
       .card-type-icon {
         position: absolute;
-        right: 12px;
+        right: 14px;
         top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.2rem;
+        margin-top: 0;
+        font-size: 1.5rem;
         color: var(--color-gray-400);
+        pointer-events: none;
       }
 
       .card-input-wrapper {
@@ -674,15 +676,18 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
       (function () {
-        const pricing = <%- JSON.stringify(pricing || {}) %>;
+        // ESLint/TS ignore: EJS template syntax not recognized by linter
+        /* eslint-disable */
+        const pricingData = <%- JSON.stringify(pricing || {}) %>;
         const state = {
           publishableKey: "<%= stripePublishableKey %>",
-          plan: (pricing.plan || "pro"),
-          currency: (pricing.currency || "USD"),
-          unitAmount: Number.isFinite(pricing.unitAmount) ? pricing.unitAmount : 5900,
-          seatMax: Number.isFinite(pricing.seatMax) ? pricing.seatMax : 500,
+          plan: (pricingData.plan || "pro"),
+          currency: (pricingData.currency || "USD"),
+          unitAmount: Number.isFinite(pricingData.unitAmount) ? pricingData.unitAmount : 5900,
+          seatMax: Number.isFinite(pricingData.seatMax) ? pricingData.seatMax : 500,
           isAuthenticated: <%= isAuthenticated ? "true" : "false" %>,
         };
+        /* eslint-enable */
 
         const formatter = new Intl.NumberFormat(undefined, {
           style: "currency",

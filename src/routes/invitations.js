@@ -321,7 +321,7 @@ router.post("/:requestId/cancel", authenticateSession, async (req, res) => {
 // Get available teams for member to browse
 router.get("/available-teams", authenticateSession, async (req, res) => {
   try {
-    console.log("🔍 Available teams endpoint called by user:", req.session.userId);
+    // Available teams endpoint called
     const userId = req.session.userId;
 
     // Disable caching
@@ -336,7 +336,6 @@ router.get("/available-teams", authenticateSession, async (req, res) => {
         { members: userId },
       ],
     }).select("_id");
-    console.log("📊 User teams count:", userTeams.length);
 
     const userTeamIds = userTeams.map(team => team._id);
 
@@ -346,7 +345,6 @@ router.get("/available-teams", authenticateSession, async (req, res) => {
       type: "request",
       status: "pending",
     }).select("team");
-    console.log("📊 Pending requests count:", pendingRequests.length);
 
     const pendingTeamIds = pendingRequests.map(req => req.team);
 
@@ -355,11 +353,6 @@ router.get("/available-teams", authenticateSession, async (req, res) => {
       _id: { $nin: [...userTeamIds, ...pendingTeamIds] },
     }).populate("admin", "username email").select("name description admin createdAt members");
         
-    console.log("📊 Available teams found:", availableTeams.length);
-    availableTeams.forEach((team, index) => {
-      console.log(`  Team ${index + 1}: ${team.name} (Admin: ${team.admin ? team.admin.username : "null"})`);
-    });
-
     // Add member count to each team
     const teamsWithStats = availableTeams.map(team => ({
       ...team.toObject(),

@@ -56,6 +56,14 @@ router.get("/stats", authenticateSession, async (req, res) => {
     res.status(500).json({ error: "Failed to fetch dashboard stats" });
   }
 });
+      // Member stats calculated
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching member stats:", error);
+      res.status(500).json({ error: "Failed to fetch dashboard stats" });
+    }
+  },
+);
 
 // Get member tasks
 router.get("/tasks", authenticateSession, async (req, res) => {

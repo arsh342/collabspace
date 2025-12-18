@@ -262,12 +262,6 @@ router.get(
         );
         const teamIds = userTeams.map((team) => team._id);
 
-        console.log("Organiser task query debug:", {
-          userId: req.user._id,
-          userTeams: userTeams.length,
-          teamIds: teamIds.length,
-        });
-
         const query = {
           $or: [
             { createdBy: req.user._id }, // Tasks created by the organiser
@@ -279,8 +273,6 @@ router.get(
         if (status) query.status = status;
         if (team) query.team = team;
         if (assignedTo) query.assignedTo = assignedTo;
-
-        console.log("Task query:", query);
 
         tasks = await Task.find(query)
           .populate("team", "name")
@@ -426,6 +418,7 @@ router.post(
   requireAuth,
   validateTaskCreation,
   invalidateCacheMiddleware(["realtime:notifications:*"], true), // Only real-time notifications
+  invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     // Set client cache invalidation headers
     res.setHeader("X-Invalidate-Client-Cache", "tasks,dashboard");
@@ -582,6 +575,7 @@ router.put(
   requireAuth,
   validateTaskUpdate,
   invalidateCacheMiddleware(["realtime:notifications:*"], true), // Only real-time data
+  invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     // Set client cache invalidation headers
     res.setHeader("X-Invalidate-Client-Cache", "tasks,dashboard");
@@ -746,6 +740,7 @@ router.delete(
   "/:id",
   requireAuth,
   invalidateCacheMiddleware(["realtime:notifications:*"], true), // Only real-time data
+  invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
     // Set client cache invalidation headers
     res.setHeader("X-Invalidate-Client-Cache", "tasks,dashboard");
@@ -769,7 +764,7 @@ router.delete(
 
         await Task.findByIdAndDelete(req.params.id);
 
-        logger.info("Orphaned task deleted successfully");
+        logger.info(`Orphaned task deleted successfully`);
 
         return res.json({
           success: true,
@@ -816,13 +811,13 @@ router.delete(
 
       await Task.findByIdAndDelete(req.params.id);
 
-      logger.info("Task deleted from database successfully");
+      logger.info(`Task deleted from database successfully`);
 
       // Update team stats
       if (teamDoc) {
-        logger.info("Updating team stats...");
+        logger.info(`Updating team stats...`);
         await teamDoc.updateTaskStats();
-        logger.info("Team stats updated successfully");
+        logger.info(`Team stats updated successfully`);
       }
 
       logger.info(`User ${req.user.username} deleted task: ${taskTitle}`);
@@ -1001,12 +996,12 @@ router.post(
         });
       }
 
-      logger.info("User has access, updating status...");
+      logger.info(`User has access, updating status...`);
 
       // Update status
       await task.updateStatus(status, req.user._id);
 
-      logger.info("Status updated successfully");
+      logger.info(`Status updated successfully`);
 
       // Create system message for status change
       try {

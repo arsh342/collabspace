@@ -18,6 +18,7 @@ const router = express.Router();
 router.get(
   "/stats",
   requireAuth,
+  cacheMiddleware(10, (req) => `dashboard:stats:${req.user._id}`), // Cache for 10 seconds
   catchAsync(async (req, res) => {
     // Set headers to indicate client should cache this data
     res.setHeader("Cache-Control", "private, max-age=300"); // 5 minutes
@@ -48,10 +49,17 @@ router.get(
       // Calculate stats
       const totalTeams = teams.length;
 
-      // Calculate total members (including admins for total team size)
-      const totalMembers = teams.reduce((sum, team) => {
-        return sum + (team.members ? team.members.length : 0);
-      }, 0);
+      // Calculate unique members across all teams
+      const uniqueMembers = new Set();
+      teams.forEach((team) => {
+        if (Array.isArray(team.members)) {
+          team.members.forEach((member) => {
+            const memberId = typeof member === 'object' ? member._id.toString() : member.toString();
+            uniqueMembers.add(memberId);
+          });
+        }
+      });
+      const totalMembers = uniqueMembers.size;
 
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter(
@@ -61,14 +69,7 @@ router.get(
       const completionRate =
         totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-      console.log("Calculated stats:", {
-        totalTeams,
-        totalMembers,
-        totalTasks,
-        activeTasks,
-        completedTasks,
-        completionRate,
-      });
+      // Stats calculated
 
       res.json({
         success: true,
