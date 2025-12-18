@@ -93,12 +93,6 @@ if (process.env.NODE_ENV !== "test") {
       }
     })
     .catch((error) => {
-      console.log(
-        "Redis connection failed, using MongoDB-only mode:",
-      redisClient = client;
-      // Redis integration initialized
-    })
-    .catch((error) => {
       console.warn(
         "Redis connection failed, falling back to MongoDB for sessions:",
         error.message
@@ -435,14 +429,6 @@ function removeUserFromTeam(teamId, userId) {
     }
   }
 }
-// Socket.IO connection handling
-io.on("connection", (socket) => {
-  // logger.logger.info(`User connected: ${socket.id}`); // Reduced logging
-
-  // Register organiser dashboard listener
-  socket.on("registerOrganiser", async (organiserId) => {
-    try {
-      if (!organiserId) return;
 
 function updateOnlineCount(teamId) {
   const onlineCount = teamUsers.has(teamId) ? teamUsers.get(teamId).size : 0;
@@ -475,9 +461,6 @@ process.on("unhandledRejection", (err, promise) => {
   logger.logger.error(`Unhandled Rejection at: ${promise}, reason: ${err}`);
   server.close(() => process.exit(1));
 });
-      // logger.logger.info(
-      //   `Socket ${socket.id} registered for organiser ${organiserId}`
-      // ); // Reduced logging
 
 // Handle uncaught exceptions
 process.on("uncaughtException", (err) => {
@@ -502,13 +485,6 @@ async function initializeServer() {
       // Add security headers middleware
       app.use(sslManager.httpsRedirectMiddleware());
       app.use(sslManager.securityHeadersMiddleware());
-      // logger.logger.info(
-      //   `Socket ${socket.id} registered for member ${memberId}`
-      // ); // Reduced logging
-    } catch (e) {
-      logger.logger.error("Error registering member socket", e);
-    }
-  });
 
       console.log("🔒 HTTPS mode enabled");
 
@@ -600,7 +576,6 @@ function setupSocketHandlers() {
 
         logger.logger.info(
           `Socket ${socket.id} registered for organiser ${organiserId}`
-          `User ${socket.currentUserId} (${socket.id}) left team ${teamId}`
         );
 
         // Send initial summary
@@ -641,15 +616,6 @@ function setupSocketHandlers() {
         socket.join(`team-${teamId}`);
         socket.currentTeam = teamId;
         socket.currentUserId = userId;
-      // Broadcast message to team
-      socket.to(`team-${data.teamId}`).emit("new message", data);
-      logger.logger.info(
-        `Message sent in team ${data.teamId}: ${data.content}`
-      );
-    } catch (error) {
-      logger.logger.error(`Error updating user lastSeen for message:`, error);
-    }
-  });
 
         // Redis room management
         await onlineUsers.joinRoom(userId, `team-${teamId}`);
@@ -732,11 +698,6 @@ function setupSocketHandlers() {
         logger.logger.error("Error sending message:", error);
       }
     });
-    } catch (error) {
-      logger.logger.error(`Error updating user lastSeen on disconnect:`, error);
-    }
-  });
-});
 
     // Handle typing indicators
     socket.on("typing", (data) => {
@@ -806,11 +767,6 @@ function setupSocketHandlers() {
         );
       }
     });
-if (process.env.NODE_ENV !== "test") {
-  server.listen(PORT, () => {
-    console.log(`✓ Server running on port ${PORT}`);
-    logger.logger.info(`Server running on port ${PORT}`);
-    logger.logger.info(`Environment: ${process.env.NODE_ENV || "development"}`);
   });
 }
 
