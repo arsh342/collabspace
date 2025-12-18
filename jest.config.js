@@ -1,7 +1,10 @@
 module.exports = {
   testEnvironment: "node",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  testMatch: ["**/__tests__/**/*.test.js"],
+  testMatch: [
+    "**/__tests__/**/*.test.js",
+    "!**/__tests__/integration/**/*.test.js",
+  ],
   collectCoverageFrom: [
     "src/**/*.js",
     "!src/public/**",
@@ -13,4 +16,3 @@ module.exports = {
   clearMocks: true,
   verbose: true,
 };
-

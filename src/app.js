@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const http = require("http");
+const https = require("https");
 const socketIo = require("socket.io");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
@@ -8,6 +9,9 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const RedisStore = require("connect-redis").default;
 require("dotenv").config();
+
+// Import SSL configuration
+const SSLManager = require("./config/ssl");
 
 // Import configurations and middleware
 const connectDB = require("./config/database");
@@ -43,8 +47,15 @@ const uploadRoutes = require("./routes/upload");
 const paymentRoutes = require("./routes/payments");
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+
+// Initialize SSL Manager
+const sslManager = new SSLManager();
+let server;
+let useHTTPS = false;
+
+// This will be initialized after SSL setup
+let io;
+
 // In-memory map organiserId -> Set of socket ids
 const organiserSockets = new Map();
 const { computeOrganiserSummary } = require("./utils/dashboardSummary");
@@ -63,21 +74,37 @@ if (process.env.NODE_ENV !== "test") {
 // Connect to Redis for caching and session storage
 let redisClient = null;
 if (process.env.NODE_ENV !== "test") {
-  connectRedis()
+  // Add a timeout to Redis connection attempt
+  Promise.race([
+    connectRedis(),
+    new Promise((_, reject) =>
+      setTimeout(
+        () => reject(new Error("Redis connection timeout after 10s")),
+        10000
+      )
+    ),
+  ])
     .then((client) => {
-      redisClient = client;
-      console.log("Redis integration initialized");
+      if (client) {
+        redisClient = client;
+        console.log("Redis integration initialized");
+      } else {
+        console.log("Redis not available, using MongoDB-only mode");
+      }
     })
     .catch((error) => {
-      console.warn(
-        "Redis connection failed, falling back to MongoDB for sessions:",
-        error.message,
+      console.log(
+        "Redis connection failed, using MongoDB-only mode:",
+        error.message
       );
     });
 }
 
 // Security middleware
 app.use(cors());
+
+// SSL security headers (will be set up after SSL initialization)
+// This will be added dynamically after server setup
 
 // Apply rate limiting
 app.use("/api/", apiLimiter); // General API rate limiting
@@ -130,6 +157,19 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 // CSS route mapping for convenience
 app.use("/css", express.static(path.join(__dirname, "public", "css")));
 
+// Handle common favicon requests to prevent 404 errors
+app.get("/favicon.ico", (req, res) => {
+  res.status(204).end(); // No content
+});
+
+app.get("/apple-touch-icon.png", (req, res) => {
+  res.status(204).end(); // No content
+});
+
+app.get("/apple-touch-icon-precomposed.png", (req, res) => {
+  res.status(204).end(); // No content
+});
+
 // View engine setup
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -146,7 +186,7 @@ app.use(
     req.io = io;
     next();
   },
-  chatRoutes,
+  chatRoutes
 );
 app.use("/api/upload", uploadRoutes);
 app.use("/api", uploadRoutes); // This will handle /api/files/:filename
@@ -195,22 +235,6 @@ app.get("/logout", (req, res) => {
   res.redirect("/login");
 });
 
-app.get("/dashboard", (req, res) => {
-  // For now, render dashboard without authentication check
-  // In production, you would add authentication middleware here
-  const mockUser = {
-    firstName: "User",
-    lastName: "Name",
-    role: "member",
-    username: "user",
-  };
-  res.render("dashboard/index", {
-    title: "Dashboard",
-    user: mockUser,
-    path: "/dashboard",
-  });
-});
-
 app.get(
   "/organiser-dashboard",
   authenticateWeb,
@@ -221,7 +245,7 @@ app.get(
       user: req.user,
       path: "/organiser-dashboard",
     });
-  },
+  }
 );
 
 app.get("/member-dashboard", authenticateWeb, (req, res) => {
@@ -240,7 +264,7 @@ app.get("/member-dashboard", authenticateWeb, (req, res) => {
     return res
       .status(403)
       .send(
-        `Access denied. Your role is: ${req.user.role}. Team Member access required.`,
+        `Access denied. Your role is: ${req.user.role}. Team Member access required.`
       );
   }
 
@@ -252,6 +276,15 @@ app.get("/member-dashboard", authenticateWeb, (req, res) => {
     plan: req.user?.plan || "free",
     isPro: Boolean(req.user?.isPro),
     isOrganiser: req.user?.role === "Organiser",
+  });
+});
+
+// Cache system test page (accessible to all authenticated users)
+app.get("/cache-test", authenticateWeb, (req, res) => {
+  res.render("cache-test", {
+    title: "Cache System Test - CollabSpace",
+    user: req.user,
+    path: "/cache-test",
   });
 });
 
@@ -270,50 +303,11 @@ app.get("/teams/:id", (req, res) => {
   res.redirect("/organiser-dashboard");
 });
 
-app.get("/tasks", (req, res) => {
-  const mockUser = {
-    firstName: "John",
-    lastName: "Doe",
-    role: "admin",
-  };
-  res.render("tasks", {
-    title: "Tasks - CollabSpace",
-    user: mockUser,
-    path: "/tasks",
-  });
-});
-
 app.get("/chat", authenticateSession, (req, res) => {
   res.render("chat", {
     title: "Chat - CollabSpace",
     user: req.user,
     path: "/chat",
-  });
-});
-
-app.get("/profile", (req, res) => {
-  const mockUser = {
-    firstName: "John",
-    lastName: "Doe",
-    role: "admin",
-  };
-  res.render("profile", {
-    title: "Profile - CollabSpace",
-    user: mockUser,
-    path: "/profile",
-  });
-});
-
-app.get("/settings", (req, res) => {
-  const mockUser = {
-    firstName: "John",
-    lastName: "Doe",
-    role: "admin",
-  };
-  res.render("dashboard/settings", {
-    title: "Settings - CollabSpace",
-    user: mockUser,
-    path: "/settings",
   });
 });
 
@@ -349,12 +343,12 @@ app.get("/terms", (req, res) => {
 app.get("/payment", (req, res) => {
   const proUnitAmount = Number.parseInt(
     process.env.STRIPE_PRO_UNIT_AMOUNT || "5900",
-    10,
+    10
   );
   const planCurrency = (process.env.STRIPE_CURRENCY || "usd").toUpperCase();
   const maxSeats = Number.parseInt(
     process.env.STRIPE_PRO_MAX_SEATS || "500",
-    10,
+    10
   );
 
   res.render("pages/payment", {
@@ -430,226 +424,8 @@ app.get("/guides", (req, res) => {
   });
 });
 
-// Store organiser socket connections
 // Store team user connections
 const teamUsers = new Map(); // Map of teamId -> Set of userIds
-
-// Socket.IO connection handling
-io.on("connection", (socket) => {
-  logger.logger.info(`User connected: ${socket.id}`);
-
-  // Register organiser dashboard listener
-  socket.on("registerOrganiser", async (organiserId) => {
-    try {
-      if (!organiserId) return;
-
-      // Legacy in-memory storage
-      if (!organiserSockets.has(organiserId)) {
-        organiserSockets.set(organiserId, new Set());
-      }
-      organiserSockets.get(organiserId).add(socket.id);
-
-      // Redis online user management
-      await onlineUsers.addUser(organiserId, socket.id);
-
-      // Join user room for personal notifications
-      socket.join(`user_${organiserId}`);
-      socket.currentUserId = organiserId;
-
-      logger.logger.info(
-        `Socket ${socket.id} registered for organiser ${organiserId}`,
-      );
-
-      // Send initial summary
-      const summary = await computeOrganiserSummary(organiserId);
-      socket.emit("dashboardSummary", summary);
-    } catch (e) {
-      logger.logger.error("Error registering organiser socket", e);
-    }
-  });
-
-  // Register member dashboard listener
-  socket.on("registerMember", async (memberId) => {
-    try {
-      if (!memberId) return;
-
-      // Redis online user management
-      await onlineUsers.addUser(memberId, socket.id);
-
-      // Join user room for personal notifications
-      socket.join(`user_${memberId}`);
-      socket.currentUserId = memberId;
-
-      logger.logger.info(
-        `Socket ${socket.id} registered for member ${memberId}`,
-      );
-    } catch (e) {
-      logger.logger.error("Error registering member socket", e);
-    }
-  });
-
-  // Join team room
-  socket.on("join team", async (data) => {
-    const { teamId, userId } = data;
-
-    try {
-      // Update user's lastSeen timestamp for online status
-      await User.findByIdAndUpdate(userId, { lastSeen: new Date() });
-
-      // Leave previous team if any (both legacy and Redis)
-      if (socket.currentTeam && socket.currentUserId) {
-        socket.leave(`team-${socket.currentTeam}`);
-        removeUserFromTeam(socket.currentTeam, socket.currentUserId);
-        updateOnlineCount(socket.currentTeam);
-        await onlineUsers.leaveRoom(socket.currentUserId, socket.currentTeam);
-      }
-
-      // Join new team (both legacy and Redis)
-      socket.join(`team-${teamId}`);
-      socket.currentTeam = teamId;
-      socket.currentUserId = userId;
-
-      // Track user in team (legacy)
-      if (!teamUsers.has(teamId)) {
-        teamUsers.set(teamId, new Set());
-      }
-      teamUsers.get(teamId).add(userId);
-
-      // Track user in team (Redis)
-      await onlineUsers.joinRoom(userId, teamId);
-
-      logger.logger.info(`User ${userId} (${socket.id}) joined team ${teamId}`);
-
-      // Update online count for this team
-      updateOnlineCount(teamId);
-
-      // Load recent messages from Redis cache
-      const recentMessages = await messageCache.getRecentMessages(teamId, 20);
-      if (recentMessages.length > 0) {
-        socket.emit("recent messages", recentMessages);
-      }
-    } catch (error) {
-      logger.logger.error(`Error updating user lastSeen for ${userId}:`, error);
-    }
-  });
-
-  // Leave team room
-  socket.on("leave team", async (data) => {
-    const { teamId } = data;
-
-    try {
-      if (socket.currentTeam === teamId && socket.currentUserId) {
-        socket.leave(`team-${teamId}`);
-        removeUserFromTeam(teamId, socket.currentUserId);
-        updateOnlineCount(teamId);
-
-        // Redis room management
-        await onlineUsers.leaveRoom(socket.currentUserId, teamId);
-
-        logger.logger.info(
-          `User ${socket.currentUserId} (${socket.id}) left team ${teamId}`,
-        );
-
-        // Clear current team info
-        socket.currentTeam = null;
-      }
-    } catch (error) {
-      logger.logger.error(`Error leaving team ${teamId}:`, error);
-    }
-  });
-
-  // Handle chat messages
-  socket.on("send message", async (data) => {
-    try {
-      // Rate limiting check
-      const canSend = await rateLimiter.checkLimit(data.userId, "message");
-      if (!canSend) {
-        socket.emit("rate limit exceeded", {
-          message:
-            "You're sending messages too quickly. Please wait before sending another.",
-        });
-        return;
-      }
-
-      // Update user's lastSeen timestamp
-      if (data.userId) {
-        await User.findByIdAndUpdate(data.userId, { lastSeen: new Date() });
-      }
-
-      // Cache the message in Redis
-      await messageCache.addMessage(data.teamId, data);
-
-      // Broadcast message to team
-      socket.to(`team-${data.teamId}`).emit("new message", data);
-      logger.logger.info(
-        `Message sent in team ${data.teamId}: ${data.content}`,
-      );
-    } catch (error) {
-      logger.logger.error("Error updating user lastSeen for message:", error);
-    }
-  });
-
-  // Handle typing indicators
-  socket.on("typing", (data) => {
-    socket.to(`team-${data.teamId}`).emit("user typing", data);
-  });
-
-  socket.on("stop typing", (data) => {
-    socket.to(`team-${data.teamId}`).emit("user stopped typing", data);
-  });
-
-  // Handle task updates
-  socket.on("task update", (data) => {
-    socket.to(`team-${data.teamId}`).emit("task updated", data);
-    logger.logger.info(`Task updated in team ${data.teamId}: ${data.taskId}`);
-  });
-
-  // Handle user status
-  socket.on("user status", (data) => {
-    socket.to(`team-${data.teamId}`).emit("user status changed", data);
-    logger.logger.info(`User status changed: ${data.userId} - ${data.status}`);
-  });
-
-  socket.on("disconnect", async () => {
-    logger.logger.info(`User disconnected: ${socket.id}`);
-
-    try {
-      // Update user's lastSeen timestamp on disconnect
-      if (socket.currentUserId) {
-        await User.findByIdAndUpdate(socket.currentUserId, {
-          lastSeen: new Date(),
-        });
-      }
-
-      // Redis cleanup - remove user from online tracking
-      if (socket.currentUserId) {
-        await onlineUsers.removeUser(socket.currentUserId);
-
-        // Leave any Redis rooms
-        if (socket.currentTeam) {
-          await onlineUsers.leaveRoom(socket.currentUserId, socket.currentTeam);
-        }
-      }
-
-      // Remove user from team tracking
-      if (socket.currentTeam && socket.currentUserId) {
-        removeUserFromTeam(socket.currentTeam, socket.currentUserId);
-        updateOnlineCount(socket.currentTeam);
-      }
-
-      // Cleanup organiser socket registration
-      for (const [orgId, set] of organiserSockets.entries()) {
-        if (set.has(socket.id)) {
-          set.delete(socket.id);
-          if (set.size === 0) organiserSockets.delete(orgId);
-          break;
-        }
-      }
-    } catch (error) {
-      logger.logger.error("Error updating user lastSeen on disconnect:", error);
-    }
-  });
-});
 
 // Helper functions for team user tracking
 function removeUserFromTeam(teamId, userId) {
@@ -700,13 +476,309 @@ process.on("uncaughtException", (err) => {
 });
 
 const PORT = process.env.PORT || 3000;
+const HTTP_PORT = process.env.HTTP_PORT || 3000;
+const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
 
-if (process.env.NODE_ENV !== "test") {
-  server.listen(PORT, () => {
-    logger.logger.info(`Server running on port ${PORT}`);
-    logger.logger.info(`Environment: ${process.env.NODE_ENV || "development"}`);
+// Initialize SSL and start server
+async function initializeServer() {
+  try {
+    // Initialize SSL configuration
+    useHTTPS = await sslManager.initialize();
+
+    if (useHTTPS) {
+      // Create HTTPS server
+      server = sslManager.createHTTPSServer(app);
+
+      // Add security headers middleware
+      app.use(sslManager.httpsRedirectMiddleware());
+      app.use(sslManager.securityHeadersMiddleware());
+
+      console.log("🔒 HTTPS mode enabled");
+
+      // Optionally create HTTP server for redirects in production
+      if (process.env.NODE_ENV === "production") {
+        const httpApp = express();
+        httpApp.use("*", (req, res) => {
+          res.redirect(`https://${req.headers.host}${req.url}`);
+        });
+
+        const httpServer = http.createServer(httpApp);
+        httpServer.listen(HTTP_PORT, () => {
+          console.log(`🔓 HTTP redirect server running on port ${HTTP_PORT}`);
+        });
+      }
+    } else {
+      // Create regular HTTP server
+      server = http.createServer(app);
+      console.log("🔓 HTTP mode enabled");
+    }
+
+    // Initialize Socket.IO with the server
+    io = socketIo(server, {
+      cors: {
+        origin: useHTTPS
+          ? [
+              `https://localhost:${HTTPS_PORT}`,
+              `https://127.0.0.1:${HTTPS_PORT}`,
+            ]
+          : [`http://localhost:${HTTP_PORT}`, `http://127.0.0.1:${HTTP_PORT}`],
+        methods: ["GET", "POST"],
+        credentials: true,
+      },
+    });
+
+    // Set up Socket.IO event handlers (existing socket code will go here)
+    setupSocketHandlers();
+
+    const actualPort = useHTTPS ? HTTPS_PORT : HTTP_PORT;
+
+    if (process.env.NODE_ENV !== "test") {
+      server.listen(actualPort, () => {
+        const serverURL = sslManager.getServerURL(actualPort);
+        logger.logger.info(`🚀 Server running on ${serverURL}`);
+        logger.logger.info(
+          `Environment: ${process.env.NODE_ENV || "development"}`
+        );
+        logger.logger.info(`SSL Status: ${useHTTPS ? "ENABLED" : "DISABLED"}`);
+
+        if (useHTTPS && process.env.NODE_ENV !== "production") {
+          logger.logger.warn(
+            "⚠️  Using self-signed certificate - browser will show security warning"
+          );
+          logger.logger.info(
+            '💡 To bypass: Click "Advanced" → "Proceed to localhost (unsafe)"'
+          );
+        }
+      });
+    }
+  } catch (error) {
+    console.error("❌ Server initialization error:", error);
+    process.exit(1);
+  }
+}
+
+// Socket.IO event handlers setup
+function setupSocketHandlers() {
+  // Socket.IO connection handling
+  io.on("connection", (socket) => {
+    logger.logger.info(`User connected: ${socket.id}`);
+
+    // Register organiser dashboard listener
+    socket.on("registerOrganiser", async (organiserId) => {
+      try {
+        if (!organiserId) return;
+
+        // Legacy in-memory storage
+        if (!organiserSockets.has(organiserId)) {
+          organiserSockets.set(organiserId, new Set());
+        }
+        organiserSockets.get(organiserId).add(socket.id);
+
+        // Redis online user management
+        await onlineUsers.addUser(organiserId, socket.id);
+
+        // Join user room for personal notifications
+        socket.join(`user_${organiserId}`);
+        socket.currentUserId = organiserId;
+
+        logger.logger.info(
+          `Socket ${socket.id} registered for organiser ${organiserId}`
+        );
+
+        // Send initial summary
+        const summary = await computeOrganiserSummary(organiserId);
+        socket.emit("dashboardSummary", summary);
+      } catch (e) {
+        logger.logger.error("Error in registerOrganiser:", e);
+      }
+    });
+
+    // Register member listener
+    socket.on("registerMember", async (memberId) => {
+      try {
+        if (!memberId) return;
+
+        // Redis online user management
+        await onlineUsers.addUser(memberId, socket.id);
+
+        // Join user room for personal notifications
+        socket.join(`user_${memberId}`);
+        socket.currentUserId = memberId;
+
+        logger.logger.info(
+          `Socket ${socket.id} registered for member ${memberId}`
+        );
+      } catch (e) {
+        logger.logger.error("Error in registerMember:", e);
+      }
+    });
+
+    // Handle joining team rooms
+    socket.on("join team", async (data) => {
+      try {
+        const { teamId, userId } = data;
+        if (!teamId || !userId) return;
+
+        // Join the team room
+        socket.join(`team-${teamId}`);
+        socket.currentTeam = teamId;
+        socket.currentUserId = userId;
+
+        // Redis room management
+        await onlineUsers.joinRoom(userId, `team-${teamId}`);
+
+        // Track online users for this team
+        if (!teamUsers.has(teamId)) {
+          teamUsers.set(teamId, new Set());
+        }
+        teamUsers.get(teamId).add(userId);
+
+        // Notify team of user joining
+        socket.to(`team-${teamId}`).emit("user joined", {
+          userId,
+          teamId,
+          timestamp: new Date(),
+        });
+
+        // Update online count
+        updateOnlineCount(teamId);
+
+        logger.logger.info(`User ${userId} joined team ${teamId}`);
+      } catch (error) {
+        logger.logger.error("Error joining team:", error);
+      }
+    });
+
+    // Handle leaving team rooms
+    socket.on("leave team", async (data) => {
+      try {
+        const { teamId, userId } = data;
+        if (!teamId || !userId) return;
+
+        // Leave the team room
+        socket.leave(`team-${teamId}`);
+
+        // Redis room management
+        await onlineUsers.leaveRoom(userId, `team-${teamId}`);
+
+        // Remove from team users tracking
+        removeUserFromTeam(teamId, userId);
+
+        // Notify team of user leaving
+        socket.to(`team-${teamId}`).emit("user left", {
+          userId,
+          teamId,
+          timestamp: new Date(),
+        });
+
+        // Update online count
+        updateOnlineCount(teamId);
+
+        logger.logger.info(`User ${userId} left team ${teamId}`);
+      } catch (error) {
+        logger.logger.error("Error leaving team:", error);
+      }
+    });
+
+    // Handle message sending
+    socket.on("send message", async (data) => {
+      try {
+        const { teamId, message, userId } = data;
+        if (!teamId || !message || !userId) return;
+
+        // Cache message in Redis
+        await messageCache.addMessage(teamId, {
+          ...message,
+          timestamp: new Date(),
+        });
+
+        // Broadcast to team members
+        socket.to(`team-${teamId}`).emit("new message", {
+          teamId,
+          message,
+          userId,
+          timestamp: new Date(),
+        });
+
+        logger.logger.info(`Message sent to team ${teamId} by user ${userId}`);
+      } catch (error) {
+        logger.logger.error("Error sending message:", error);
+      }
+    });
+
+    // Handle typing indicators
+    socket.on("typing", (data) => {
+      socket.to(`team-${data.teamId}`).emit("user typing", data);
+    });
+
+    socket.on("stop typing", (data) => {
+      socket.to(`team-${data.teamId}`).emit("user stopped typing", data);
+    });
+
+    // Handle task updates
+    socket.on("task update", (data) => {
+      socket.to(`team-${data.teamId}`).emit("task updated", data);
+      logger.logger.info(`Task updated in team ${data.teamId}`);
+    });
+
+    // Handle user status
+    socket.on("user status", (data) => {
+      socket.to(`team-${data.teamId}`).emit("user status changed", data);
+      logger.logger.info(
+        `User status changed: ${data.userId} - ${data.status}`
+      );
+    });
+
+    socket.on("disconnect", async () => {
+      logger.logger.info(`User disconnected: ${socket.id}`);
+
+      try {
+        // Update user's lastSeen timestamp on disconnect
+        if (socket.currentUserId) {
+          await User.findByIdAndUpdate(socket.currentUserId, {
+            lastSeen: new Date(),
+          });
+        }
+
+        // Redis cleanup - remove user from online tracking
+        if (socket.currentUserId) {
+          await onlineUsers.removeUser(socket.currentUserId);
+
+          // Leave any Redis rooms
+          if (socket.currentTeam) {
+            await onlineUsers.leaveRoom(
+              socket.currentUserId,
+              socket.currentTeam
+            );
+          }
+        }
+
+        // Remove user from team tracking
+        if (socket.currentTeam && socket.currentUserId) {
+          removeUserFromTeam(socket.currentTeam, socket.currentUserId);
+          updateOnlineCount(socket.currentTeam);
+        }
+
+        // Cleanup organiser socket registration
+        for (const [orgId, set] of organiserSockets.entries()) {
+          if (set.has(socket.id)) {
+            set.delete(socket.id);
+            if (set.size === 0) organiserSockets.delete(orgId);
+            break;
+          }
+        }
+      } catch (error) {
+        logger.logger.error(
+          "Error updating user lastSeen on disconnect:",
+          error
+        );
+      }
+    });
   });
 }
+
+// Initialize the server with SSL support
+initializeServer();
 
 module.exports = {
   app,

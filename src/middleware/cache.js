@@ -6,15 +6,30 @@ const {
 } = require("../config/redis");
 
 /**
- * Redis caching middleware for Express routes
- * @param {number} ttl - Time to live in seconds (default: 1 hour)
+ * Redis caching middleware for Express routes - ONLY for essential real-time data
+ * Use this ONLY for:
+ * - Real-time notifications
+ * - Live message counts
+ * - Online user status
+ * - Cross-session data that needs to be shared immediately
+ *
+ * @param {number} ttl - Time to live in seconds (default: 5 minutes for real-time data)
  * @param {function} keyGenerator - Function to generate cache key from req object
+ * @param {boolean} forceCache - Force caching even for non-essential data (use sparingly)
  */
-function cacheMiddleware(ttl = 3600, keyGenerator = null) {
+function cacheMiddleware(ttl = 300, keyGenerator = null, forceCache = false) {
   return async (req, res, next) => {
     // Skip caching if Redis is not available
     const redisClient = require("../config/redis").getRedisClient();
     if (!redisClient || !redisClient.isReady) {
+      return next();
+    }
+
+    // Only cache essential real-time data unless forced
+    if (!forceCache && !isEssentialRealTimeRoute(req)) {
+      // Add header to indicate this should be cached client-side
+      res.setHeader("X-Cache-Strategy", "client-side");
+      res.setHeader("X-Cache-TTL", ttl.toString());
       return next();
     }
 
@@ -24,19 +39,18 @@ function cacheMiddleware(ttl = 3600, keyGenerator = null) {
       if (keyGenerator && typeof keyGenerator === "function") {
         cacheKey = keyGenerator(req);
       } else {
-        // Default key generation based on route and user
-        const userId = req.session?.user?.id || "anonymous";
+        // Default key generation for real-time data
+        const userId = req.session?.userId || req.user?._id || "anonymous";
         const route = req.route?.path || req.path;
         const method = req.method;
-        const queryString =
-          Object.keys(req.query).length > 0 ? JSON.stringify(req.query) : "";
-        cacheKey = `cache:${method}:${route}:${userId}:${queryString}`;
+        cacheKey = `realtime:${method}:${route}:${userId}`;
       }
 
       // Try to get cached response
       const cachedResponse = await getCache(cacheKey);
       if (cachedResponse) {
-        console.log(`Cache hit for key: ${cacheKey}`);
+        console.log(`✅ Redis cache hit: ${cacheKey}`);
+        res.setHeader("X-Cache-Hit", "redis");
         return res.json(cachedResponse);
       }
 
@@ -49,7 +63,7 @@ function cacheMiddleware(ttl = 3600, keyGenerator = null) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           setCache(cacheKey, data, ttl)
             .then(() => {
-              console.log(`Response cached with key: ${cacheKey}`);
+              console.log(`💾 Redis cached: ${cacheKey} (TTL: ${ttl}s)`);
             })
             .catch((err) => {
               console.error("Failed to cache response:", err);
@@ -69,10 +83,46 @@ function cacheMiddleware(ttl = 3600, keyGenerator = null) {
 }
 
 /**
- * Cache invalidation middleware
- * Invalidates cache based on patterns when data is modified
+ * Determine if a route contains essential real-time data that should be Redis cached
+ * @param {Object} req - Express request object
+ * @returns {boolean} - True if route should be Redis cached
  */
-function invalidateCacheMiddleware(patterns) {
+function isEssentialRealTimeRoute(req) {
+  const route = req.route?.path || req.path;
+  const method = req.method;
+
+  // Only cache these essential real-time routes in Redis:
+  const essentialRoutes = [
+    // Real-time notifications and counts
+    "/api/notifications/unread-count",
+    "/api/messages/unread-count",
+
+    // Live online status (for real-time updates)
+    "/api/users/online-status",
+    "/api/teams/:id/online-members",
+
+    // Real-time message updates (last few messages only)
+    "/api/messages/latest",
+
+    // Cross-session critical data
+    "/api/auth/session-status",
+    "/api/users/active-sessions",
+  ];
+
+  // Check if current route matches essential routes
+  return essentialRoutes.some((essentialRoute) => {
+    // Handle parameterized routes
+    const routePattern = essentialRoute.replace(/:\w+/g, "[^/]+");
+    const regex = new RegExp(`^${routePattern}$`);
+    return regex.test(route) && method === "GET";
+  });
+}
+
+/**
+ * Cache invalidation middleware - ONLY for Redis real-time data
+ * Use sparingly and only for essential real-time patterns
+ */
+function invalidateCacheMiddleware(patterns, realTimeOnly = true) {
   return async (req, res, next) => {
     // Store original methods
     const originalJson = res.json;
@@ -89,21 +139,32 @@ function invalidateCacheMiddleware(patterns) {
             if (typeof pattern === "function") {
               actualPattern = pattern(req);
             } else {
-              // Replace common placeholders
+              // Only process real-time patterns if realTimeOnly is true
+              if (realTimeOnly && !isRealTimePattern(pattern)) {
+                console.log(
+                  `⏭️  Skipping non-real-time pattern: ${pattern} (use client-side cache)`
+                );
+                continue;
+              }
+
+              // Replace common placeholders for real-time patterns only
               actualPattern = pattern
-                .replace(":userId", req.session?.user?.id || "*")
+                .replace(":userId", req.session?.userId || req.user?._id || "*")
                 .replace(
                   ":teamId",
-                  req.params?.teamId || req.body?.teamId || "*",
-                )
-                .replace(
-                  ":taskId",
-                  req.params?.taskId || req.body?.taskId || "*",
+                  req.params?.teamId || req.body?.teamId || "*"
                 );
             }
 
             await invalidatePattern(actualPattern);
-            console.log(`Cache invalidated for pattern: ${actualPattern}`);
+            console.log(`🗑️  Redis cache invalidated: ${actualPattern}`);
+          }
+
+          // Always notify clients about data updates for client-side cache invalidation
+          try {
+            notifyClientsOfDataUpdate(req, res, patterns);
+          } catch (notifyError) {
+            console.error("Client notification error:", notifyError);
           }
         } catch (error) {
           console.error("Cache invalidation error:", error);
@@ -112,17 +173,60 @@ function invalidateCacheMiddleware(patterns) {
     };
 
     res.json = function (data) {
+      const result = originalJson.call(this, data);
       invalidateCache();
-      return originalJson.call(this, data);
+      return result;
     };
 
     res.send = function (data) {
+      const result = originalSend.call(this, data);
       invalidateCache();
-      return originalSend.call(this, data);
+      return result;
     };
 
     next();
   };
+}
+
+/**
+ * Check if a pattern represents real-time data that should be in Redis
+ */
+function isRealTimePattern(pattern) {
+  const realTimePatterns = [
+    "realtime:*",
+    "online:*",
+    "notifications:*",
+    "unread-count:*",
+    "active-sessions:*",
+  ];
+
+  return realTimePatterns.some((rtPattern) => {
+    const regex = new RegExp(rtPattern.replace("*", ".*"));
+    return regex.test(pattern);
+  });
+}
+
+/**
+ * Notify clients about data updates for client-side cache invalidation
+ */
+function notifyClientsOfDataUpdate(req, res, patterns) {
+  // Add headers to tell client which cache to invalidate
+  const cacheInvalidationHints = patterns.map((pattern) => {
+    if (pattern.includes("team")) return "teams";
+    if (pattern.includes("task")) return "tasks";
+    if (pattern.includes("user")) return "users";
+    if (pattern.includes("message")) return "messages";
+    if (pattern.includes("stats")) return "dashboard";
+    return "general";
+  });
+
+  // Set header for client-side cache invalidation
+  if (cacheInvalidationHints.length > 0 && res && res.setHeader) {
+    res.setHeader(
+      "X-Invalidate-Client-Cache",
+      cacheInvalidationHints.join(",")
+    );
+  }
 }
 
 /**

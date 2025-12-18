@@ -140,7 +140,7 @@ router.get(
       console.error("Get user teams error:", error);
       throw new AppError("Failed to get teams", 500);
     }
-  }),
+  })
 );
 
 // @route   GET /api/teams/public
@@ -189,7 +189,7 @@ router.get(
       logger.error("Get public teams error:", error);
       throw new AppError("Failed to get public teams", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams
@@ -199,8 +199,10 @@ router.post(
   "/",
   requireAuth,
   validateTeamCreation,
-  invalidateCacheMiddleware(["user-*", "teams-*", "stats-*"]),
+  invalidateCacheMiddleware(["realtime:notifications:*"], true), // Only real-time notifications
   catchAsync(async (req, res) => {
+    // Set client cache invalidation headers
+    res.setHeader("X-Invalidate-Client-Cache", "teams,dashboard");
     try {
       // Freemium: limit free users to 3 active teams as admin
       const isPro =
@@ -285,7 +287,7 @@ router.post(
       logger.error("Create team error:", error);
       throw new AppError("Failed to create team", 500);
     }
-  }),
+  })
 );
 
 // @route   GET /api/teams/:id
@@ -302,7 +304,7 @@ router.get(
         .populate("invitedUsers.user", "username firstName lastName avatar")
         .populate(
           "invitedUsers.invitedBy",
-          "username firstName lastName avatar",
+          "username firstName lastName avatar"
         );
 
       if (!team) {
@@ -320,7 +322,7 @@ router.get(
       logger.error("Get team details error:", error);
       throw new AppError("Failed to get team details", 500);
     }
-  }),
+  })
 );
 
 // @route   PUT /api/teams/:id
@@ -330,8 +332,10 @@ router.put(
   "/:id",
   requireTeamOrganiser,
   validateTeamUpdate,
-  invalidateCacheMiddleware(["team-*", "teams-*", "stats-*"]),
+  invalidateCacheMiddleware(["realtime:notifications:*"], true), // Only real-time data
   catchAsync(async (req, res) => {
+    // Set client cache invalidation headers
+    res.setHeader("X-Invalidate-Client-Cache", "teams,dashboard");
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -364,7 +368,7 @@ router.put(
 
       // Remove undefined fields
       Object.keys(updateData).forEach(
-        (key) => updateData[key] === undefined && delete updateData[key],
+        (key) => updateData[key] === undefined && delete updateData[key]
       );
 
       const team = await Team.findByIdAndUpdate(req.params.id, updateData, {
@@ -385,7 +389,7 @@ router.put(
       logger.error("Update team error:", error);
       throw new AppError("Failed to update team", 500);
     }
-  }),
+  })
 );
 
 // @route   DELETE /api/teams/:id
@@ -394,8 +398,10 @@ router.put(
 router.delete(
   "/:id",
   requireTeamOrganiser,
-  invalidateCacheMiddleware(["team-*", "teams-*", "user-*", "stats-*"]),
+  invalidateCacheMiddleware(["realtime:notifications:*"], true), // Only real-time data
   catchAsync(async (req, res) => {
+    // Set client cache invalidation headers
+    res.setHeader("X-Invalidate-Client-Cache", "teams,tasks,dashboard");
     try {
       const teamName = req.team.name;
       const teamId = req.params.id;
@@ -408,7 +414,7 @@ router.delete(
       if (taskCount > 0) {
         await Task.deleteMany({ team: teamId });
         logger.info(
-          `Deleted ${taskCount} tasks associated with team: ${teamName}`,
+          `Deleted ${taskCount} tasks associated with team: ${teamName}`
         );
       }
 
@@ -420,7 +426,7 @@ router.delete(
       if (messageCount > 0) {
         await Message.deleteMany({ team: teamId });
         logger.info(
-          `Deleted ${messageCount} messages associated with team: ${teamName}`,
+          `Deleted ${messageCount} messages associated with team: ${teamName}`
         );
       }
 
@@ -428,7 +434,7 @@ router.delete(
       await Team.findByIdAndDelete(teamId);
 
       logger.info(
-        `User ${req.user.username} deleted team: ${teamName} (and ${taskCount} tasks, ${messageCount} messages)`,
+        `User ${req.user.username} deleted team: ${teamName} (and ${taskCount} tasks, ${messageCount} messages)`
       );
 
       res.json({
@@ -439,7 +445,7 @@ router.delete(
       logger.error("Delete team error:", error);
       throw new AppError("Failed to delete team", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/invite
@@ -482,7 +488,7 @@ router.post(
 
       // Check if user is already invited
       const existingInvite = req.team.invitedUsers.find(
-        (invite) => invite.user.toString() === userToInvite._id.toString(),
+        (invite) => invite.user.toString() === userToInvite._id.toString()
       );
 
       if (existingInvite) {
@@ -498,11 +504,11 @@ router.post(
       // Populate team data for response
       await req.team.populate(
         "invitedUsers.user",
-        "username firstName lastName avatar",
+        "username firstName lastName avatar"
       );
 
       logger.info(
-        `User ${req.user.username} invited ${userToInvite.username} to team: ${req.team.name}`,
+        `User ${req.user.username} invited ${userToInvite.username} to team: ${req.team.name}`
       );
 
       res.json({
@@ -514,7 +520,7 @@ router.post(
       logger.error("Send team invitation error:", error);
       throw new AppError("Failed to send invitation", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/join
@@ -565,7 +571,7 @@ router.post(
       logger.error("Join team error:", error);
       throw new AppError("Failed to join team", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/accept-invitation
@@ -592,7 +598,7 @@ router.post(
       await team.populate("members", "username firstName lastName avatar");
 
       logger.info(
-        `User ${req.user.username} accepted invitation to team: ${team.name}`,
+        `User ${req.user.username} accepted invitation to team: ${team.name}`
       );
 
       res.json({
@@ -604,7 +610,7 @@ router.post(
       logger.error("Accept team invitation error:", error);
       throw new AppError("Failed to accept invitation", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/decline-invitation
@@ -627,7 +633,7 @@ router.post(
       await team.declineInvitation(req.user._id);
 
       logger.info(
-        `User ${req.user.username} declined invitation to team: ${team.name}`,
+        `User ${req.user.username} declined invitation to team: ${team.name}`
       );
 
       res.json({
@@ -638,7 +644,7 @@ router.post(
       logger.error("Decline team invitation error:", error);
       throw new AppError("Failed to decline invitation", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/leave
@@ -671,7 +677,7 @@ router.post(
       logger.error("Leave team error:", error);
       throw new AppError("Failed to leave team", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/remove-member
@@ -706,7 +712,7 @@ router.post(
       await req.team.populate("members", "username firstName lastName avatar");
 
       logger.info(
-        `Admin ${req.user.username} removed member ${userId} from team: ${req.team.name}`,
+        `Admin ${req.user.username} removed member ${userId} from team: ${req.team.name}`
       );
 
       res.json({
@@ -718,7 +724,7 @@ router.post(
       logger.error("Remove team member error:", error);
       throw new AppError("Failed to remove member", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/transfer-admin
@@ -762,7 +768,7 @@ router.post(
       await req.team.populate("admin", "username firstName lastName avatar");
 
       logger.info(
-        `Admin ${req.user.username} transferred admin role to ${userId} in team: ${req.team.name}`,
+        `Admin ${req.user.username} transferred admin role to ${userId} in team: ${req.team.name}`
       );
 
       res.json({
@@ -774,7 +780,7 @@ router.post(
       logger.error("Transfer admin role error:", error);
       throw new AppError("Failed to transfer admin role", 500);
     }
-  }),
+  })
 );
 
 // @route   GET /api/teams/:id/stats
@@ -801,7 +807,7 @@ router.get(
       logger.error("Get team stats error:", error);
       throw new AppError("Failed to get team statistics", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/request-join
@@ -845,7 +851,7 @@ router.post(
       const existingRequest = team.joinRequests.find(
         (request) =>
           request.user.toString() === req.user._id.toString() &&
-          request.status === "pending",
+          request.status === "pending"
       );
 
       if (existingRequest) {
@@ -859,7 +865,7 @@ router.post(
       const pendingInvitation = team.invitedUsers.find(
         (invite) =>
           invite.user.toString() === req.user._id.toString() &&
-          invite.status === "pending",
+          invite.status === "pending"
       );
 
       if (pendingInvitation) {
@@ -881,7 +887,7 @@ router.post(
       await team.save();
 
       logger.info(
-        `User ${req.user.username} requested to join team: ${team.name}`,
+        `User ${req.user.username} requested to join team: ${team.name}`
       );
 
       res.status(200).json({
@@ -896,7 +902,7 @@ router.post(
       logger.error("Request join team error:", error);
       throw new AppError("Failed to send join request", 500);
     }
-  }),
+  })
 );
 
 // @route   GET /api/teams/:id/join-requests
@@ -910,7 +916,7 @@ router.get(
       const team = await Team.findById(req.params.id)
         .populate(
           "joinRequests.user",
-          "username firstName lastName email avatar",
+          "username firstName lastName email avatar"
         )
         .select("joinRequests");
 
@@ -923,7 +929,7 @@ router.get(
 
       // Filter pending requests
       const pendingRequests = team.joinRequests.filter(
-        (request) => request.status === "pending",
+        (request) => request.status === "pending"
       );
 
       res.json({
@@ -937,7 +943,7 @@ router.get(
       logger.error("Get join requests error:", error);
       throw new AppError("Failed to get join requests", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/approve-join-request
@@ -975,7 +981,7 @@ router.post(
       // Find the join request
       const joinRequest = team.joinRequests.find(
         (request) =>
-          request.user.toString() === userId && request.status === "pending",
+          request.user.toString() === userId && request.status === "pending"
       );
 
       if (!joinRequest) {
@@ -1001,11 +1007,11 @@ router.post(
 
       // Get user details for response
       const user = await User.findById(userId).select(
-        "username firstName lastName",
+        "username firstName lastName"
       );
 
       logger.info(
-        `Join request approved for user ${user.username} to team: ${team.name}`,
+        `Join request approved for user ${user.username} to team: ${team.name}`
       );
 
       res.status(200).json({
@@ -1021,7 +1027,7 @@ router.post(
       logger.error("Approve join request error:", error);
       throw new AppError("Failed to approve join request", 500);
     }
-  }),
+  })
 );
 
 // @route   POST /api/teams/:id/deny-join-request
@@ -1064,7 +1070,7 @@ router.post(
       // Find the join request
       const joinRequest = team.joinRequests.find(
         (request) =>
-          request.user.toString() === userId && request.status === "pending",
+          request.user.toString() === userId && request.status === "pending"
       );
 
       if (!joinRequest) {
@@ -1084,11 +1090,11 @@ router.post(
 
       // Get user details for response
       const user = await User.findById(userId).select(
-        "username firstName lastName",
+        "username firstName lastName"
       );
 
       logger.info(
-        `Join request denied for user ${user.username} to team: ${team.name}`,
+        `Join request denied for user ${user.username} to team: ${team.name}`
       );
 
       res.status(200).json({
@@ -1104,7 +1110,7 @@ router.post(
       logger.error("Deny join request error:", error);
       throw new AppError("Failed to deny join request", 500);
     }
-  }),
+  })
 );
 
 // @route   GET /api/teams/search
@@ -1144,7 +1150,7 @@ router.get(
       const teams = await Team.find(query)
         .populate("admin", "username firstName lastName avatar")
         .select(
-          "name description admin memberCount isPublic tags type createdAt",
+          "name description admin memberCount isPublic tags type createdAt"
         )
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -1160,14 +1166,14 @@ router.get(
         const hasPendingRequest = team.joinRequests?.some(
           (request) =>
             request.user.toString() === req.user._id.toString() &&
-            request.status === "pending",
+            request.status === "pending"
         );
 
         // Check if user has pending invitation
         const hasPendingInvitation = team.invitedUsers?.some(
           (invite) =>
             invite.user.toString() === req.user._id.toString() &&
-            invite.status === "pending",
+            invite.status === "pending"
         );
 
         teamObj.userStatus = {
@@ -1197,7 +1203,7 @@ router.get(
       logger.error("Search teams error:", error);
       throw new AppError("Failed to search teams", 500);
     }
-  }),
+  })
 );
 
 // @desc    Get total members count across all user's teams
@@ -1228,7 +1234,7 @@ router.get(
       logger.error("Get members count error:", error);
       throw new AppError("Failed to get members count", 500);
     }
-  }),
+  })
 );
 
 module.exports = router;

@@ -4,32 +4,73 @@ let client;
 
 async function connectRedis() {
   try {
-    // Create Redis client
-    client = redis.createClient({
-      url: process.env.REDIS_URL || "redis://localhost:6379",
-      password: process.env.REDIS_PASSWORD,
+    // Skip Redis connection in test environment to avoid connection errors
+    if (process.env.NODE_ENV === "test") {
+      console.log("Test environment detected, skipping Redis connection");
+      return null;
+    }
+
+    // Create Redis client configuration optimized for Redis Cloud
+    const redisConfig = {
       socket: {
-        connectTimeout: 10000,
-        lazyConnect: true,
+        connectTimeout: 60000, // Longer timeout for cloud connections (60 seconds)
+        lazyConnect: false, // Connect immediately
+        tls: false, // Redis Cloud free tier doesn't use TLS
+        keepAlive: 30000, // Keep connection alive
+        reconnectStrategy: (retries) => {
+          if (retries > 5) {
+            console.log("Redis max reconnection attempts reached, giving up");
+            return false; // Stop reconnecting after 5 attempts
+          }
+          console.log(`Redis reconnection attempt ${retries}`);
+          return Math.min(retries * 1000, 5000); // Exponential backoff, max 5s
+        },
       },
+      // Legacy retry strategy for older redis versions
       retry_strategy: (options) => {
-        if (options.error && options.error.code === "ECONNREFUSED") {
-          // End reconnection on specific error and flush all commands with an error
-          console.error("Redis connection refused");
-          return new Error("Redis connection refused");
+        if (options.error) {
+          if (
+            options.error.code === "ECONNREFUSED" ||
+            options.error.code === "ENOTFOUND" ||
+            options.error.code === "ETIMEDOUT"
+          ) {
+            console.error(`Redis connection error: ${options.error.code}`);
+            return false; // Don't retry on these errors
+          }
         }
-        if (options.total_retry_time > 1000 * 60 * 60) {
-          // End reconnection after hour
+        if (options.total_retry_time > 1000 * 60 * 5) {
+          // End reconnection after 5 minutes
           return new Error("Redis retry time exhausted");
         }
-        if (options.attempt > 10) {
-          // End reconnection after 10 attempts
+        if (options.attempt > 3) {
+          // End reconnection after 3 attempts
           return new Error("Redis max retry attempts exceeded");
         }
         // Reconnect after
-        return Math.min(options.attempt * 100, 3000);
+        return Math.min(options.attempt * 100, 1000);
       },
-    });
+    };
+
+    // Check if Redis Cloud credentials are available
+    if (
+      process.env.REDIS_HOST &&
+      process.env.REDIS_PORT &&
+      process.env.REDIS_PASSWORD
+    ) {
+      // Use Redis Cloud configuration
+      redisConfig.username = process.env.REDIS_USERNAME || "default";
+      redisConfig.password = process.env.REDIS_PASSWORD;
+      redisConfig.socket.host = process.env.REDIS_HOST;
+      redisConfig.socket.port = parseInt(process.env.REDIS_PORT);
+    } else if (process.env.REDIS_URL) {
+      // Use Redis URL configuration
+      redisConfig.url = process.env.REDIS_URL;
+    } else {
+      // Use local Redis configuration
+      redisConfig.url = "redis://localhost:6379";
+    }
+
+    client = redis.createClient(redisConfig);
 
     // Handle Redis connection events
     client.on("connect", () => {
@@ -42,19 +83,40 @@ async function connectRedis() {
 
     client.on("error", (err) => {
       console.error("Redis client error:", err);
+      // Don't let Redis errors crash the app or spam logs
+      if (
+        err.code === "ENOTFOUND" ||
+        err.code === "ETIMEDOUT" ||
+        err.code === "ConnectionTimeoutError"
+      ) {
+        console.log(
+          "Redis connection failed, continuing without Redis features"
+        );
+        // Set client to null to stop further attempts
+        client = null;
+      }
     });
 
     client.on("end", () => {
       console.log("Redis connection closed");
     });
 
-    // Connect to Redis
-    await client.connect();
+    // Connect to Redis with timeout
+    const connectionPromise = client.connect();
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("Redis connection timeout")), 15000);
+    });
+
+    await Promise.race([connectionPromise, timeoutPromise]);
 
     return client;
   } catch (error) {
-    console.error("Failed to connect to Redis:", error);
+    console.error("Failed to connect to Redis:", error.message);
+    console.log(
+      "Application will continue without Redis caching and real-time features"
+    );
     // Don't throw error to allow app to continue without Redis
+    client = null;
     return null;
   }
 }

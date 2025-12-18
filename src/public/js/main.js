@@ -69,11 +69,30 @@ class CollabSpace {
     });
   }
 
-  checkAuthentication() {
-    const token = localStorage.getItem("token");
-    if (token) {
+  async checkAuthentication() {
+    // Try to get user from cache first
+    let userData = null;
+    if (window.collabCache) {
+      userData = await window.collabCache.getUser();
+    }
+
+    // Fallback to localStorage
+    if (!userData) {
+      const token = localStorage.getItem("token");
+      if (token) {
+        userData = JSON.parse(localStorage.getItem("user") || "{}");
+      }
+    }
+
+    if (userData && userData._id) {
       this.isAuthenticated = true;
-      this.currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+      this.currentUser = userData;
+
+      // Cache user data if we have cache available
+      if (window.collabCache) {
+        await window.collabCache.cacheUser(userData);
+      }
+
       this.setupAuthenticatedUI();
     } else {
       this.setupUnauthenticatedUI();
@@ -82,13 +101,13 @@ class CollabSpace {
 
   setupAuthenticatedUI() {
     // Update UI elements for authenticated users
-    const authElements = document.querySelectorAll("[data-auth=\"required\"]");
+    const authElements = document.querySelectorAll('[data-auth="required"]');
     authElements.forEach((element) => {
       element.style.display = "block";
     });
 
     const unauthElements = document.querySelectorAll(
-      "[data-auth=\"unauthorized\"]",
+      '[data-auth="unauthorized"]'
     );
     unauthElements.forEach((element) => {
       element.style.display = "none";
@@ -97,23 +116,33 @@ class CollabSpace {
 
   setupUnauthenticatedUI() {
     // Update UI elements for unauthenticated users
-    const authElements = document.querySelectorAll("[data-auth=\"required\"]");
+    const authElements = document.querySelectorAll('[data-auth="required"]');
     authElements.forEach((element) => {
       element.style.display = "none";
     });
 
     const unauthElements = document.querySelectorAll(
-      "[data-auth=\"unauthorized\"]",
+      '[data-auth="unauthorized"]'
     );
     unauthElements.forEach((element) => {
       element.style.display = "block";
     });
   }
 
-  initializeSocket() {
+  async initializeSocket() {
     if (!this.isAuthenticated) return;
 
-    const token = localStorage.getItem("token");
+    // Try to get token from cache or localStorage
+    let token = null;
+    if (window.collabCache) {
+      const userData = await window.collabCache.getUser();
+      token = userData?.token;
+    }
+
+    if (!token) {
+      token = localStorage.getItem("token");
+    }
+
     if (!token) return;
 
     // Initialize Socket.IO connection
@@ -175,7 +204,7 @@ class CollabSpace {
     // Show notification
     this.showNotification(
       `New message from ${message.sender.username}`,
-      "info",
+      "info"
     );
   }
 
@@ -300,10 +329,20 @@ class CollabSpace {
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem("token", data.data.token);
-        localStorage.setItem("user", JSON.stringify(data.data.user));
+        const userData = data.data.user;
+        const token = data.data.token;
+
+        // Store in localStorage for backward compatibility
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        // Store in advanced cache system
+        if (window.collabCache) {
+          await window.collabCache.cacheUser({ ...userData, token });
+        }
+
         this.isAuthenticated = true;
-        this.currentUser = data.data.user;
+        this.currentUser = userData;
 
         this.showNotification("Login successful", "success");
         window.location.href = "/dashboard";
@@ -329,10 +368,20 @@ class CollabSpace {
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem("token", data.data.token);
-        localStorage.setItem("user", JSON.stringify(data.data.user));
+        const user = data.data.user;
+        const token = data.data.token;
+
+        // Store in localStorage for backward compatibility
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        // Store in advanced cache system
+        if (window.collabCache) {
+          await window.collabCache.cacheUser({ ...user, token });
+        }
+
         this.isAuthenticated = true;
-        this.currentUser = data.data.user;
+        this.currentUser = user;
 
         this.showNotification("Registration successful", "success");
         window.location.href = "/dashboard";
@@ -345,14 +394,19 @@ class CollabSpace {
     }
   }
 
-  logout() {
+  async logout() {
     // Use the auth persistence system for logout if available
     if (window.authPersistence) {
       window.authPersistence.logout();
       return;
     }
 
-    // Fallback logout
+    // Clear all caches
+    if (window.collabCache) {
+      await window.collabCache.invalidate("all");
+    }
+
+    // Fallback logout - clear localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     this.isAuthenticated = false;
@@ -362,6 +416,9 @@ class CollabSpace {
       this.socket.disconnect();
       this.socket = null;
     }
+
+    // Dispatch logout event for cache invalidation
+    document.dispatchEvent(new CustomEvent("userLoggedOut"));
 
     // Call logout API
     fetch("/api/auth/logout", {
@@ -377,7 +434,16 @@ class CollabSpace {
 
   // API Helper Functions
   async apiRequest(endpoint, options = {}) {
-    const token = localStorage.getItem("token");
+    // Try to get token from cache first, then localStorage
+    let token = null;
+    if (window.collabCache) {
+      const userData = await window.collabCache.getUser();
+      token = userData?.token;
+    }
+
+    if (!token) {
+      token = localStorage.getItem("token");
+    }
 
     const defaultOptions = {
       headers: {
@@ -403,6 +469,93 @@ class CollabSpace {
     }
   }
 
+  // Enhanced API methods with intelligent caching based on server hints
+  async apiGet(endpoint, useCache = true, cacheKey = null, cacheTTL = null) {
+    // Try cache first if enabled
+    if (useCache && window.collabCache && cacheKey) {
+      const cachedData = await window.collabCache.cache.get(cacheKey);
+      if (cachedData) {
+        console.log(`📦 Client cache hit: ${cacheKey}`);
+        return { success: true, data: cachedData, fromCache: true };
+      }
+    }
+
+    // Make API request with full response to check headers
+    const fullResponse = await fetch(endpoint, {
+      method: "GET",
+      headers: await this.getApiHeaders(),
+      credentials: "include",
+    });
+
+    const response = await fullResponse.json();
+
+    // Handle caching based on server response headers
+    await this.handleServerCacheHints(
+      fullResponse,
+      response,
+      cacheKey,
+      cacheTTL
+    );
+
+    // Handle cache invalidation hints
+    this.handleCacheInvalidationHints(fullResponse);
+
+    return response;
+  }
+
+  async getApiHeaders() {
+    let token = null;
+    if (window.collabCache) {
+      const userData = await window.collabCache.getUser();
+      token = userData?.token;
+    }
+
+    if (!token) {
+      token = localStorage.getItem("token");
+    }
+
+    return {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    };
+  }
+
+  async handleServerCacheHints(response, data, cacheKey, cacheTTL) {
+    if (!window.collabCache) return;
+
+    const cacheStrategy = response.headers.get("X-Cache-Strategy");
+    const cacheCategory = response.headers.get("X-Cache-Category");
+    const serverTTL = response.headers.get("X-Cache-TTL");
+
+    if (cacheStrategy === "client-side" && response.ok && data.success) {
+      const ttl = cacheTTL || (serverTTL ? parseInt(serverTTL) * 1000 : null);
+
+      if (cacheKey && cacheCategory) {
+        await window.collabCache.cache.set(cacheKey, data.data, {
+          ttl: ttl,
+          category: cacheCategory,
+          persistent: cacheCategory === "user" || cacheCategory === "settings",
+        });
+        console.log(
+          `💾 Server-hinted cache: ${cacheKey} (${cacheCategory}, TTL: ${ttl}ms)`
+        );
+      }
+    }
+  }
+
+  handleCacheInvalidationHints(response) {
+    const invalidateHint = response.headers.get("X-Invalidate-Client-Cache");
+
+    if (invalidateHint && window.collabCache) {
+      const categoriesToInvalidate = invalidateHint.split(",");
+
+      categoriesToInvalidate.forEach(async (category) => {
+        await window.collabCache.invalidateCategory(category.trim());
+        console.log(`🗑️  Client cache invalidated: ${category.trim()}`);
+      });
+    }
+  }
+
   // Chat Functions
   addMessageToChat(message) {
     const chatMessages = document.querySelector(".chat-messages");
@@ -425,8 +578,8 @@ class CollabSpace {
             <div class="message-header">
                 <span class="message-sender">${message.sender.username}</span>
                 <span class="message-time">${this.formatTime(
-    message.createdAt,
-  )}</span>
+                  message.createdAt
+                )}</span>
             </div>
             <div class="message-content">${message.content}</div>
         `;
@@ -438,7 +591,7 @@ class CollabSpace {
   updateTaskInUI(data) {
     // Update task in the current view
     const taskElement = document.querySelector(
-      `[data-task-id="${data.taskId}"]`,
+      `[data-task-id="${data.taskId}"]`
     );
     if (taskElement) {
       // Update task display based on the updates

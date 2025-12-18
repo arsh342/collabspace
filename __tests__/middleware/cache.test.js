@@ -33,7 +33,7 @@ describe("Cache Middleware", () => {
       path: "/api/test",
       route: { path: "/api/test" },
       query: {},
-      session: { user: { id: "user123" } },
+      session: { userId: "user123" },
       params: {},
       body: {},
     };
@@ -42,6 +42,9 @@ describe("Cache Middleware", () => {
       json: jest.fn(),
       statusCode: 200,
       send: jest.fn(),
+      setHeader: jest.fn(),
+      getHeader: jest.fn(),
+      locals: {},
     };
 
     next = jest.fn();
@@ -58,7 +61,7 @@ describe("Cache Middleware", () => {
       const cachedData = { message: "cached response" };
       mockGetCache.mockResolvedValue(cachedData);
 
-      const middleware = cacheMiddleware(300);
+      const middleware = cacheMiddleware(300, null, true); // Force cache for testing
       await middleware(req, res, next);
 
       expect(mockGetCache).toHaveBeenCalled();
@@ -69,7 +72,7 @@ describe("Cache Middleware", () => {
     it("should proceed to next middleware when no cache hit", async () => {
       mockGetCache.mockResolvedValue(null);
 
-      const middleware = cacheMiddleware(300);
+      const middleware = cacheMiddleware(300, null, true); // Force cache for testing
       await middleware(req, res, next);
 
       expect(mockGetCache).toHaveBeenCalled();
@@ -108,7 +111,7 @@ describe("Cache Middleware", () => {
       mockGetCache.mockResolvedValue(null);
       const customKeyGenerator = jest.fn().mockReturnValue("custom:key:123");
 
-      const middleware = cacheMiddleware(300, customKeyGenerator);
+      const middleware = cacheMiddleware(300, customKeyGenerator, true); // Force cache for testing
       await middleware(req, res, next);
 
       expect(customKeyGenerator).toHaveBeenCalledWith(req);
@@ -117,12 +120,13 @@ describe("Cache Middleware", () => {
     it("should generate default cache key correctly", async () => {
       mockGetCache.mockResolvedValue(null);
       req.query = { page: 1, limit: 10 };
+      req.session = { userId: "user123" }; // Use correct session structure
 
-      const middleware = cacheMiddleware(300);
+      const middleware = cacheMiddleware(300, null, true); // Force cache for testing
       await middleware(req, res, next);
 
       expect(mockGetCache).toHaveBeenCalledWith(
-        expect.stringContaining("cache:GET:/api/test:user123:")
+        expect.stringContaining("realtime:GET:/api/test:user123")
       );
     });
 
@@ -130,11 +134,11 @@ describe("Cache Middleware", () => {
       mockGetCache.mockResolvedValue(null);
       req.session = {};
 
-      const middleware = cacheMiddleware(300);
+      const middleware = cacheMiddleware(300, null, true); // Force cache for testing
       await middleware(req, res, next);
 
       expect(mockGetCache).toHaveBeenCalledWith(
-        expect.stringContaining(":anonymous:")
+        expect.stringContaining("realtime:GET:/api/test:anonymous")
       );
     });
   });

@@ -480,74 +480,141 @@
         animation: fadeIn 0.3s ease-out;
       }
 
-      /* Responsive Design */
+      /* Mobile & Tablet Responsive Styles */
       @media (max-width: 900px) {
-        /* Mobile layout */
         body {
-          overflow-y: auto; /* Allow scrolling on mobile */
+          overflow-y: auto;
         }
 
         .register-split-container {
           flex-direction: column;
-          height: 100vh; /* Full height on mobile */
-          overflow-y: auto; /* Allow scrolling on mobile if needed */
+          height: auto;
+          min-height: 100vh;
+          overflow-y: auto;
         }
 
         .register-left-panel {
-          height: auto; /* Auto height */
-          padding: 2rem;
+          height: auto;
+          min-height: 35vh;
+          padding: var(--space-6) var(--space-4);
           text-align: center;
           align-items: center;
         }
 
-        .left-panel-logo {
-          margin-bottom: 1.5rem;
+        .left-panel-title {
+          font-size: var(--font-size-2xl);
+          margin-bottom: var(--space-3);
         }
+
+        .left-panel-subtitle {
+          font-size: var(--font-size-base);
+          margin-bottom: var(--space-4);
+        }
+
         .left-panel-features {
-          text-align: left; /* Keep features aligned to left for readability */
+          text-align: left;
+          max-width: 400px;
         }
+
         .left-panel-features li {
           justify-content: flex-start;
+          font-size: var(--font-size-sm);
         }
 
         .register-right-panel {
-          height: auto; /* Auto height */
-          padding: 1.5rem; /* Further reduced padding on mobile */
-          overflow-y: auto; /* Allow scrolling on mobile */
+          height: auto;
+          min-height: 65vh;
+          padding: var(--space-6) var(--space-4);
+          overflow-y: auto;
         }
 
         .register-form-container {
-          max-width: 100%; /* Full width on mobile */
+          max-width: 100%;
         }
+
         .register-header {
-          text-align: center;
+          margin-bottom: var(--space-4);
         }
+
         .register-header h1 {
           font-size: var(--font-size-xl);
         }
-        .register-header p {
-          font-size: var(--font-size-sm);
-        }
+
         .form-row {
           grid-template-columns: 1fr;
+          gap: 0.75rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .form-group {
+          margin-bottom: 0.75rem;
+        }
+
+        .form-control,
+        select.form-control,
+        .btn {
+          min-height: 48px; /* Touch-friendly */
+          font-size: 16px; /* Prevents iOS zoom */
+        }
+
+        .btn {
+          padding: 0.875rem 1.5rem;
+        }
+
+        .checkbox-group {
+          margin-bottom: 1.5rem;
+        }
+
+        .register-footer {
+          margin-top: 1.5rem;
+          padding-top: 1.5rem;
         }
       }
 
       @media (max-width: 600px) {
         .register-left-panel {
-          padding: 1.5rem;
+          padding: var(--space-4) var(--space-3);
+          min-height: 25vh;
         }
+
+        .left-panel-logo {
+          margin-bottom: 1rem;
+        }
+
         .left-panel-title {
-          font-size: var(--font-size-2xl);
+          font-size: var(--font-size-xl);
         }
+
         .left-panel-subtitle {
-          font-size: var(--font-size-base);
+          font-size: var(--font-size-sm);
         }
+
         .left-panel-features li {
-          font-size: var(--font-size-base);
+          font-size: var(--font-size-xs);
+          gap: 0.5rem;
         }
+
         .register-right-panel {
-          padding: 1.5rem;
+          padding: var(--space-4) var(--space-3);
+        }
+
+        .register-header {
+          padding-top: 0;
+        }
+
+        .form-control,
+        select.form-control,
+        .btn-primary {
+          padding: 0.75rem 1rem;
+        }
+
+        .form-label {
+          font-size: var(--font-size-xs);
+          margin-bottom: 0.375rem;
+        }
+
+        .form-text {
+          font-size: 0.7rem;
         }
       }
     </style>

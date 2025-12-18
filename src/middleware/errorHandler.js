@@ -131,8 +131,22 @@ const errorHandler = (err, req, res, next) => {
 
 // 404 handler for undefined routes
 const notFound = (req, res, next) => {
-  const error = new AppError(`Route ${req.originalUrl} not found`, 404);
-  next(error);
+  // Skip logging for common browser requests that aren't actual routes
+  const skipLogging = [
+    "/favicon.ico",
+    "/apple-touch-icon.png",
+    "/apple-touch-icon-precomposed.png",
+    "/robots.txt",
+    "/sitemap.xml",
+  ].some((path) => req.originalUrl.includes(path));
+
+  if (!skipLogging) {
+    const error = new AppError(`Route ${req.originalUrl} not found`, 404);
+    next(error);
+  } else {
+    // Silently return 404 for browser resource requests
+    res.status(404).end();
+  }
 };
 
 // Handle unhandled promise rejections
