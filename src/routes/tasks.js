@@ -281,6 +281,13 @@ router.get(
           .skip(skip)
           .limit(parseInt(limit));
 
+        console.log("Tasks found:", tasks.length);
+        tasks.forEach((task) => {
+          console.log(
+            `- Task: ${task.title}, Team: ${task.team?.name}, Status: ${task.status}`
+          );
+        });
+
         total = await Task.countDocuments(query);
       } else {
         // Get tasks for user
@@ -410,8 +417,11 @@ router.post(
   "/",
   requireAuth,
   validateTaskCreation,
+  invalidateCacheMiddleware(["realtime:notifications:*"], true), // Only real-time notifications
   invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
+    // Set client cache invalidation headers
+    res.setHeader("X-Invalidate-Client-Cache", "tasks,dashboard");
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -564,8 +574,11 @@ router.put(
   "/:id",
   requireAuth,
   validateTaskUpdate,
+  invalidateCacheMiddleware(["realtime:notifications:*"], true), // Only real-time data
   invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
+    // Set client cache invalidation headers
+    res.setHeader("X-Invalidate-Client-Cache", "tasks,dashboard");
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -726,8 +739,11 @@ router.put(
 router.delete(
   "/:id",
   requireAuth,
+  invalidateCacheMiddleware(["realtime:notifications:*"], true), // Only real-time data
   invalidateCacheMiddleware([`team-*`, `user-*`, `stats-*`]),
   catchAsync(async (req, res) => {
+    // Set client cache invalidation headers
+    res.setHeader("X-Invalidate-Client-Cache", "tasks,dashboard");
     try {
       const task = await Task.findById(req.params.id).populate(
         "team",

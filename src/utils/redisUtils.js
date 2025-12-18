@@ -6,7 +6,16 @@ const {
 } = require("../config/redis");
 
 /**
- * Redis utilities for real-time features (Socket.IO, online users, etc.)
+ * Redis utilities for ESSENTIAL real-time features ONLY
+ *
+ * Redis should ONLY be used for:
+ * - Online user presence (needs cross-session sharing)
+ * - Real-time notifications
+ * - Live message counts/unread status
+ * - Socket.IO room management
+ * - Rate limiting for security
+ *
+ * Everything else (teams, tasks, user profiles, etc.) should use client-side caching
  */
 
 // Online users management
@@ -29,7 +38,7 @@ class OnlineUsersManager {
           socketId,
           timestamp: Date.now(),
           status: "online",
-        }),
+        })
       );
 
       // Add to online users set
@@ -194,7 +203,7 @@ class MessageCache {
         JSON.stringify({
           ...message,
           timestamp: Date.now(),
-        }),
+        })
       );
 
       // Trim to keep only recent messages

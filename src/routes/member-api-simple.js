@@ -14,40 +14,48 @@ router.get("/test", (req, res) => {
   res.json({ message: "Member API working" });
 });
 
-// Member Dashboard Stats
-router.get(
-  "/stats",
-  authenticateSession,
-  cacheMiddleware(180, (req) => `member:stats:${req.session.userId}`), // Cache for 3 minutes
-  async (req, res) => {
-    try {
-      const userId = req.session.userId;
+// Member Dashboard Stats - Use client-side caching
+router.get("/stats", authenticateSession, async (req, res) => {
+  try {
+    // Set headers for client-side caching
+    res.setHeader("Cache-Control", "private, max-age=180"); // 3 minutes
+    res.setHeader("X-Cache-Strategy", "client-side");
+    res.setHeader("X-Cache-Category", "dashboard");
 
-      // Get user's teams
-      const userTeams = await Team.find({
-        members: userId,
-      }).select("_id");
+    const userId = req.session.userId;
 
-      const teamIds = userTeams.map((team) => team._id);
+    // Get user's teams
+    const userTeams = await Team.find({
+      members: userId,
+    }).select("_id");
 
-      // Get member tasks (tasks in their teams)
-      const memberTasks = await Task.find({
-        team: { $in: teamIds },
-        isArchived: false,
-      });
+    const teamIds = userTeams.map((team) => team._id);
 
-      // Get completed tasks
-      const completedTasks = memberTasks.filter(
-        (task) => task.status === "completed",
-      );
+    // Get member tasks (tasks in their teams)
+    const memberTasks = await Task.find({
+      team: { $in: teamIds },
+      isArchived: false,
+    });
 
-      const stats = {
-        myTasks: memberTasks.length,
-        completedTasks: completedTasks.length,
-        myTeams: userTeams.length,
-        unreadMessages: 0, // Simplified for now
-      };
+    // Get completed tasks
+    const completedTasks = memberTasks.filter(
+      (task) => task.status === "completed"
+    );
 
+    const stats = {
+      myTasks: memberTasks.length,
+      completedTasks: completedTasks.length,
+      myTeams: userTeams.length,
+      unreadMessages: 0, // Simplified for now
+    };
+
+    console.log("Member stats calculated:", stats);
+    res.json(stats);
+  } catch (error) {
+    console.error("Error fetching member stats:", error);
+    res.status(500).json({ error: "Failed to fetch dashboard stats" });
+  }
+});
       // Member stats calculated
       res.json(stats);
     } catch (error) {
@@ -110,7 +118,7 @@ router.get("/profile", authenticateSession, async (req, res) => {
     const userId = req.session.userId;
 
     const user = await User.findById(userId).select(
-      "firstName lastName email username phone avatar bio createdAt",
+      "firstName lastName email username phone avatar bio createdAt"
     );
 
     if (!user) {
@@ -138,7 +146,7 @@ router.put("/profile", authenticateSession, async (req, res) => {
         phone,
         bio,
       },
-      { new: true, runValidators: true },
+      { new: true, runValidators: true }
     ).select("firstName lastName email username phone avatar bio");
 
     if (!updatedUser) {
@@ -252,7 +260,7 @@ router.get("/progress", authenticateSession, async (req, res) => {
     });
 
     const completedTasks = allTasks.filter(
-      (task) => task.status === "completed",
+      (task) => task.status === "completed"
     ).length;
     const totalTasks = allTasks.length;
 
@@ -270,7 +278,7 @@ router.get("/progress", authenticateSession, async (req, res) => {
 
     const teamParticipation = Math.min(
       100,
-      Math.round((weeklyTasksCompleted / 5) * 100),
+      Math.round((weeklyTasksCompleted / 5) * 100)
     ); // Cap at 100%
 
     res.json({
@@ -365,7 +373,7 @@ router.get("/quick-stats", authenticateSession, async (req, res) => {
     // Average response time (simplified - based on team size)
     const totalMembers = userTeams.reduce(
       (sum, team) => sum + (team.members?.length || 0),
-      0,
+      0
     );
     const averageResponseTime =
       totalMembers > 0 ? Math.max(1, Math.floor(12 / totalMembers)) : 2;

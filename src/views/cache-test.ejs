@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cache Test - CollabSpace</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #1e1e1e;
+        color: #ffffff;
+      }
+      .card {
+        background: #2d2d2d;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        border: 1px solid #404040;
+      }
+      button {
+        background: #6264a7;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: #5b5fa6;
+      }
+      .success {
+        color: #28a745;
+      }
+      .error {
+        color: #dc3545;
+      }
+      .info {
+        color: #17a2b8;
+      }
+      .warning {
+        color: #ffc107;
+      }
+      pre {
+        background: #1a1a1a;
+        padding: 15px;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      .status {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border-left: 4px solid;
+      }
+      .status.success {
+        border-color: #28a745;
+        background: rgba(40, 167, 69, 0.1);
+      }
+      .status.error {
+        border-color: #dc3545;
+        background: rgba(220, 53, 69, 0.1);
+      }
+      .status.info {
+        border-color: #17a2b8;
+        background: rgba(23, 162, 184, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🗄️ CollabSpace Cache System Test</h1>
+    <p>
+      Test the optimized caching strategy:
+      <strong>Redis for real-time only, Browser for everything else</strong>
+    </p>
+
+    <div class="card">
+      <h2>🎯 Cache Strategy Overview</h2>
+      <div id="strategy-status" class="status info">
+        <strong>✅ Redis Usage:</strong> Minimal - Only essential real-time
+        data<br />
+        <strong>✅ Browser Cache:</strong> Maximal - All user/team/task data<br />
+        <strong>📊 Expected Performance:</strong> ~90% reduction in Redis
+        operations
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🔧 Cache Management</h2>
+      <button onclick="testCacheStats()">📊 Show Cache Stats</button>
+      <button onclick="testCacheOperations()">🧪 Run Cache Tests</button>
+      <button onclick="clearCache()">🗑️ Clear Client Cache</button>
+      <button onclick="monitorCache()">👀 Start Monitoring</button>
+      <button onclick="performanceTest()">⚡ Performance Test</button>
+    </div>
+
+    <div class="card">
+      <h2>📊 Test Results</h2>
+      <div id="test-output">
+        <p class="info">Click buttons above to test cache functionality...</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🚀 API Cache Test</h2>
+      <p>Test API responses with optimized caching headers:</p>
+      <button onclick="testDashboardAPI()">📈 Test Dashboard API</button>
+      <button onclick="testTeamsAPI()">👥 Test Teams API</button>
+      <button onclick="testUserAPI()">👤 Test User API</button>
+      <div id="api-results"></div>
+    </div>
+
+    <!-- Include cache system scripts -->
+    <script src="/public/js/browser-cache.js"></script>
+    <script src="/public/js/cache-adapter.js"></script>
+    <script src="/public/js/cache-debug.js"></script>
+
+    <script>
+      function log(message, type = "info") {
+        const output = document.getElementById("test-output");
+        const timestamp = new Date().toLocaleTimeString();
+        const className =
+          type === "success"
+            ? "success"
+            : type === "error"
+            ? "error"
+            : type === "warning"
+            ? "warning"
+            : "info";
+
+        output.innerHTML += `<div class="status ${className}">
+                <strong>[${timestamp}]</strong> ${message}
+            </div>`;
+        output.scrollTop = output.scrollHeight;
+      }
+
+      async function testCacheStats() {
+        log("🔍 Testing cache statistics...", "info");
+        try {
+          if (window.cacheStats) {
+            await window.cacheStats();
+            log("✅ Cache stats displayed in console", "success");
+          } else {
+            log("⚠️ Cache stats function not available", "warning");
+          }
+        } catch (error) {
+          log(`❌ Cache stats error: ${error.message}`, "error");
+        }
+      }
+
+      async function testCacheOperations() {
+        log("🧪 Running cache functionality tests...", "info");
+        try {
+          if (window.cacheTest) {
+            const results = await window.cacheTest();
+            log(
+              `✅ Tests completed: ${results.passed} passed, ${results.failed} failed`,
+              results.failed > 0 ? "warning" : "success"
+            );
+          } else {
+            log("⚠️ Cache test function not available", "warning");
+          }
+        } catch (error) {
+          log(`❌ Cache test error: ${error.message}`, "error");
+        }
+      }
+
+      async function clearCache() {
+        log("🗑️ Clearing client cache...", "info");
+        try {
+          if (window.cacheClear) {
+            await window.cacheClear();
+            log("✅ Client cache cleared successfully", "success");
+          } else {
+            log("⚠️ Cache clear function not available", "warning");
+          }
+        } catch (error) {
+          log(`❌ Cache clear error: ${error.message}`, "error");
+        }
+      }
+
+      function monitorCache() {
+        log("👀 Starting cache monitoring (check console)...", "info");
+        try {
+          if (window.cacheDebug && window.cacheDebug.monitor) {
+            window.cacheDebug.monitor();
+            log("✅ Cache monitoring started (30s intervals)", "success");
+          } else {
+            log("⚠️ Cache monitor function not available", "warning");
+          }
+        } catch (error) {
+          log(`❌ Cache monitor error: ${error.message}`, "error");
+        }
+      }
+
+      async function performanceTest() {
+        log("⚡ Running performance benchmark...", "info");
+        try {
+          if (window.cacheManager && window.cacheManager.performanceTest) {
+            await window.cacheManager.performanceTest();
+            log("✅ Performance test completed (check console)", "success");
+          } else {
+            log("⚠️ Performance test function not available", "warning");
+          }
+        } catch (error) {
+          log(`❌ Performance test error: ${error.message}`, "error");
+        }
+      }
+
+      async function testDashboardAPI() {
+        await testAPI("/api/dashboard/stats", "Dashboard");
+      }
+
+      async function testTeamsAPI() {
+        await testAPI("/api/teams", "Teams");
+      }
+
+      async function testUserAPI() {
+        await testAPI("/api/auth/me", "User");
+      }
+
+      async function testAPI(endpoint, name) {
+        const apiResults = document.getElementById("api-results");
+        const timestamp = new Date().toLocaleTimeString();
+
+        try {
+          const start = performance.now();
+          const response = await fetch(endpoint, { credentials: "include" });
+          const duration = Math.round(performance.now() - start);
+
+          const cacheStrategy = response.headers.get("X-Cache-Strategy");
+          const cacheHit = response.headers.get("X-Cache-Hit");
+          const cacheCategory = response.headers.get("X-Cache-Category");
+
+          let statusClass = response.ok ? "success" : "error";
+          let cacheInfo = "";
+
+          if (cacheHit === "redis") {
+            cacheInfo = "🔴 Redis Cache Hit";
+          } else if (cacheStrategy === "client-side") {
+            cacheInfo = "🟢 Client-side Cache Recommended";
+          } else {
+            cacheInfo = "⚪ No Cache Strategy";
+          }
+
+          apiResults.innerHTML += `
+                    <div class="status ${statusClass}">
+                        <strong>[${timestamp}] ${name} API:</strong> ${
+            response.status
+          } (${duration}ms)<br>
+                        <strong>Cache:</strong> ${cacheInfo}<br>
+                        ${
+                          cacheCategory
+                            ? `<strong>Category:</strong> ${cacheCategory}<br>`
+                            : ""
+                        }
+                        ${
+                          cacheStrategy
+                            ? `<strong>Strategy:</strong> ${cacheStrategy}`
+                            : ""
+                        }
+                    </div>
+                `;
+        } catch (error) {
+          apiResults.innerHTML += `
+                    <div class="status error">
+                        <strong>[${timestamp}] ${name} API Error:</strong> ${error.message}
+                    </div>
+                `;
+        }
+      }
+
+      // Auto-initialize
+      window.addEventListener("DOMContentLoaded", () => {
+        log("🚀 Cache test page loaded", "success");
+        log(
+          "💡 Optimized strategy active: Redis minimal, Browser maximal",
+          "info"
+        );
+
+        // Check if cache system is available
+        setTimeout(() => {
+          if (window.browserCache && window.collabCache) {
+            log("✅ Cache system initialized successfully", "success");
+          } else {
+            log("⚠️ Cache system not fully initialized", "warning");
+          }
+        }, 2000);
+      });
+    </script>
+  </body>
+</html>
